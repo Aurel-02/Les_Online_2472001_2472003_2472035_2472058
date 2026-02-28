@@ -1,7 +1,7 @@
 public class MainLesOnline {
     public static void main(String[] args) {
         // Inisialisasi Data
-        Pengajar tutorJava = new Pengajar("T01", "Budi Santoso", "Pemrograman Java");
+        Pengajar tutorJava = new Pengajar("T01", "Agung Budiono", "Pemrograman Java");
         Siswa siswa1 = new Siswa("S01", "Andi", "SMA");
         Siswa siswa2 = new Siswa("S02", "Siti", "Kuliah");
 
