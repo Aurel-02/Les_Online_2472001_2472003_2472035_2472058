@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\UserSession; // ← SINGLETON: Import kelas UserSession
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,15 +23,22 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Bisa ditambahkan logika redirect berdasarkan role di sini nantinya
-            return redirect()->intended('/');
+            // ─── SINGLETON: Ambil instance tunggal UserSession ───────────────
+            // getInstance() memastikan hanya ada satu objek UserSession
+            // yang digunakan di seluruh aplikasi (tidak ada "new UserSession()").
+            $session = UserSession::getInstance();
+
+            // ─── SINGLETON: Gunakan metode getRedirectUrlByRole() dari instance ───
+            // Instance yang sama digunakan untuk membaca role dan menentukan
+            // URL tujuan redirect setelah login berhasil.
+            return redirect($session->getRedirectUrlByRole());
         }
 
         return back()->withErrors([
@@ -41,26 +49,33 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,orang tua,siswa,guru',
+            'role'     => 'required|in:admin,orang tua,siswa,guru',
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role'     => $request->role,
         ]);
 
         Auth::login($user);
 
-        return redirect('/');
+        // ─── SINGLETON: Gunakan instance yang sama untuk redirect setelah register ───
+        $session = UserSession::getInstance();
+        return redirect($session->getRedirectUrlByRole());
     }
 
     public function logout(Request $request)
     {
+        // ─── SINGLETON: Instance UserSession tetap dipakai sebelum logout ───
+        // (opsional, bisa digunakan untuk logging aktivitas logout)
+        $session = UserSession::getInstance();
+        // Contoh: Log::info($session->getName() . ' telah logout.');
+
         Auth::logout();
 
         $request->session()->invalidate();
