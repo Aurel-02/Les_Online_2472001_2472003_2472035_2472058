@@ -322,8 +322,8 @@
                 <div class="logo-text">Pintar.id</div>
             </a>
             <div class="nav-buttons">
-                <a href="#" onclick="return false;" class="btn btn-register">Masuk</a>
-                <a href="#" onclick="return false;" class="btn btn-register">Daftar</a>
+                <a href="{{ route('login') }}" class="btn btn-login">Masuk</a>
+                <a href="{{ route('register') }}" class="btn btn-register">Daftar</a>
             </div>
         </header>
 
