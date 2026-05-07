@@ -6,9 +6,6 @@
     <title>Dashboard Siswa - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* ══════════════════════════════════════════════════════
-           DESIGN TOKENS — sesuai landing page Pintar.id
-        ══════════════════════════════════════════════════════ */
         :root {
             --dark-oak:      #3D2B1F;
             --muted-sage:    #8E9680;
@@ -238,15 +235,15 @@
             margin-bottom: 28px;
         }
 
-        /* ── Mata Pelajaran Grid ── */
-        .subject-grid {
+        /* ── Menu Grid ── */
+        .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 56px;
         }
 
-        .subject-card {
+        .menu-card {
             background: rgba(230, 216, 193, 0.7);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.6);
@@ -256,44 +253,31 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 18px rgba(61,43,31,0.06);
             text-decoration: none;
-            display: block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        .subject-card:hover {
+        .menu-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 14px 36px rgba(61,43,31,0.13);
         }
 
-        .subject-emoji {
+        .menu-emoji {
             font-size: 40px;
             margin-bottom: 14px;
             display: block;
         }
 
-        .subject-name {
+        .menu-name {
             font-size: 17px;
             font-weight: 800;
             color: var(--dark-oak);
             margin-bottom: 6px;
         }
 
-        .subject-progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(61,43,31,0.1);
-            border-radius: 99px;
-            margin: 10px 0 6px;
-            overflow: hidden;
-        }
-
-        .subject-progress-fill {
-            height: 100%;
-            border-radius: 99px;
-            background: var(--muted-sage);
-            transition: width 1s ease;
-        }
-
-        .subject-meta {
+        .menu-desc {
             font-size: 13px;
             color: rgba(61, 43, 31, 0.55);
             font-weight: 600;
@@ -459,7 +443,7 @@
             nav { padding: 16px 20px; }
             .main-wrapper { padding: 32px 16px 60px; }
             .welcome-title { font-size: 36px; }
-            .subject-grid { grid-template-columns: 1fr 1fr; }
+            .menu-grid { grid-template-columns: 1fr 1fr; }
             .user-greeting { display: none; }
         }
     </style>
@@ -483,7 +467,6 @@
         <div class="nav-right">
             <span class="user-greeting">Hai, <span>{{ $userName }}</span> 👋</span>
 
-            {{-- ─── SINGLETON: Logout menggunakan AuthController yang memanggil UserSession::getInstance() ─── --}}
             <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
                 <button type="submit" class="btn-logout">Keluar</button>
@@ -525,63 +508,45 @@
             </div>
         </section>
 
-        <!-- ── Mata Pelajaran ── -->
-        <div class="section-title">Mata Pelajaran</div>
-        <div class="section-subtitle">Pilih pelajaran untuk melanjutkan belajarmu</div>
+        <!-- ── Menu Utama ── -->
+        <div class="section-title">Menu Utama</div>
+        <div class="section-subtitle">Akses cepat ke berbagai fitur Pintar.id</div>
 
-        <div class="subject-grid">
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">🔢</span>
-                <div class="subject-name">Matematika</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 72%;"></div>
-                </div>
-                <div class="subject-meta">72% selesai · 18 modul</div>
+        <div class="menu-grid">
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">🏛️</span>
+                <div class="menu-name">Info Univ & PTN</div>
+                <div class="menu-desc">Eksplorasi kampus impianmu</div>
             </a>
 
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">📖</span>
-                <div class="subject-name">Bahasa Indonesia</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 85%; background: var(--warm-amber);"></div>
-                </div>
-                <div class="subject-meta">85% selesai · 14 modul</div>
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">👤</span>
+                <div class="menu-name">Profile</div>
+                <div class="menu-desc">Kelola akun & data diri</div>
             </a>
 
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">🔬</span>
-                <div class="subject-name">IPA</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 55%; background: var(--dusty-mauve);"></div>
-                </div>
-                <div class="subject-meta">55% selesai · 20 modul</div>
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">🎯</span>
+                <div class="menu-name">Rekomendasi Jurusan</div>
+                <div class="menu-desc">Berdasarkan nilai tryout</div>
             </a>
 
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">🌍</span>
-                <div class="subject-name">IPS</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 40%;"></div>
-                </div>
-                <div class="subject-meta">40% selesai · 16 modul</div>
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">🔔</span>
+                <div class="menu-name">Notifikasi</div>
+                <div class="menu-desc">Pemberitahuan terbaru</div>
             </a>
 
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">🌐</span>
-                <div class="subject-name">Bahasa Inggris</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 63%; background: var(--warm-amber);"></div>
-                </div>
-                <div class="subject-meta">63% selesai · 22 modul</div>
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">🛍️</span>
+                <div class="menu-name">Beli Paket Belajar</div>
+                <div class="menu-desc">Upgrade materi pelajaran</div>
             </a>
 
-            <a href="#" class="subject-card">
-                <span class="subject-emoji">💻</span>
-                <div class="subject-name">Komputer</div>
-                <div class="subject-progress-bar">
-                    <div class="subject-progress-fill" style="width: 30%; background: var(--dusty-mauve);"></div>
-                </div>
-                <div class="subject-meta">30% selesai · 12 modul</div>
+            <a href="#" class="menu-card">
+                <span class="menu-emoji">💬</span>
+                <div class="menu-name">Chat Sama Guru</div>
+                <div class="menu-desc">Diskusi & tanya tugas</div>
             </a>
         </div>
 
@@ -666,27 +631,25 @@
                 </div>
 
                 <div class="activity-item">
-                    <div class="activity-icon activity-icon-sage">▶️</div>
+                    <div class="activity-icon activity-icon-sage">💬</div>
                     <div class="activity-text">
-                        <div class="activity-desc">Video "Persamaan Linear" Bahasa Inggris ditonton</div>
+                        <div class="activity-desc">Pesan baru dari Bu Dewi Sartika</div>
                         <div class="activity-time">3 hari yang lalu</div>
                     </div>
                 </div>
 
                 <div class="activity-item">
-                    <div class="activity-icon activity-icon-amber">⭐</div>
+                    <div class="activity-icon activity-icon-amber">🎯</div>
                     <div class="activity-text">
-                        <div class="activity-desc">Modul IPS Bab 3 diselesaikan dengan sempurna</div>
+                        <div class="activity-desc">Rekomendasi jurusan baru telah tersedia!</div>
                         <div class="activity-time">4 hari yang lalu</div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <!-- END bottom-grid -->
 
     </div>
-    <!-- END main-wrapper -->
 
 </body>
 </html>
