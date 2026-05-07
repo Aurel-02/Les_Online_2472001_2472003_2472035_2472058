@@ -17,7 +17,8 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        return view('auth.register');
+        $jenjangs = \Illuminate\Support\Facades\DB::table('jenjang')->get();
+        return view('auth.register', compact('jenjangs'));
     }
 
     public function login(Request $request)
@@ -50,16 +51,18 @@ class AuthController extends Controller
     {
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'email'    => 'required|string|email|max:255|unique:user,email',
             'password' => 'required|string|min:8|confirmed',
             'role'     => 'required|in:admin,orang tua,siswa,guru',
+            'id_jenjang' => 'required_if:role,siswa',
         ]);
 
         $user = User::create([
             'nama'     => $request->name,
             'email'    => $request->email,
-            'password' => $request->password,
+            'password' => Hash::make($request->password), // Make sure password is hashed
             'role'     => $request->role,
+            'id_jenjang' => $request->role === 'siswa' ? $request->id_jenjang : null,
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login untuk melanjutkan.');

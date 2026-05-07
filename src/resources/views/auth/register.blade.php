@@ -254,6 +254,16 @@
             margin-bottom: 10px;
         }
 
+        #jenjang-group {
+            display: none; /* hidden by default */
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .btn-submit {
             width: 100%;
             padding: 16px;
@@ -375,6 +385,19 @@
                     @error('role') <div class="error-message">{{ $message }}</div> @enderror
                 </div>
 
+                <div class="form-group" id="jenjang-group" style="{{ old('role') == 'siswa' ? 'display: block;' : 'display: none;' }}">
+                    <label for="id_jenjang">Jenjang Pendidikan</label>
+                    <select id="id_jenjang" name="id_jenjang" class="form-control">
+                        <option value="" disabled selected>Pilih jenjang pendidikan...</option>
+                        @foreach($jenjangs as $jenjang)
+                            <option value="{{ $jenjang->id_jenjang }}" {{ old('id_jenjang') == $jenjang->id_jenjang ? 'selected' : '' }}>
+                                {{ $jenjang->nama_jenjang }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('id_jenjang') <div class="error-message">{{ $message }}</div> @enderror
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -397,5 +420,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleRadios = document.querySelectorAll('.role-option');
+            const jenjangGroup = document.getElementById('jenjang-group');
+            const jenjangSelect = document.getElementById('id_jenjang');
+
+            function toggleJenjang() {
+                const isSiswa = document.querySelector('input[name="role"]:checked')?.value === 'siswa';
+                if (isSiswa) {
+                    jenjangGroup.style.display = 'block';
+                    jenjangSelect.setAttribute('required', 'required');
+                } else {
+                    jenjangGroup.style.display = 'none';
+                    jenjangSelect.removeAttribute('required');
+                }
+            }
+
+            roleRadios.forEach(radio => {
+                radio.addEventListener('change', toggleJenjang);
+            });
+
+            // Initialize on load
+            toggleJenjang();
+        });
+    </script>
 </body>
 </html>
