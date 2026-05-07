@@ -23,3 +23,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::middleware('auth')->group(function () {
     Route::get('/siswa/home', [SiswaController::class, 'index'])->name('siswa.home');
 });
+
+// ─── [SEMENTARA] Route video tanpa auth — untuk preview/development ───────────
+Route::get('/siswa/video', [SiswaController::class, 'videoPreview'])->name('siswa.video');
