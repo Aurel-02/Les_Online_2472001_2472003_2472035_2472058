@@ -27,21 +27,4 @@ class SiswaController extends Controller
 
         return view('siswa.home', compact('userName', 'userEmail', 'userRole'));
     }
-
-    public function video()
-    {
-        $session = UserSession::getInstance();
-        if (!$session->isSiswa()) {
-            abort(403, 'Akses ditolak. Halaman ini khusus untuk siswa.');
-        }
-        $userName = $session->getName();
-        return view('siswa.video', compact('userName'));
-    }
-
-
-    public function videoPreview()
-    {
-        $userName = 'Preview Siswa';
-        return view('siswa.video', compact('userName'));
-    }
 }

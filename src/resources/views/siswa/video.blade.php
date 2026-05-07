@@ -20,7 +20,6 @@
         .blob-1 { position:fixed; top:-10%; right:-5%; width:600px; height:600px; background:rgba(142,150,128,0.2); border-radius:50%; filter:blur(80px); z-index:0; pointer-events:none; }
         .blob-2 { position:fixed; bottom:-10%; left:-5%; width:400px; height:400px; background:rgba(217,179,130,0.2); border-radius:50%; filter:blur(60px); z-index:0; pointer-events:none; }
 
-        /* ══ NAVBAR (sesuai gambar referensi) ══ */
         nav {
             padding:12px 32px;
             display:flex;
@@ -33,7 +32,6 @@
             flex-shrink:0;
         }
 
-        /* Search bar */
         .nav-search {
             display:flex; align-items:center; gap:8px;
             background:rgba(255,255,255,0.55);
@@ -47,7 +45,6 @@
         .nav-search input { border:none; background:transparent; outline:none; font-family:'Outfit',sans-serif; font-size:14px; color:var(--dark-oak); width:100%; }
         .nav-search input::placeholder { color:rgba(61,43,31,0.38); }
 
-        /* Nav tabs */
         .nav-tabs { display:flex; gap:4px; flex:1; justify-content:center; }
         .nav-tab {
             padding:8px 20px; border-radius:30px; font-size:14px; font-weight:600;
@@ -60,7 +57,6 @@
             box-shadow:0 4px 14px rgba(61,43,31,0.25);
         }
 
-        /* Nav right */
         .nav-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
         .nav-bell {
             width:38px; height:38px; border-radius:50%;
@@ -86,7 +82,6 @@
         .nav-username { font-size:13px; font-weight:700; color:var(--dark-oak); }
         .nav-role { font-size:11px; color:rgba(61,43,31,0.45); }
 
-        /* ══ PAGE BODY ══ */
         .page-body {
             flex:1; display:flex; overflow:hidden;
             position:relative; z-index:5;
@@ -96,14 +91,14 @@
         }
 
         .glass-card {
-            background:rgba(230,216,193,0.65);
-            backdrop-filter:blur(14px);
-            border:1px solid rgba(255,255,255,0.65);
-            border-radius:22px;
-            box-shadow:0 4px 24px rgba(61,43,31,0.08);
+            background:rgba(255,255,255,0.25);
+            backdrop-filter:blur(24px);
+            -webkit-backdrop-filter:blur(24px);
+            border:1px solid rgba(255,255,255,0.5);
+            border-radius:24px;
+            box-shadow:0 8px 32px rgba(61,43,31,0.08);
         }
 
-        /* ══ LEFT: COMMENT (full height) ══ */
         .comment-col {
             width:320px; flex-shrink:0;
             display:flex; flex-direction:column;
@@ -159,12 +154,9 @@
         }
         .btn-send:hover { background:#7b846e; transform:translateY(-1px); }
 
-        /* ══ RIGHT ══ */
         .right-col { flex:1; display:flex; flex-direction:column; gap:16px; overflow-y:auto; min-width:0; padding-right: 4px; }
         .right-col::-webkit-scrollbar { width:4px; }
         .right-col::-webkit-scrollbar-thumb { background:rgba(142,150,128,0.35); border-radius:99px; }
-
-        /* Video player */
         .video-card { flex-shrink:0; overflow:hidden; }
         .video-wrapper {
             position:relative; width:100%; height: 380px;
@@ -206,52 +198,65 @@
         .video-meta { display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:rgba(61,43,31,0.5); }
         .video-meta span { display:flex; align-items:center; gap:4px; }
 
-        /* ══ NEXT VIDEO — horizontal scroll ══ */
         .next-card { flex-shrink:0; }
         .next-header {
-            padding:14px 20px 10px;
-            font-size:15px; font-weight:800;
-            border-bottom:1px solid rgba(61,43,31,0.08);
-            display:flex; align-items:center; gap:8px;
+            font-size:16px; font-weight:800;
+            margin-bottom: 12px;
+            color: var(--dark-oak);
         }
         .next-scroll-wrap {
-            padding:14px 16px;
-            display:flex; gap:12px;
+            display:flex; gap:16px;
             overflow-x:auto; scroll-snap-type:x mandatory;
             -webkit-overflow-scrolling:touch;
+            padding-bottom: 12px;
         }
         .next-scroll-wrap::-webkit-scrollbar { height:4px; }
         .next-scroll-wrap::-webkit-scrollbar-track { background:transparent; }
         .next-scroll-wrap::-webkit-scrollbar-thumb { background:rgba(142,150,128,0.35); border-radius:99px; }
+        
         .next-item {
-            flex-shrink:0; width:180px; scroll-snap-align:start;
-            border-radius:16px; text-decoration:none; color:inherit;
-            padding:10px; transition:background 0.25s, transform 0.2s; cursor:pointer;
+            flex-shrink:0; width:180px; height:240px; scroll-snap-align:start;
+            border-radius:24px; text-decoration:none; color:inherit;
+            position:relative; overflow:hidden;
+            transition:transform 0.25s, box-shadow 0.25s; cursor:pointer;
+            box-shadow:0 8px 24px rgba(61,43,31,0.1);
         }
-        .next-item:hover { background:rgba(142,150,128,0.13); transform:translateY(-3px); }
-        .next-item.active { background:rgba(142,150,128,0.18); border:1.5px solid rgba(142,150,128,0.35); }
-        .next-thumb {
-            width:100%; aspect-ratio:16/9; border-radius:10px;
-            display:flex; align-items:center; justify-content:center;
-            position:relative; overflow:hidden; margin-bottom:8px;
-        }
-        .next-thumb .play-icon {
-            width:32px; height:32px; background:rgba(255,255,255,0.88);
-            border-radius:50%; display:flex; align-items:center; justify-content:center;
-            font-size:12px; color:var(--dark-oak); z-index:1;
-        }
-        .next-thumb .num-badge {
-            position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.38);
-            color:#fff; font-size:10px; font-weight:700; padding:1px 6px; border-radius:6px;
-        }
+        .next-item:hover { transform:translateY(-4px); box-shadow:0 12px 32px rgba(61,43,31,0.15); }
+        
         .thumb-1 { background:linear-gradient(135deg,#8E9680,#6b7260); }
         .thumb-2 { background:linear-gradient(135deg,#D9B382,#c49a50); }
         .thumb-3 { background:linear-gradient(135deg,#A37C76,#7d5a55); }
         .thumb-4 { background:linear-gradient(135deg,#8E9680,#A37C76); }
         .thumb-5 { background:linear-gradient(135deg,#D9B382,#A37C76); }
-        .next-item-title { font-size:13px; font-weight:700; line-height:1.35; color:var(--dark-oak); margin-bottom:3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 160px; }
-        .next-item-sub { font-size:12px; color:rgba(61,43,31,0.48); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 160px; }
-        .next-item-dur { font-size:12px; font-weight:700; color:var(--muted-sage); margin-top:4px; }
+
+        .next-item-overlay {
+            position:absolute; inset:0;
+            background:linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.65) 100%);
+            display:flex; flex-direction:column; justify-content:space-between;
+            padding:16px;
+        }
+        .next-item-top { display:flex; justify-content:space-between; align-items:flex-start; }
+        .next-badge {
+            background:rgba(255,255,255,0.25); backdrop-filter:blur(8px);
+            color:#fff; font-size:10px; font-weight:700; padding:4px 10px; border-radius:99px;
+            border:1px solid rgba(255,255,255,0.3);
+        }
+        .btn-more {
+            width:28px; height:28px; border-radius:50%;
+            background:rgba(255,255,255,0.25); backdrop-filter:blur(8px);
+            display:flex; align-items:center; justify-content:center;
+            color:#fff; font-size:14px; font-weight:800; border:1px solid rgba(255,255,255,0.3);
+        }
+        .next-item-bottom { display:flex; justify-content:space-between; align-items:flex-end; gap:12px; }
+        .next-item-text { flex:1; color:#fff; }
+        .next-item-title { font-size:14px; font-weight:800; margin-bottom:4px; line-height:1.2; }
+        .next-item-sub { font-size:11px; color:rgba(255,255,255,0.7); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        
+        .play-icon {
+            width:32px; height:32px; border-radius:50%; flex-shrink:0;
+            background:#fff; display:flex; align-items:center; justify-content:center;
+            color:var(--dark-oak); font-size:12px;
+        }
 
         @media(max-width:1024px) {
             .page-body { flex-direction:column; overflow:auto; height:auto; }
@@ -270,9 +275,7 @@
 <div class="blob-1"></div>
 <div class="blob-2"></div>
 
-<!-- ══ NAVBAR ══ -->
 <nav>
-    <!-- Search -->
     <div class="nav-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--dark-oak)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -280,7 +283,6 @@
         <input type="text" placeholder="Cari materi...">
     </div>
 
-    <!-- Tabs -->
     <div class="nav-tabs">
         <a href="{{ route('siswa.home') }}" class="nav-tab">Beranda</a>
         <span class="nav-tab active">Matematika</span>
@@ -288,8 +290,7 @@
         <span class="nav-tab">IPA</span>
         <span class="nav-tab">IPS</span>
     </div>
-
-    <!-- Right -->
+ 
     <div class="nav-right">
         <div class="nav-bell">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--dark-oak)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -307,10 +308,8 @@
     </div>
 </nav>
 
-<!-- ══ PAGE BODY ══ -->
 <div class="page-body">
 
-    <!-- KIRI: KOMENTAR -->
     <div class="comment-col glass-card">
         <div class="comment-header">
             💬 Komentar <span class="comment-count">24</span>
@@ -379,10 +378,8 @@
         </div>
     </div>
 
-    <!-- KANAN -->
     <div class="right-col">
 
-        <!-- VIDEO PLAYER -->
         <div class="glass-card video-card">
             <div class="video-wrapper">
                 <div class="video-placeholder">
@@ -391,7 +388,7 @@
                 </div>
                 <div class="video-top-overlay">
                     <div class="video-overlay-badge">📐 Matematika · Bab 5</div>
-                    <button class="btn-note">📝 Buat Catatan</button>
+                    <a href="{{ route('siswa.catatan') }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
                 </div>
             </div>
             <div class="video-info">
@@ -406,59 +403,88 @@
             </div>
         </div>
 
-        <!-- NEXT VIDEO — horizontal scroll -->
-        <div class="glass-card next-card">
-            <div class="next-header">▶️ Video Selanjutnya</div>
+        <div class="next-card">
+            <div class="next-header">Video Selanjutnya</div>
             <div class="next-scroll-wrap">
 
-                <a href="#" class="next-item active">
-                    <div class="next-thumb thumb-1">
-                        <div class="play-icon">▶</div>
-                        <span class="num-badge">6</span>
+                <a href="#" class="next-item thumb-1">
+                    <div class="next-item-overlay">
+                        <div class="next-item-top">
+                            <span class="next-badge">Bab 6</span>
+                            <div class="btn-more">•••</div>
+                        </div>
+                        <div class="next-item-bottom">
+                            <div class="next-item-text">
+                                <div class="next-item-title">Pertidaksamaan Linear</div>
+                                <div class="next-item-sub">Matematika · Durasi 14:20</div>
+                            </div>
+                            <div class="play-icon">▶</div>
+                        </div>
                     </div>
-                    <div class="next-item-title">Pertidaksamaan Linear Satu Variabel</div>
-                    <div class="next-item-sub">Matematika · Bab 6</div>
-                    <div class="next-item-dur">⏱ 14:20</div>
                 </a>
 
-                <a href="#" class="next-item">
-                    <div class="next-thumb thumb-2">
-                        <div class="play-icon">▶</div>
-                        <span class="num-badge">7</span>
+                <a href="#" class="next-item thumb-2">
+                    <div class="next-item-overlay">
+                        <div class="next-item-top">
+                            <span class="next-badge">Bab 7</span>
+                            <div class="btn-more">•••</div>
+                        </div>
+                        <div class="next-item-bottom">
+                            <div class="next-item-text">
+                                <div class="next-item-title">Sistem Persamaan Tiga Variabel</div>
+                                <div class="next-item-sub">Matematika · Durasi 22:05</div>
+                            </div>
+                            <div class="play-icon">▶</div>
+                        </div>
                     </div>
-                    <div class="next-item-title">Sistem Persamaan Linear Tiga Variabel</div>
-                    <div class="next-item-sub">Matematika · Bab 7</div>
-                    <div class="next-item-dur">⏱ 22:05</div>
                 </a>
 
-                <a href="#" class="next-item">
-                    <div class="next-thumb thumb-3">
-                        <div class="play-icon">▶</div>
-                        <span class="num-badge">8</span>
+                <a href="#" class="next-item thumb-3">
+                    <div class="next-item-overlay">
+                        <div class="next-item-top">
+                            <span class="next-badge">Bab 7</span>
+                            <div class="btn-more">•••</div>
+                        </div>
+                        <div class="next-item-bottom">
+                            <div class="next-item-text">
+                                <div class="next-item-title">Latihan Soal</div>
+                                <div class="next-item-sub">Matematika · Durasi 09:30</div>
+                            </div>
+                            <div class="play-icon">▶</div>
+                        </div>
                     </div>
-                    <div class="next-item-title">Latihan Soal: Persamaan &amp; Pertidaksamaan</div>
-                    <div class="next-item-sub">Matematika · Bab 7</div>
-                    <div class="next-item-dur">⏱ 09:30</div>
                 </a>
 
-                <a href="#" class="next-item">
-                    <div class="next-thumb thumb-4">
-                        <div class="play-icon">▶</div>
-                        <span class="num-badge">9</span>
+                <a href="#" class="next-item thumb-4">
+                    <div class="next-item-overlay">
+                        <div class="next-item-top">
+                            <span class="next-badge">Bab 8</span>
+                            <div class="btn-more">•••</div>
+                        </div>
+                        <div class="next-item-bottom">
+                            <div class="next-item-text">
+                                <div class="next-item-title">Grafik Fungsi Linear</div>
+                                <div class="next-item-sub">Matematika · Durasi 17:48</div>
+                            </div>
+                            <div class="play-icon">▶</div>
+                        </div>
                     </div>
-                    <div class="next-item-title">Grafik Fungsi Linear di Koordinat Kartesius</div>
-                    <div class="next-item-sub">Matematika · Bab 8</div>
-                    <div class="next-item-dur">⏱ 17:48</div>
                 </a>
 
-                <a href="#" class="next-item">
-                    <div class="next-thumb thumb-5">
-                        <div class="play-icon">▶</div>
-                        <span class="num-badge">10</span>
+                <a href="#" class="next-item thumb-5">
+                    <div class="next-item-overlay">
+                        <div class="next-item-top">
+                            <span class="next-badge">Bab 9</span>
+                            <div class="btn-more">•••</div>
+                        </div>
+                        <div class="next-item-bottom">
+                            <div class="next-item-text">
+                                <div class="next-item-title">Fungsi Kuadrat</div>
+                                <div class="next-item-sub">Matematika · Durasi 20:15</div>
+                            </div>
+                            <div class="play-icon">▶</div>
+                        </div>
                     </div>
-                    <div class="next-item-title">Fungsi Kuadrat dan Grafiknya</div>
-                    <div class="next-item-sub">Matematika · Bab 9</div>
-                    <div class="next-item-dur">⏱ 20:15</div>
                 </a>
 
             </div>

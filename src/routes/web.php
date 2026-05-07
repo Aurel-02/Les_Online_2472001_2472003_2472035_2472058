@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\CatatanController;
 
 Route::get('/', function () {
     return view('landing');
@@ -25,4 +27,5 @@ Route::middleware('auth')->group(function () {
 });
 
 // ─── [SEMENTARA] Route video tanpa auth — untuk preview/development ───────────
-Route::get('/siswa/video', [SiswaController::class, 'videoPreview'])->name('siswa.video');
+Route::get('/siswa/video', [VideoController::class, 'preview'])->name('siswa.video');
+Route::get('/siswa/video/catatan', [CatatanController::class, 'preview'])->name('siswa.catatan');
