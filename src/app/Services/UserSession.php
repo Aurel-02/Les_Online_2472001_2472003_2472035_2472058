@@ -104,7 +104,7 @@ class UserSession
     public function getName(): ?string
     {
         $user = $this->getUser();
-        return $user ? $user->name : null;
+        return $user ? $user->nama : null;
     }
 
     /**

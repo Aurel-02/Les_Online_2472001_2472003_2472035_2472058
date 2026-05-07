@@ -56,17 +56,13 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name'     => $request->name,
+            'nama'     => $request->name,
             'email'    => $request->email,
             'password' => $request->password,
             'role'     => $request->role,
         ]);
 
-        Auth::login($user);
-
-        // ─── SINGLETON: Gunakan instance yang sama untuk redirect setelah register ───
-        $session = UserSession::getInstance();
-        return redirect($session->getRedirectUrlByRole());
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login untuk melanjutkan.');
     }
 
     public function logout(Request $request)

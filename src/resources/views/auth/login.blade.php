@@ -216,6 +216,17 @@
             border: 1px solid rgba(163, 124, 118, 0.3);
         }
 
+        .alert-success {
+            background-color: rgba(142, 150, 128, 0.15);
+            color: var(--muted-sage);
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(142, 150, 128, 0.3);
+            font-weight: 500;
+        }
+
         .error-message {
             color: var(--dusty-mauve);
             font-size: 13px;
@@ -262,6 +273,12 @@
             <div class="badge">Selamat Datang</div>
             <h1 class="card-title">Masuk ke Akun</h1>
             <p class="card-subtitle">Lanjutkan perjalanan belajarmu hari ini.</p>
+
+            @if(session('success'))
+                <div class="alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             @if($errors->any())
                 <div class="alert-error">
