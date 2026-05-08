@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserSession;
+use App\Pattern\MateriFactory;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
     public function index()
     {
-        $session = UserSession::getInstance();
-        $userName = $session->getName();
-        return view('siswa.video', compact('userName'));
+        $materi = MateriFactory::create('video');
+        return view($materi->getView(), $materi->getData());
     }
 
     // ─── [SEMENTARA] Preview tanpa auth — hapus setelah development ───────────

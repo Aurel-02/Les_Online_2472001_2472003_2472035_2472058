@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserSession;
+use App\Pattern\MateriFactory;
 use Illuminate\Http\Request;
 
 class CatatanController extends Controller
 {
     public function index()
     {
-        $session = UserSession::getInstance();
-        if (!$session->isSiswa()) {
-            abort(403, 'Akses ditolak. Halaman ini khusus untuk siswa.');
-        }
-        $userName = $session->getName();
-        return view('siswa.catatan', compact('userName'));
+        $materi = MateriFactory::create('catatan');
+        return view($materi->getView(), $materi->getData());
     }
 
     // ─── [SEMENTARA] Preview tanpa auth — hapus setelah development ───────────

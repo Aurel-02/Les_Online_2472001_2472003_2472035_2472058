@@ -54,6 +54,22 @@
         }
         .btn-save:hover { background:#7b846e; transform:translateY(-2px); box-shadow:0 6px 18px rgba(142,150,128,0.4); }
 
+        .nav-user {
+            display:flex; align-items:center; gap:10px; cursor:pointer;
+            background:rgba(255,255,255,0.5); border:1.5px solid rgba(61,43,31,0.1);
+            border-radius:30px; padding:5px 14px 5px 5px;
+            transition:background 0.2s;
+        }
+        .nav-user:hover { background:rgba(255,255,255,0.85); }
+        .nav-avatar {
+            width:30px; height:30px; border-radius:50%;
+            background:var(--muted-sage); color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            font-size:13px; font-weight:800;
+        }
+        .nav-username { font-size:13px; font-weight:700; color:var(--dark-oak); }
+        .nav-role { font-size:11px; color:rgba(61,43,31,0.45); }
+
         .page-body {
             flex:1; display:flex; padding:20px 24px; gap:24px;
             max-width:1600px; margin:0 auto; width:100%;
@@ -208,6 +224,13 @@
     </div>
     <div class="nav-right">
         <button class="btn-save" onclick="alert('Catatan berhasil disimpan!')">Simpan Catatan</button>
+        <div class="nav-user">
+            <div class="nav-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
+            <div>
+                <div class="nav-username">{{ $userName }}</div>
+                <div class="nav-role">siswa</div>
+            </div>
+        </div>
     </div>
 </nav>
 
