@@ -279,6 +279,32 @@
         .activity-desc { font-size: 15px; font-weight: 600; color: var(--dark-oak); line-height: 1.4; }
         .activity-time { font-size: 13px; color: rgba(61, 43, 31, 0.45); margin-top: 6px; font-weight: 600; }
 
+        /* ── Dropdown & Mapel Cards ── */
+        .filter-select {
+            padding: 8px 16px; border-radius: 99px;
+            border: 1px solid rgba(61,43,31,0.2);
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+            font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+            color: var(--dark-oak); outline: none; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-select:focus { border-color: var(--muted-sage); }
+        .mapel-card {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 20px; padding: 20px;
+            display: flex; align-items: center; gap: 16px;
+            transition: all 0.3s ease; text-decoration: none; color: inherit;
+        }
+        .mapel-card:hover { transform: translateY(-4px); background: #fff; box-shadow: 0 8px 24px rgba(61,43,31,0.06); }
+        .mapel-icon {
+            width: 48px; height: 48px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px; flex-shrink: 0;
+        }
+        .mapel-title { font-size: 16px; font-weight: 800; color: var(--dark-oak); line-height: 1.2; }
+        .mapel-subtitle { font-size: 12px; color: rgba(61,43,31,0.5); margin-top: 4px; font-weight: 600; }
+
         /* ── Responsive ── */
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); transition: 0.3s; }
@@ -385,7 +411,18 @@
                     </div>
                 </div>
             </div>
-
+            <!-- MATA PELAJARAN DINAMIS -->
+            <div class="section-header-flex" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h2 class="section-title" style="margin-bottom:0;">Mata Pelajaran</h2>
+                <div class="filter-group" id="mapel-filters" style="display:flex; gap:12px;">
+                    <!-- Dropdowns rendered by JS -->
+                </div>
+            </div>
+            <div class="score-list-card" style="margin-bottom:48px;">
+                <div class="score-list" id="mapel-list">
+                    <!-- Cards rendered by JS -->
+                </div>
+            </div>
             <!-- NILAI MATA PELAJARAN (PROGRESS BARS) -->
             <h2 class="section-title">Perkembangan Nilai</h2>
             <div class="score-list-card">
@@ -462,5 +499,109 @@
 
         </div>
     </main>
+    <script>
+        const userJenjang = {{ $userJenjang ?? 3 }}; // 1: SD, 2: SMP, 3: SMA
+        const mapelFilters = document.getElementById('mapel-filters');
+        const mapelList = document.getElementById('mapel-list');
+
+        const subjectsData = {
+            sd: [
+                { title: 'Matematika', subtitle: 'Dasar Berhitung', icon: '📐', color: 'bg-amber' },
+                { title: 'Bahasa Indonesia', subtitle: 'Membaca & Menulis', icon: '📖', color: 'bg-sage' },
+                { title: 'IPA Dasar', subtitle: 'Alam Sekitar', icon: '🌿', color: 'bg-mauve' }
+            ],
+            smp: [
+                { title: 'Matematika', subtitle: 'Aljabar & Geometri', icon: '📐', color: 'bg-amber' },
+                { title: 'Bahasa Inggris', subtitle: 'Grammar & Vocabulary', icon: '🔤', color: 'bg-blue' },
+                { title: 'IPA Terpadu', subtitle: 'Fisika & Biologi Dasar', icon: '🔬', color: 'bg-sage' },
+                { title: 'IPS Terpadu', subtitle: 'Sejarah & Geografi', icon: '🌍', color: 'bg-mauve' }
+            ],
+            sma_ipa: [
+                { title: 'Matematika Peminatan', subtitle: 'Kalkulus & Trigonometri', icon: '📐', color: 'bg-amber' },
+                { title: 'Fisika', subtitle: 'Mekanika & Termodinamika', icon: '⚡', color: 'bg-blue' },
+                { title: 'Kimia', subtitle: 'Reaksi & Unsur', icon: '🧪', color: 'bg-sage' },
+                { title: 'Biologi', subtitle: 'Genetika & Ekosistem', icon: '🧬', color: 'bg-mauve' }
+            ],
+            sma_ips: [
+                { title: 'Matematika Wajib', subtitle: 'Aljabar Lanjut', icon: '📐', color: 'bg-amber' },
+                { title: 'Ekonomi', subtitle: 'Akuntansi & Makro', icon: '💰', color: 'bg-sage' },
+                { title: 'Geografi', subtitle: 'Pemetaan & Bumi', icon: '🗺️', color: 'bg-blue' },
+                { title: 'Sosiologi', subtitle: 'Masyarakat & Interaksi', icon: '👥', color: 'bg-mauve' }
+            ]
+        };
+
+        function renderMapelCards(subjects) {
+            mapelList.innerHTML = '';
+            subjects.forEach(sub => {
+                const a = document.createElement('a');
+                a.href = "{{ route('siswa.materi') }}?mapel=" + encodeURIComponent(sub.title);
+                a.className = 'mapel-card';
+                a.innerHTML = `
+                    <div class="mapel-icon ${sub.color}">${sub.icon}</div>
+                    <div>
+                        <div class="mapel-title">${sub.title}</div>
+                        <div class="mapel-subtitle">${sub.subtitle}</div>
+                    </div>
+                `;
+                mapelList.appendChild(a);
+            });
+        }
+
+        function initDropdowns() {
+            mapelFilters.innerHTML = '';
+            
+            // Kelas Dropdown
+            const kelasSelect = document.createElement('select');
+            kelasSelect.className = 'filter-select';
+            
+            let minKelas, maxKelas;
+            if (userJenjang == 1) { minKelas = 1; maxKelas = 6; }
+            else if (userJenjang == 2) { minKelas = 7; maxKelas = 9; }
+            else { minKelas = 10; maxKelas = 12; }
+
+            for(let i = minKelas; i <= maxKelas; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `Kelas ${i}`;
+                kelasSelect.appendChild(opt);
+            }
+            mapelFilters.appendChild(kelasSelect);
+
+            // Jurusan Dropdown (hanya untuk SMA)
+            let jurusanSelect = null;
+            if (userJenjang == 3) {
+                jurusanSelect = document.createElement('select');
+                jurusanSelect.className = 'filter-select';
+                
+                ['IPA', 'IPS'].forEach(jur => {
+                    const opt = document.createElement('option');
+                    opt.value = jur.toLowerCase();
+                    opt.textContent = `Jurusan ${jur}`;
+                    jurusanSelect.appendChild(opt);
+                });
+                mapelFilters.appendChild(jurusanSelect);
+            }
+
+            // Event Listeners
+            const updateCards = () => {
+                let currentSubjects = [];
+                if (userJenjang == 1) currentSubjects = subjectsData.sd;
+                else if (userJenjang == 2) currentSubjects = subjectsData.smp;
+                else if (userJenjang == 3) {
+                    const jur = jurusanSelect.value; // ipa atau ips
+                    currentSubjects = subjectsData[`sma_${jur}`];
+                }
+                renderMapelCards(currentSubjects);
+            };
+
+            kelasSelect.addEventListener('change', updateCards);
+            if(jurusanSelect) jurusanSelect.addEventListener('change', updateCards);
+
+            // Initial render
+            updateCards();
+        }
+
+        document.addEventListener('DOMContentLoaded', initDropdowns);
+    </script>
 </body>
 </html>

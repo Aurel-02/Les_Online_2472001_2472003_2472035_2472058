@@ -13,10 +13,4 @@ class CatatanController extends Controller
         return view($materi->getView(), $materi->getData());
     }
 
-    // ─── [SEMENTARA] Preview tanpa auth — hapus setelah development ───────────
-    public function preview()
-    {
-        $userName = 'Preview Siswa';
-        return view('siswa.catatan', compact('userName'));
-    }
 }

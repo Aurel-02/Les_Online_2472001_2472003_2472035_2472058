@@ -219,7 +219,7 @@
 
 <nav>
     <div class="nav-left">
-        <a href="{{ route('siswa.video') }}" class="btn-back">←</a>
+        <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="btn-back">←</a>
         <div class="nav-title">Catatan Saya</div>
     </div>
     <div class="nav-right">
@@ -227,7 +227,7 @@
         <div class="nav-user">
             <div class="nav-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
             <div>
-                <div class="nav-username">{{ $userName }}</div>
+                <div class="nav-username">{{ explode(' ', $userName)[0] }}</div>
                 <div class="nav-role">siswa</div>
             </div>
         </div>
@@ -238,7 +238,7 @@
 
     <div class="left-split glass-card">
         <div class="notes-header">
-            <input type="text" placeholder="Judul Catatan..." value="Catatan: Persamaan Linear Bab 5">
+            <input type="text" placeholder="Judul Catatan..." value="Catatan: {{ $mapel }} Bab 5">
             <div class="notes-meta">Terakhir diedit: Baru saja</div>
         </div>
         <div class="notes-toolbar">
@@ -264,7 +264,7 @@ Tips: Catat poin-poin penting, rumus, atau bagian yang belum kamu mengerti dari 
                     <div class="video-placeholder-icon">▶</div>
                     <p>Video Pembelajaran</p>
                 </div>
-                <div class="video-overlay-badge">📐 Matematika · Bab 5</div>
+                <div class="video-overlay-badge">📚 {{ $mapel }} · Bab 5</div>
             </div>
             <div class="video-info">
                 <div class="video-title">Persamaan Linear Dua Variabel</div>

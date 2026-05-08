@@ -285,10 +285,7 @@
 
     <div class="nav-tabs">
         <a href="{{ route('siswa.home') }}" class="nav-tab">Beranda</a>
-        <span class="nav-tab active">Matematika</span>
-        <span class="nav-tab">Bahasa</span>
-        <span class="nav-tab">IPA</span>
-        <span class="nav-tab">IPS</span>
+        <a href="{{ route('siswa.materi') }}?mapel={{ urlencode($mapel) }}" class="nav-tab active">{{ $mapel }}</a>
     </div>
  
     <div class="nav-right">
@@ -301,7 +298,7 @@
         <div class="nav-user">
             <div class="nav-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
             <div>
-                <div class="nav-username">{{ $userName }}</div>
+                <div class="nav-username">{{ explode(' ', $userName)[0] }}</div>
                 <div class="nav-role">siswa</div>
             </div>
         </div>
@@ -387,12 +384,12 @@
                     <p>Video akan ditampilkan di sini</p>
                 </div>
                 <div class="video-top-overlay">
-                    <div class="video-overlay-badge">📐 Matematika · Bab 5</div>
-                    <a href="{{ route('siswa.catatan') }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
+                    <div class="video-overlay-badge">📚 {{ $mapel }} · Bab 5</div>
+                    <a href="{{ route('siswa.catatan') }}?mapel={{ urlencode($mapel) }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
                 </div>
             </div>
             <div class="video-info">
-                <div class="video-subject-tag">📐 Matematika · Bab 5</div>
+                <div class="video-subject-tag">📚 {{ $mapel }} · Bab 5</div>
                 <div class="video-title">Persamaan Linear Dua Variabel — Metode Substitusi &amp; Eliminasi</div>
                 <div class="video-meta">
                     <span>👁️ 1.2k ditonton</span>

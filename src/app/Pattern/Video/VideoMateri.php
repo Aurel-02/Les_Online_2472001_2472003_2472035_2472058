@@ -14,11 +14,16 @@ class VideoMateri implements MateriInterface
 
     public function getData(): array
     {
-        // Menarik nama siswa dari database via UserSession (yang mengambil dari Auth::user())
         $session = UserSession::getInstance();
+        $userName = $session->getName();
+        if (!$userName) {
+            $userName = 'Siswa Pintar';
+        }
+        $mapel = request()->query('mapel', 'Matematika');
         
         return [
-            'userName' => $session->getName()
+            'userName' => $userName,
+            'mapel' => $mapel
         ];
     }
 }

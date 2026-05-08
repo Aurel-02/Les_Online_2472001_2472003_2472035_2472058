@@ -24,8 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // ─── Route untuk Siswa (dilindungi middleware auth & role) ───────────────────────────
 Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/home', [SiswaController::class, 'index'])->name('siswa.home');
+    Route::get('/siswa/materi', [SiswaController::class, 'daftarMateri'])->name('siswa.materi');
+    Route::get('/siswa/video', [VideoController::class, 'index'])->name('siswa.video');
+    Route::get('/siswa/video/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
 });
-
-// ─── [SEMENTARA] Route video tanpa auth — untuk preview/development ───────────
-Route::get('/siswa/video', [VideoController::class, 'preview'])->name('siswa.video');
-Route::get('/siswa/video/catatan', [CatatanController::class, 'preview'])->name('siswa.catatan');
