@@ -10,9 +10,6 @@ class VideoController extends Controller
     public function index()
     {
         $session = UserSession::getInstance();
-        if (!$session->isSiswa()) {
-            abort(403, 'Akses ditolak. Halaman ini khusus untuk siswa.');
-        }
         $userName = $session->getName();
         return view('siswa.video', compact('userName'));
     }

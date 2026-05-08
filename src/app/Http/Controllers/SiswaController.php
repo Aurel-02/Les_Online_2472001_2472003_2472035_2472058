@@ -14,12 +14,6 @@ class SiswaController extends Controller
         // Ini adalah penggunaan Singleton Pattern di sisi controller.
         $session = UserSession::getInstance();
 
-        // ─── SINGLETON: Proteksi akses — hanya role 'siswa' yang boleh masuk ───
-        // Menggunakan isSiswa() dari instance singleton yang sudah ada.
-        if (!$session->isSiswa()) {
-            abort(403, 'Akses ditolak. Halaman ini khusus untuk siswa.');
-        }
-
         // ─── SINGLETON: Ambil data pengguna dari instance singleton ───
         $userName  = $session->getName();
         $userEmail = $session->getEmail();

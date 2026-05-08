@@ -21,8 +21,8 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// ─── Route untuk Siswa (dilindungi middleware auth) ───────────────────────────
-Route::middleware('auth')->group(function () {
+// ─── Route untuk Siswa (dilindungi middleware auth & role) ───────────────────────────
+Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/home', [SiswaController::class, 'index'])->name('siswa.home');
 });
 
