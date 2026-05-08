@@ -326,10 +326,16 @@
                 <div class="search-btn">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
-            <div class="user-profile">
+            <a href="{{ route('siswa.profile') }}" class="user-profile" style="text-decoration:none; color:inherit;">
                 <div class="user-greeting">Hi, <span>{{ explode(' ', $userName)[0] }}</span></div>
-                <div class="user-avatar">{{ substr($userName, 0, 1) }}</div>
-            </div>
+                <div class="user-avatar" style="overflow:hidden;">
+                    @if(isset($photoProfile) && $photoProfile)
+                        <img src="{{ asset('uploads/profiles/' . $photoProfile) }}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+                    @else
+                        {{ substr($userName, 0, 1) }}
+                    @endif
+                </div>
+            </a>
             </div>
         </header>
 

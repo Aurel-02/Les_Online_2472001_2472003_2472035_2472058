@@ -23,7 +23,8 @@ class VideoMateri implements MateriInterface
         
         return [
             'userName' => $userName,
-            'mapel' => $mapel
+            'mapel' => $mapel,
+            'photoProfile' => $session->getPhotoProfile()
         ];
     }
 }

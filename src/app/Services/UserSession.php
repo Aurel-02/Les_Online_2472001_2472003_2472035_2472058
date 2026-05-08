@@ -63,6 +63,12 @@ class UserSession
         return $user ? $user->email : null;
     }
 
+    public function getPhotoProfile(): ?string
+    {
+        $user = $this->getUser();
+        return $user ? $user->photo_profile : null;
+    }
+
     public function isSiswa(): bool
     {
         return $this->getRole() === 'siswa';

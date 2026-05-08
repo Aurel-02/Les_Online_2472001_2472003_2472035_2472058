@@ -27,4 +27,9 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/materi', [SiswaController::class, 'daftarMateri'])->name('siswa.materi');
     Route::get('/siswa/video', [VideoController::class, 'index'])->name('siswa.video');
     Route::get('/siswa/video/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
+    Route::get('/siswa/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('siswa.profile');
+    Route::post('/siswa/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('siswa.profile.update');
+    Route::post('/siswa/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('siswa.profile.photo');
+    Route::get('/siswa/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordForm'])->name('siswa.profile.password');
+    Route::post('/siswa/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('siswa.profile.password.update');
 });

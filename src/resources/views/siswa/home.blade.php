@@ -379,11 +379,17 @@
         <!-- ── HEADER ── -->
         <header class="topbar">
             <!-- Elemen kosong untuk mendorong user-profile ke kanan jika flex -->
-            <div></div> 
-            <div class="user-profile">
+            <div></div>
+            <a href="{{ route('siswa.profile') }}" class="user-profile" style="text-decoration:none;">
                 <div class="user-greeting">Hi, <span>{{ explode(' ', $userName)[0] }}</span></div>
-                <div class="user-avatar">{{ substr($userName, 0, 1) }}</div>
-            </div>
+                    <div class="user-avatar">
+                        @if(isset($photoProfile) && $photoProfile)
+                            <img src="{{ asset('uploads/profiles/' . $photoProfile) }}" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                        @else
+                            {{ strtoupper(substr($userName, 0, 1)) }}
+                        @endif
+                    </div>
+                </a>
         </header>
 
         <!-- ── DASHBOARD BODY ── -->

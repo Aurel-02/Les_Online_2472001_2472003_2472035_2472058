@@ -19,16 +19,18 @@ class SiswaController extends Controller
         $userEmail = $session->getEmail();
         $userRole  = $session->getRole();
         $userJenjang = $session->getUser()->id_jenjang;
+        $photoProfile = $session->getPhotoProfile();
 
-        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang'));
+        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile'));
     }
 
     public function daftarMateri(Request $request)
     {
         $session = UserSession::getInstance();
         $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
         $mapel = $request->query('mapel', 'Matematika');
         
-        return view('siswa.materi', compact('userName', 'mapel'));
+        return view('siswa.materi', compact('userName', 'mapel', 'photoProfile'));
     }
 }

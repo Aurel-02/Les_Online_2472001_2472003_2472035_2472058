@@ -224,13 +224,19 @@
     </div>
     <div class="nav-right">
         <button class="btn-save" onclick="alert('Catatan berhasil disimpan!')">Simpan Catatan</button>
-        <div class="nav-user">
-            <div class="nav-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
+        <a href="{{ route('siswa.profile') }}" class="nav-user" style="text-decoration:none; color:inherit;">
+            <div class="nav-avatar" style="overflow:hidden;">
+                @if(isset($photoProfile) && $photoProfile)
+                    <img src="{{ asset('uploads/profiles/' . $photoProfile) }}" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+                @else
+                    {{ strtoupper(substr($userName, 0, 1)) }}
+                @endif
+            </div>
             <div>
                 <div class="nav-username">{{ explode(' ', $userName)[0] }}</div>
                 <div class="nav-role">siswa</div>
             </div>
-        </div>
+        </a>
     </div>
 </nav>
 
