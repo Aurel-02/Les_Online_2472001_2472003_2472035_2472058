@@ -38,6 +38,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 9999;
         }
 
         .logo-container {
@@ -74,6 +76,8 @@
             display: flex;
             gap: 16px;
             align-items: center;
+            position: relative;
+            z-index: 99999;
         }
 
         .btn {

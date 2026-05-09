@@ -93,7 +93,7 @@ class UserSession
     {
         return match ($this->getRole()) {
             'siswa'     => '/siswa/home',
-            'guru'      => '/guru/home',
+            'guru'      => '/guru/dashboard',
             'admin'     => '/admin/dashboard',
             'orang tua' => '/orangtua/home',
             default     => '/',

@@ -14,6 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
+        
+        $middleware->redirectUsersTo(function () {
+            if (\Illuminate\Support\Facades\Auth::check()) {
+                return \App\Services\UserSession::getInstance()->getRedirectUrlByRole();
+            }
+            return '/';
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

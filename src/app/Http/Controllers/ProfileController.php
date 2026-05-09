@@ -97,4 +97,47 @@ class ProfileController extends Controller
 
         return redirect()->route('siswa.profile')->with('success_password', 'Password berhasil diubah!');
     }
+
+    public function indexGuru()
+    {
+        $session = UserSession::getInstance();
+        $user = $session->getUser();
+        
+        return view('guru.profile', [
+            'userName' => $user->nama,
+            'userEmail' => $user->email,
+            'userRole' => $user->role,
+            'photoProfile' => $user->photo_profile
+        ]);
+    }
+
+    public function showChangePasswordFormGuru()
+    {
+        $session = UserSession::getInstance();
+        $user = $session->getUser();
+
+        return view('guru.change_password', [
+            'userName' => $user->nama,
+            'photoProfile' => $user->photo_profile
+        ]);
+    }
+
+    public function updatePasswordGuru(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'Password lama tidak cocok']);
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('guru.profile')->with('success_password', 'Password berhasil diubah!');
+    }
 }
