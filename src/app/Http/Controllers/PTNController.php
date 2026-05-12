@@ -18,4 +18,15 @@ class PTNController extends Controller
 
         return view('siswa.ptn', compact('userName', 'photoProfile', 'search', 'kategori'));
     }
+
+    public function jurusan(Request $request)
+    {
+        $session      = UserSession::getInstance();
+        $userName     = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $nama = $request->query('nama', '');
+
+        return view('siswa.jurusan', compact('userName', 'photoProfile', 'nama'));
+    }
 }

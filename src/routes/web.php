@@ -35,6 +35,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordForm'])->name('siswa.profile.password');
     Route::post('/siswa/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('siswa.profile.password.update');
     Route::get('/siswa/ptn', [PTNController::class, 'index'])->name('siswa.ptn');
+    Route::get('/siswa/jurusan', [PTNController::class, 'jurusan'])->name('siswa.jurusan');
 });
 
 Route::middleware(['auth'])->group(function () {
