@@ -10,6 +10,11 @@ class PTNController extends Controller
 {
     protected $ptnRepository;
 
+    /**
+     * Constructor injection for PTN Repository.
+     *
+     * @param PTNRepositoryInterface $ptnRepository
+     */
     public function __construct(PTNRepositoryInterface $ptnRepository)
     {
         $this->ptnRepository = $ptnRepository;
