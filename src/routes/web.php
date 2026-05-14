@@ -40,6 +40,13 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/chat', [SiswaController::class, 'chat'])->name('siswa.chat');
     Route::get('/siswa/paket-belajar', [SiswaController::class, 'paketBelajar'])->name('siswa.paket-belajar');
     Route::get('/siswa/notifikasi', [SiswaController::class, 'notifikasi'])->name('siswa.notifikasi');
+    Route::post('/siswa/set-kelas', [SiswaController::class, 'setKelas'])->name('siswa.set-kelas');
+    Route::get('/siswa/ujian', [\App\Http\Controllers\UjianController::class, 'index'])->name('siswa.ujian');
+    Route::get('/siswa/ujian/{jenis}/mapel', [\App\Http\Controllers\UjianController::class, 'pilihMapel'])->name('siswa.ujian.mapel');
+    Route::get('/siswa/ujian/{jenis}/{mapel}/persiapan', [\App\Http\Controllers\UjianController::class, 'persiapan'])->name('siswa.ujian.persiapan');
+    Route::get('/siswa/ujian/{jenis}/{mapel}/soal', [\App\Http\Controllers\UjianController::class, 'soal'])->name('siswa.ujian.soal');
+    Route::post('/siswa/ujian/submit', [\App\Http\Controllers\UjianController::class, 'submit'])->name('siswa.ujian.submit');
+    Route::get('/siswa/ujian/review/{id}', [\App\Http\Controllers\UjianController::class, 'review'])->name('siswa.ujian.review');
 });
 
 Route::middleware(['auth'])->group(function () {

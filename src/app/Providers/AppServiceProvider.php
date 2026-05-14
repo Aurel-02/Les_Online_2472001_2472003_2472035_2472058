@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Pattern\PTN\PTNRepositoryInterface;
+use App\Pattern\PTN\StaticPTNRepository;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -12,8 +15,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(
-            \App\Pattern\PTN\PTNRepositoryInterface::class,
-            \App\Pattern\PTN\StaticPTNRepository::class
+            PTNRepositoryInterface::class,
+            StaticPTNRepository::class
         );
     }
 
