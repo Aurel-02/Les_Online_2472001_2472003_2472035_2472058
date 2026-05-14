@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserSession; // ← SINGLETON: Import kelas UserSession
+use App\Services\UserSession; 
 use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
     public function index()
     {
-        // ─── SINGLETON: Ambil instance tunggal UserSession ───────────────────
-        // getInstance() selalu mengembalikan objek yang SAMA (tidak membuat baru).
-        // Ini adalah penggunaan Singleton Pattern di sisi controller.
         $session = UserSession::getInstance();
 
-        // ─── SINGLETON: Ambil data pengguna dari instance singleton ───
         $userName  = $session->getName();
         $userEmail = $session->getEmail();
         $userRole  = $session->getRole();
@@ -48,7 +44,21 @@ class SiswaController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
         
-        return view('siswa.paket_belajar', compact('userName', 'photoProfile'));
+        $user = $session->getUser();
+        $idJenjang = $user ? $user->id_jenjang : null;
+        
+        $jenjangName = null;
+        if ($idJenjang) {
+            $jenjangName = \Illuminate\Support\Facades\DB::table('jenjang')->where('id_jenjang', $idJenjang)->value('nama_jenjang');
+        }
+
+        if ($jenjangName) {
+            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')->where('jenjang', $jenjangName)->get();
+        } else {
+            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')->get();
+        }
+        
+        return view('siswa.paket_belajar', compact('userName', 'photoProfile', 'paketList', 'jenjangName'));
     }
 
     public function notifikasi(Request $request)
