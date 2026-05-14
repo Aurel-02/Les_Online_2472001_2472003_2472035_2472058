@@ -14,10 +14,20 @@ class SiswaController extends Controller
         $userName  = $session->getName();
         $userEmail = $session->getEmail();
         $userRole  = $session->getRole();
-        $userJenjang = $session->getUser()->id_jenjang;
+        
+        $user = $session->getUser();
+        $userJenjang = $user ? $user->id_jenjang : 3;
         $photoProfile = $session->getPhotoProfile();
 
-        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile'));
+        $activities = collect();
+        if ($user) {
+            $activities = \App\Models\Activity::where('user_id', $user->getKey())
+                            ->orderBy('created_at', 'desc')
+                            ->take(5)
+                            ->get();
+        }
+
+        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile', 'activities'));
     }
 
     public function daftarMateri(Request $request)
@@ -68,5 +78,16 @@ class SiswaController extends Controller
         $photoProfile = $session->getPhotoProfile();
         
         return view('siswa.notifikasi', compact('userName', 'photoProfile'));
+    }
+
+    public function setKelas(Request $request)
+    {
+        $request->validate([
+            'kelas' => 'required|integer'
+        ]);
+
+        session(['selected_kelas' => $request->kelas]);
+        
+        return response()->json(['success' => true]);
     }
 }
