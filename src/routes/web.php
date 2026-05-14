@@ -36,6 +36,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::post('/siswa/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('siswa.profile.password.update');
     Route::get('/siswa/ptn', [PTNController::class, 'index'])->name('siswa.ptn');
     Route::get('/siswa/jurusan', [PTNController::class, 'jurusan'])->name('siswa.jurusan');
+    Route::get('/siswa/jurusan/detail', [PTNController::class, 'jurusanDetail'])->name('siswa.jurusan.detail');
     Route::get('/siswa/chat', [SiswaController::class, 'chat'])->name('siswa.chat');
     Route::get('/siswa/paket-belajar', [SiswaController::class, 'paketBelajar'])->name('siswa.paket-belajar');
     Route::get('/siswa/notifikasi', [SiswaController::class, 'notifikasi'])->name('siswa.notifikasi');

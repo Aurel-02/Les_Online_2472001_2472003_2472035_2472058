@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info Jurusan - Pintar.id</title>
+    <title>Detail Jurusan - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --dark-oak:#3D2B1F; --muted-sage:#8E9680; --dusty-mauve:#A37C76; --warm-amber:#D9B382; --vintage-cream:#E6D8C1; --sidebar-width:260px; }
@@ -32,39 +32,39 @@
         .breadcrumb { display:flex; align-items:center; gap:8px; margin-bottom:28px; font-size:14px; font-weight:600; color:rgba(61,43,31,.5); }
         .breadcrumb a { color:var(--muted-sage); text-decoration:none; }
         .breadcrumb a:hover { color:var(--dark-oak); }
-        .jurusan-hero { background:linear-gradient(135deg,#4A6741 0%,#6B8F5E 100%); border-radius:32px; padding:44px 52px; display:flex; align-items:center; justify-content:space-between; margin-bottom:40px; box-shadow:0 16px 40px rgba(74,103,65,.25); position:relative; overflow:hidden; }
-        .jurusan-hero::before { content:''; position:absolute; right:-60px; top:-60px; width:320px; height:320px; background:radial-gradient(circle,rgba(255,255,255,.15) 0%,transparent 70%); border-radius:50%; }
-        .hero-left h1 { font-size:32px; font-weight:800; color:#fff; line-height:1.15; letter-spacing:-1px; margin-bottom:12px; }
-        .hero-left p { font-size:15px; color:rgba(255,255,255,.75); max-width:440px; line-height:1.6; }
-        .hero-icon { font-size:100px; filter:drop-shadow(0 10px 24px rgba(0,0,0,.2)); animation:float 6s ease-in-out infinite; }
-        @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-14px) rotate(4deg);} }
+        
+        .detail-hero { background:rgba(255,255,255,.6); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.9); border-radius:32px; padding:44px; display:flex; gap:32px; align-items:center; margin-bottom:40px; box-shadow:0 16px 40px rgba(61,43,31,.05); position:relative; overflow:hidden; }
+        .hero-icon-wrap { width:120px; height:120px; border-radius:32px; display:flex; align-items:center; justify-content:center; font-size:64px; flex-shrink:0; box-shadow:inset 0 4px 20px rgba(255,255,255,.5); }
+        .hero-content h1 { font-size:36px; font-weight:800; color:var(--dark-oak); line-height:1.2; margin-bottom:8px; letter-spacing:-1px; }
+        .hero-content .fakultas-tag { display:inline-block; background:rgba(217,179,130,.2); color:#9a7240; font-size:14px; font-weight:700; padding:6px 16px; border-radius:99px; margin-bottom:16px; }
+        .hero-content p { font-size:16px; color:rgba(61,43,31,.7); line-height:1.6; }
+
         .info-row { display:flex; gap:16px; margin-bottom:40px; flex-wrap:wrap; }
         .info-card { flex:1; min-width:150px; background:rgba(255,255,255,.5); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.8); border-radius:24px; padding:24px; text-align:center; box-shadow:0 8px 24px rgba(61,43,31,.04); }
-        .info-card-num { font-size:24px; font-weight:800; color:var(--dark-oak); }
-        .info-card-lbl { font-size:12px; font-weight:700; color:rgba(61,43,31,.5); text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
+        .info-card-num { font-size:22px; font-weight:800; color:var(--dark-oak); }
+        .info-card-lbl { font-size:12px; font-weight:700; color:rgba(61,43,31,.5); text-transform:uppercase; letter-spacing:.5px; margin-top:6px; }
+        
         .section-title { font-size:22px; font-weight:800; color:var(--dark-oak); margin-bottom:20px; }
         .glass-card { background:rgba(255,255,255,.45); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.8); border-radius:32px; padding:36px; box-shadow:0 10px 30px rgba(61,43,31,.04); margin-bottom:40px; }
-        .glass-card p { font-size:15px; line-height:1.8; color:rgba(61,43,31,.7); }
-        .prodi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-bottom:48px; }
-        .prodi-card { background:rgba(255,255,255,.55); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.85); border-radius:24px; padding:24px; box-shadow:0 8px 24px rgba(61,43,31,.04); transition:all .3s ease; }
-        .prodi-card:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(61,43,31,.08); background:rgba(255,255,255,.8); }
-        .prodi-icon { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; margin-bottom:14px; }
-        .prodi-name { font-size:16px; font-weight:800; color:var(--dark-oak); margin-bottom:4px; }
-        .prodi-desc { font-size:12px; color:rgba(61,43,31,.55); font-weight:600; margin-bottom:10px; line-height:1.4; }
-        .prodi-utbk { display:inline-flex; align-items:center; gap:6px; background:rgba(217,179,130,.2); color:#9a7240; font-size:12px; font-weight:700; padding:5px 12px; border-radius:99px; }
-        .prospek-list { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:48px; }
-        .prospek-pill { padding:10px 22px; border-radius:99px; font-size:14px; font-weight:700; background:rgba(61,43,31,.06); color:var(--dark-oak); transition:all .2s; }
+        .glass-card p { font-size:15px; line-height:1.8; color:rgba(61,43,31,.75); }
+        
+        .mata-kuliah-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; margin-bottom:48px; }
+        .mk-item { background:rgba(255,255,255,.6); border:1px solid rgba(255,255,255,.9); padding:16px 20px; border-radius:16px; font-size:15px; font-weight:600; color:var(--dark-oak); display:flex; align-items:center; gap:12px; transition:all .2s; }
+        .mk-item:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(61,43,31,.05); background:#fff; }
+        .mk-icon { color:var(--muted-sage); }
+        
+        .prospek-list { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:48px; }
+        .prospek-pill { padding:12px 24px; border-radius:99px; font-size:15px; font-weight:700; background:rgba(61,43,31,.06); color:var(--dark-oak); transition:all .2s; display:flex; align-items:center; gap:8px; }
         .prospek-pill:hover { background:var(--dark-oak); color:#fff; }
+
         .bg-sage  { background:rgba(142,150,128,.2); color:#6A725D; }
         .bg-mauve { background:rgba(163,124,118,.2); color:#8a655f; }
         .bg-amber { background:rgba(217,179,130,.2); color:#B38F60; }
         .bg-blue  { background:rgba(112,161,255,.2); color:#5B8BEB; }
         .bg-green { background:rgba(74,103,65,.2); color:#4A6741; }
         .bg-pink  { background:rgba(200,130,150,.2); color:#c08296; }
-        .no-result { text-align:center; padding:80px 20px; color:rgba(61,43,31,.4); }
-        .no-result .emoji { font-size:64px; margin-bottom:16px; }
-        .no-result p { font-size:16px; font-weight:600; }
-        @media(max-width:992px){ .sidebar{transform:translateX(-100%);} .main-wrapper{margin-left:0;} .jurusan-hero{flex-direction:column;text-align:center;gap:24px;padding:32px;} .content-body{padding:0 24px 60px;} .topbar{padding:24px;} }
+
+        @media(max-width:992px){ .sidebar{transform:translateX(-100%);} .main-wrapper{margin-left:0;} .detail-hero{flex-direction:column;text-align:center;padding:32px;} .content-body{padding:0 24px 60px;} .topbar{padding:24px;} }
     </style>
 </head>
 <body>
@@ -87,7 +87,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 </span> Info Univ & PTN
             </a>
-            <a href="{{ route('siswa.jurusan') }}" class="sidebar-item {{ request()->routeIs('siswa.jurusan') ? 'active' : '' }}">
+            <a href="{{ route('siswa.jurusan') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                 </span> Rekomendasi Jurusan
@@ -135,64 +135,65 @@
             <div class="breadcrumb">
                 <a href="{{ route('siswa.ptn') }}">Info PTN</a>
                 <span style="color:rgba(61,43,31,.3);">&#x203A;</span>
-                <span id="breadcrumb-title">Info Jurusan</span>
+                <a href="{{ route('siswa.jurusan', ['nama' => $jurusanDetail['fakultas']]) }}">Fakultas {{ $jurusanDetail['fakultas'] }}</a>
+                <span style="color:rgba(61,43,31,.3);">&#x203A;</span>
+                <span>{{ $jurusanDetail['nama'] }}</span>
             </div>
 
-            <div class="jurusan-hero" id="jurusan-hero">
-                <div class="hero-left">
-                    <h1 id="hero-title">Info Jurusan</h1>
-                    <p id="hero-desc">Temukan informasi lengkap tentang jurusan impianmu.</p>
+            <div class="detail-hero">
+                <div class="hero-icon-wrap {{ $jurusanDetail['color_class'] }}">
+                    {{ $jurusanDetail['icon'] }}
                 </div>
-                <div class="hero-icon" id="hero-icon">&#x1F393;</div>
+                <div class="hero-content">
+                    <div class="fakultas-tag">&#x1F3DB;&#xFE0F; Fakultas {{ $jurusanDetail['fakultas'] }}</div>
+                    <h1>{{ $jurusanDetail['nama'] }}</h1>
+                    <p>{{ $jurusanDetail['singkat'] }}</p>
+                </div>
             </div>
 
-            <div class="info-row" id="info-row"></div>
+            <div class="info-row">
+                <div class="info-card">
+                    <div class="info-card-num">{{ $jurusanDetail['gelar'] }}</div>
+                    <div class="info-card-lbl">Gelar Lulusan</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-num">{{ $jurusanDetail['durasi'] }}</div>
+                    <div class="info-card-lbl">Masa Studi</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-num">{{ $jurusanDetail['akreditasi'] }}</div>
+                    <div class="info-card-lbl">Akreditasi Rata-rata</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-num">{{ $jurusanDetail['utbk'] }}</div>
+                    <div class="info-card-lbl">Target Skor UTBK</div>
+                </div>
+            </div>
 
-            <h2 class="section-title">Tentang Jurusan</h2>
-            <div class="glass-card"><p id="deskripsi-text">Memuat informasi...</p></div>
+            <h2 class="section-title">Apa yang dipelajari?</h2>
+            <div class="glass-card">
+                <p>{{ $jurusanDetail['desc'] }}</p>
+            </div>
 
-            <h2 class="section-title">Program Studi &amp; Target Skor UTBK</h2>
-            <div class="prodi-grid" id="prodi-grid"></div>
+            <h2 class="section-title">Mata Kuliah Utama</h2>
+            <div class="mata-kuliah-grid">
+                @foreach($jurusanDetail['mata_kuliah'] as $mk)
+                <div class="mk-item">
+                    <span class="mk-icon">&#x2714;</span>
+                    {{ $mk }}
+                </div>
+                @endforeach
+            </div>
 
-            <h2 class="section-title">Prospek Karir</h2>
-            <div class="prospek-list" id="prospek-list"></div>
+            <h2 class="section-title">Prospek Karir Lulusan</h2>
+            <div class="prospek-list">
+                @foreach($jurusanDetail['prospek'] as $karir)
+                <div class="prospek-pill">
+                    &#x1F4BC; {{ $karir }}
+                </div>
+                @endforeach
+            </div>
         </div>
     </main>
-
-<script>
-const jurusanData = @json($fakultasData);
-
-const queryNama = {!! json_encode($nama) !!};
-const data = jurusanData[queryNama];
-
-if (data) {
-    document.getElementById('breadcrumb-title').textContent = queryNama;
-    document.getElementById('hero-title').textContent = queryNama;
-    document.getElementById('hero-desc').textContent = data.desc.substring(0, 120) + '...';
-    document.getElementById('hero-icon').textContent = data.icon;
-    document.getElementById('deskripsi-text').textContent = data.desc;
-
-    document.getElementById('info-row').innerHTML =
-        `<div class="info-card"><div class="info-card-num">${data.gelar}</div><div class="info-card-lbl">Gelar</div></div>` +
-        `<div class="info-card"><div class="info-card-num">${data.durasi}</div><div class="info-card-lbl">Masa Studi</div></div>` +
-        `<div class="info-card"><div class="info-card-num">${data.akreditasi}</div><div class="info-card-lbl">Akreditasi</div></div>` +
-        `<div class="info-card"><div class="info-card-num">${data.prodi.length} Prodi</div><div class="info-card-lbl">Program Studi</div></div>`;
-
-    document.getElementById('prodi-grid').innerHTML = data.prodi.map(p => `
-        <a href="/siswa/jurusan/detail?nama=${encodeURIComponent(p.n)}" class="prodi-card" style="text-decoration:none; display:block;">
-            <div class="prodi-icon ${p.c}">${p.i}</div>
-            <div class="prodi-name">${p.n}</div>
-            <div class="prodi-desc">${p.d}</div>
-            <div class="prodi-utbk">&#x1F4CA; Target UTBK: <strong>${p.utbk}</strong></div>
-        </a>`).join('');
-
-    document.getElementById('prospek-list').innerHTML = data.prospek.map(k =>
-        `<span class="prospek-pill">${k}</span>`).join('');
-} else {
-    document.querySelector('.content-body').innerHTML =
-        `<div class="breadcrumb"><a href="{{ route('siswa.ptn') }}">Info PTN</a><span style="color:rgba(61,43,31,.3);">&#x203A;</span><span>Jurusan</span></div>` +
-        `<div class="no-result"><div class="emoji">&#x1F50D;</div><p>Jurusan "<strong>${queryNama}</strong>" belum tersedia.<br><a href="{{ route('siswa.ptn') }}" style="color:var(--muted-sage);text-decoration:none;font-weight:700;">&#x2190; Kembali ke Info PTN</a></p></div>`;
-}
-</script>
 </body>
 </html>
