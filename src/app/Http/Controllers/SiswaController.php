@@ -33,4 +33,30 @@ class SiswaController extends Controller
         
         return view('siswa.materi', compact('userName', 'mapel', 'photoProfile'));
     }
+    public function chat(Request $request)
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+        
+        return view('siswa.chat', compact('userName', 'photoProfile'));
+    }
+
+    public function paketBelajar(Request $request)
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+        
+        return view('siswa.paket_belajar', compact('userName', 'photoProfile'));
+    }
+
+    public function notifikasi(Request $request)
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+        
+        return view('siswa.notifikasi', compact('userName', 'photoProfile'));
+    }
 }
