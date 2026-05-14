@@ -118,6 +118,8 @@
         .card-img-wrap { width: 100%; height: 160px; border-radius: 18px; overflow: hidden; margin-bottom: 18px; background: rgba(255,255,255,.4); }
         .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
         .ptn-card:hover .card-img-wrap img { transform: scale(1.05); }
+        .card-img-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+        .card-img-placeholder span { font-size:42px; font-weight:900; color:rgba(61,43,31,.25); letter-spacing:-2px; }
         .card-top { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
         .card-title { font-size: 17px; font-weight: 800; color: var(--dark-oak); line-height: 1.2; }
         .card-abbr { font-size: 13px; font-weight: 600; color: rgba(61,43,31,.5); margin-top: 3px; }
@@ -289,6 +291,7 @@
             <div class="modal-wrap-rel">
                 <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open');document.body.style.overflow='';">&#x2715;</button>
                 <img class="modal-hero" id="modal-img" src="" alt="">
+                <div id="modal-img-placeholder" class="modal-hero" style="display:none;align-items:center;justify-content:center;font-size:72px;font-weight:900;color:rgba(61,43,31,.18);letter-spacing:-4px;"></div>
             </div>
             <div class="modal-body">
                 <div class="modal-badge" id="modal-badge"></div>
@@ -306,38 +309,7 @@
 
 
 <script>
-const ptnData = [
-    { name:"Universitas Indonesia", abbr:"UI", kota:"Depok, Jawa Barat", img:"/images/ptn/ui.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"48.000+", prodi:"300+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","SIMAK UI","S1 Kelas Internasional"],
-      info:"Universitas tertua dan paling bergengsi di Indonesia dengan berbagai program studi kelas dunia. Berdiri sejak 1849, UI terus mencetak pemimpin bangsa di berbagai bidang.",
-      fakultas:[{n:"Kedokteran",p:"Pendidikan Dokter, Ilmu Gizi, Kesehatan Masyarakat",utbk:"780-820"},{n:"Teknik",p:"Teknik Sipil, Teknik Mesin, Teknik Kimia, Teknik Elektro",utbk:"700-750"},{n:"Hukum",p:"Ilmu Hukum",utbk:"680-720"},{n:"Ekonomi & Bisnis",p:"Ekonomi, Manajemen, Akuntansi",utbk:"690-730"},{n:"Ilmu Komputer",p:"Ilmu Komputer, Sistem Informasi",utbk:"720-760"},{n:"FISIP",p:"Ilmu Politik, Sosiologi, Hubungan Internasional",utbk:"660-700"}]},
-    { name:"Universitas Gadjah Mada", abbr:"UGM", kota:"Yogyakarta", img:"/images/ptn/ugm.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"55.000+", prodi:"280+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","UM UGM","PBUB"],
-      info:"Universitas nasional kerakyatan yang berdiri sejak 1949. UGM terkenal dengan riset pertanian, hukum, dan sosial humaniora yang berdampak nyata bagi masyarakat.",
-      fakultas:[{n:"Teknik",p:"Teknik Sipil, Arsitektur, Teknik Elektro, Teknik Kimia",utbk:"700-750"},{n:"Kedokteran",p:"Pendidikan Dokter, Keperawatan, Gizi Kesehatan",utbk:"770-810"},{n:"MIPA",p:"Matematika, Fisika, Kimia, Biologi",utbk:"680-720"},{n:"Pertanian",p:"Agroteknologi, Agribisnis, Ilmu Tanah",utbk:"640-680"},{n:"Hukum",p:"Ilmu Hukum",utbk:"680-720"},{n:"Ekonomika & Bisnis",p:"Ilmu Ekonomi, Manajemen, Akuntansi",utbk:"690-730"}]},
-    { name:"Institut Teknologi Bandung", abbr:"ITB", kota:"Bandung, Jawa Barat", img:"/images/ptn/itb.png", wilayah:"jawa", fokus:"teknik", akreditasi:"Unggul", mahasiswa:"22.000+", prodi:"180+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","USMI ITB"],
-      info:"Institut teknologi paling bergengsi di Indonesia. ITB adalah pusat inovasi sains, rekayasa, dan seni yang menghasilkan insinyur dan ilmuwan kelas dunia sejak 1920.",
-      fakultas:[{n:"Sekolah Teknik Elektro & Informatika",p:"Teknik Informatika, Sistem & Teknologi Informasi, Teknik Elektro",utbk:"750-790"},{n:"Teknik Sipil & Lingkungan",p:"Teknik Sipil, Teknik Lingkungan, Perencanaan Wilayah",utbk:"710-750"},{n:"Teknik Mesin & Dirgantara",p:"Teknik Mesin, Teknik Penerbangan",utbk:"700-740"},{n:"MIPA",p:"Matematika, Fisika, Kimia, Astronomi",utbk:"700-740"},{n:"Teknologi Industri",p:"Teknik Industri, Teknik Kimia, Teknik Fisika",utbk:"690-730"},{n:"Seni Rupa & Desain",p:"Desain Produk, Desain Komunikasi Visual, Kriya",utbk:"650-690"}]},
-    { name:"Institut Teknologi Sepuluh Nopember", abbr:"ITS", kota:"Surabaya, Jawa Timur", img:"/images/ptn/its.png", wilayah:"jawa", fokus:"teknik", akreditasi:"Unggul", mahasiswa:"21.000+", prodi:"120+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","Mandiri ITS"],
-      info:"Kampus teknik unggulan di Jawa Timur. ITS terkenal dengan riset robotika, kapal laut, dan teknologi informasi yang kompetitif di tingkat internasional.",
-      fakultas:[{n:"Teknologi Informasi & Komunikasi",p:"Teknik Informatika, Sistem Informasi, Teknik Komputer",utbk:"720-760"},{n:"Teknologi Kelautan",p:"Teknik Perkapalan, Teknik Kelautan, Transportasi Laut",utbk:"640-680"},{n:"Teknik Sipil, Lingkungan & Kebumian",p:"Teknik Sipil, Teknik Lingkungan, Teknik Geomatika",utbk:"670-710"},{n:"Teknik Mesin & Industri",p:"Teknik Mesin, Teknik Industri",utbk:"660-700"},{n:"Desain Kreatif & Digital",p:"Desain Produk, Desain Interior, Desain Komunikasi Visual",utbk:"620-660"}]},
-    { name:"Universitas Airlangga", abbr:"UNAIR", kota:"Surabaya, Jawa Timur", img:"/images/ptn/unair.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"35.000+", prodi:"220+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","SMMU UNAIR"],
-      info:"Universitas riset terkemuka dengan keunggulan di bidang kedokteran, farmasi, dan ilmu kesehatan. UNAIR masuk dalam jajaran 500 universitas terbaik dunia versi QS.",
-      fakultas:[{n:"Kedokteran",p:"Pendidikan Dokter, Fisioterapi",utbk:"750-790"},{n:"Farmasi",p:"Farmasi, Farmasi Klinis & Komunitas",utbk:"700-740"},{n:"Kesehatan Masyarakat",p:"Kesehatan Masyarakat, Gizi, K3",utbk:"660-700"},{n:"Ekonomi & Bisnis",p:"Ilmu Ekonomi, Manajemen, Akuntansi",utbk:"660-700"},{n:"Hukum",p:"Ilmu Hukum",utbk:"640-680"},{n:"Sains & Teknologi",p:"Matematika, Fisika, Kimia, Biologi, Teknik Lingkungan",utbk:"640-680"}]},
-    { name:"Universitas Diponegoro", abbr:"UNDIP", kota:"Semarang, Jawa Tengah", img:"/images/ptn/undip.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"48.000+", prodi:"260+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","UM UNDIP"],
-      info:"Universitas riset di pesisir utara Jawa dengan program kelautan, hukum, dan teknik yang terkemuka. UNDIP terus berkembang sebagai kampus kelas dunia.",
-      fakultas:[{n:"Teknik",p:"Teknik Sipil, Teknik Mesin, Teknik Elektro, Teknik Kimia",utbk:"670-710"},{n:"Hukum",p:"Ilmu Hukum",utbk:"650-690"},{n:"Ekonomika & Bisnis",p:"Manajemen, Akuntansi, Ilmu Ekonomi",utbk:"660-700"},{n:"Perikanan & Ilmu Kelautan",p:"Ilmu Kelautan, Perikanan, Oseanografi",utbk:"600-640"},{n:"Kedokteran",p:"Pendidikan Dokter, Keperawatan",utbk:"720-760"},{n:"FISIP",p:"Administrasi Bisnis, Ilmu Komunikasi, Hubungan Internasional",utbk:"620-660"}]},
-    { name:"Universitas Hasanuddin", abbr:"UNHAS", kota:"Makassar, Sulawesi Selatan", img:"/images/ptn/unhas.png", wilayah:"luar", fokus:"umum", akreditasi:"Unggul", mahasiswa:"40.000+", prodi:"230+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","Seleksi Mandiri UNHAS"],
-      info:"PTN terbesar di Kawasan Timur Indonesia. UNHAS menjadi pusat pengembangan SDM unggulan dengan program studi yang relevan dengan potensi daerah KTI.",
-      fakultas:[{n:"Teknik",p:"Teknik Sipil, Teknik Mesin, Teknik Elektro, Teknik Informatika",utbk:"640-680"},{n:"Kedokteran",p:"Pendidikan Dokter, Ilmu Keperawatan",utbk:"710-750"},{n:"Hukum",p:"Ilmu Hukum",utbk:"620-660"},{n:"Ekonomi & Bisnis",p:"Manajemen, Akuntansi, Ilmu Ekonomi",utbk:"620-660"},{n:"Pertanian",p:"Agribisnis, Agroteknologi, Kehutanan",utbk:"580-620"},{n:"Ilmu Kelautan & Perikanan",p:"Ilmu Kelautan, Budidaya Perairan, Pemanfaatan SD Perikanan",utbk:"580-620"}]},
-    { name:"Universitas Sumatera Utara", abbr:"USU", kota:"Medan, Sumatera Utara", img:"/images/ptn/usu.png", wilayah:"luar", fokus:"umum", akreditasi:"Unggul", mahasiswa:"45.000+", prodi:"220+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","SM-USU"],
-      info:"Universitas terdepan di Sumatera dengan tradisi riset pertanian, teknik, dan kedokteran yang kuat. USU berperan penting dalam pembangunan wilayah Sumatera.",
-      fakultas:[{n:"Teknik",p:"Teknik Sipil, Teknik Mesin, Teknik Elektro, Teknik Industri",utbk:"620-660"},{n:"Kedokteran",p:"Pendidikan Dokter, Ilmu Keperawatan",utbk:"680-720"},{n:"Pertanian",p:"Agribisnis, Agroteknologi, Kehutanan",utbk:"560-600"},{n:"Ekonomi & Bisnis",p:"Manajemen, Akuntansi, Ekonomi Pembangunan",utbk:"600-640"},{n:"Hukum",p:"Ilmu Hukum",utbk:"600-640"},{n:"ISIP",p:"Ilmu Komunikasi, Sosiologi, Administrasi Negara",utbk:"560-600"}]},
-    { name:"Universitas Padjadjaran", abbr:"UNPAD", kota:"Bandung, Jawa Barat", img:"/images/ptn/unpad.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"50.000+", prodi:"240+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","SMUP UNPAD"],
-      info:"Kampus riset modern di Jatinangor dengan keunggulan di bidang sosial, hukum, dan kesehatan. UNPAD dikenal sebagai universitas dengan atmosfer akademik yang dinamis.",
-      fakultas:[{n:"Kedokteran",p:"Pendidikan Dokter, Kedokteran Gigi, Keperawatan",utbk:"730-770"},{n:"Hukum",p:"Ilmu Hukum",utbk:"650-690"},{n:"Ekonomi & Bisnis",p:"Manajemen, Akuntansi, Bisnis Digital",utbk:"650-690"},{n:"Ilmu Komunikasi",p:"Ilmu Komunikasi, Hubungan Masyarakat, Jurnalistik",utbk:"640-680"},{n:"MIPA",p:"Matematika, Statistika, Kimia, Fisika, Biologi",utbk:"640-680"},{n:"Ilmu Sosial & Ilmu Politik",p:"Ilmu Politik, Sosiologi, Kesejahteraan Sosial",utbk:"620-660"}]},
-    { name:"Universitas Brawijaya", abbr:"UB", kota:"Malang, Jawa Timur", img:"/images/ptn/ub.png", wilayah:"jawa", fokus:"umum", akreditasi:"Unggul", mahasiswa:"60.000+", prodi:"290+", tags:["Unggul","SNBP","SNBT","Mandiri"], jalur:["SNBP","SNBT","Selma UB"],
-      info:"Salah satu universitas dengan mahasiswa terbanyak di Indonesia. UB unggul dalam riset pertanian, teknologi pangan, dan hukum dengan kampus yang asri di kaki Gunung Arjuno.",
-      fakultas:[{n:"Teknik",p:"Teknik Sipil, Teknik Mesin, Teknik Elektro, Teknik Informatika",utbk:"640-680"},{n:"Pertanian",p:"Agribisnis, Agroteknologi, Agroekoteknologi",utbk:"590-630"},{n:"Hukum",p:"Ilmu Hukum",utbk:"630-670"},{n:"Ekonomi & Bisnis",p:"Manajemen, Akuntansi, Ilmu Ekonomi",utbk:"640-680"},{n:"Kedokteran",p:"Pendidikan Dokter, Ilmu Keperawatan",utbk:"700-740"},{n:"Teknologi Pertanian",p:"Teknologi Pangan, Keteknikan Pertanian, Bioteknologi",utbk:"600-640"}]},
-];
+const ptnData = @json($ptns);
 
 function renderCards(data) {
     const grid = document.getElementById('ptn-grid');
@@ -347,9 +319,17 @@ function renderCards(data) {
         return;
     }
     const tagClass = { Unggul:'tag-green', SNBP:'tag-amber', SNBT:'tag-blue', Mandiri:'tag-mauve' };
-    grid.innerHTML = data.map(p => `
+    const abbrColors = ['#8E9680','#A37C76','#D9B382','#7B9EA6','#9B8EA3','#A0876A','#6A8A7A','#B08060'];
+    grid.innerHTML = data.map(p => {
+        const ci = p.abbr.charCodeAt(0) % abbrColors.length;
+        const imgHtml = p.img
+            ? `<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+               <div class="card-img-placeholder" style="display:none;background:linear-gradient(135deg,${abbrColors[ci]}33,${abbrColors[(ci+2)%abbrColors.length]}55);"><span>${p.abbr}</span></div>`
+            : `<div class="card-img-placeholder" style="background:linear-gradient(135deg,${abbrColors[ci]}33,${abbrColors[(ci+2)%abbrColors.length]}55);"><span>${p.abbr}</span></div>`;
+        const tags = (p.tags||[]).filter(t=>t);
+        return `
         <div class="ptn-card" onclick="openModal(${ptnData.indexOf(p)})">
-            <div class="card-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
+            <div class="card-img-wrap">${imgHtml}</div>
             <div class="card-top">
                 <div>
                     <div class="card-title">${p.name}</div>
@@ -357,7 +337,7 @@ function renderCards(data) {
                 </div>
             </div>
             <div class="card-location">&#x1F4CD; ${p.kota}</div>
-            <div class="card-tags">${p.tags.map(t => `<span class="tag ${tagClass[t]||'tag-green'}">${t}</span>`).join('')}</div>
+            <div class="card-tags">${tags.map(t => `<span class="tag ${tagClass[t]||'tag-green'}">${t}</span>`).join('')}</div>
             <div class="card-stats">
                 <div class="stat-item"><div class="stat-num">${p.mahasiswa}</div><div class="stat-lbl">Mahasiswa</div></div>
                 <div class="card-divider"></div>
@@ -365,7 +345,7 @@ function renderCards(data) {
                 <div class="card-divider"></div>
                 <div class="stat-item"><div class="stat-num">${p.akreditasi}</div><div class="stat-lbl">Akreditasi</div></div>
             </div>
-        </div>`).join('');
+        </div>`;}).join('');
 }
 
 let activeFilter = 'semua', searchVal = '';
@@ -392,8 +372,15 @@ document.addEventListener('DOMContentLoaded', () => renderCards(ptnData));
 
 function openModal(idx) {
     const p = ptnData[idx];
-    document.getElementById('modal-img').src = p.img;
-    document.getElementById('modal-img').alt = p.name;
+    const modalImg = document.getElementById('modal-img');
+    const modalPlaceholder = document.getElementById('modal-img-placeholder');
+    if (p.img) {
+        modalImg.src = p.img; modalImg.alt = p.name;
+        modalImg.style.display = ''; modalPlaceholder.style.display = 'none';
+        modalImg.onerror = () => { modalImg.style.display='none'; modalPlaceholder.style.display='flex'; modalPlaceholder.textContent=p.abbr; };
+    } else {
+        modalImg.style.display = 'none'; modalPlaceholder.style.display = 'flex'; modalPlaceholder.textContent = p.abbr;
+    }
     document.getElementById('modal-badge').textContent = '\u{1F3DB}\uFE0F Perguruan Tinggi Negeri';
     document.getElementById('modal-title').textContent = p.name;
     document.getElementById('modal-abbr').textContent = p.abbr + ' \u2014 ' + p.kota;
@@ -405,11 +392,11 @@ function openModal(idx) {
         `<div class="mstat"><div class="mstat-num">${p.jalur.length}</div><div class="mstat-lbl">Jalur Masuk</div></div>`;
     document.getElementById('modal-jalur').innerHTML = p.jalur.map(j => `<span class="jalur-pill">${j}</span>`).join('');
     document.getElementById('modal-fakultas').innerHTML = p.fakultas.map(f => `
-        <div class="fakultas-item">
+        <a href="/siswa/jurusan?nama=${encodeURIComponent(f.n)}" class="fakultas-item" style="text-decoration:none;">
             <div class="fak-name">${f.n}</div>
             <div class="fak-prodi">${f.p}</div>
             <div class="fak-utbk">&#x1F4CA; Target UTBK: <strong>${f.utbk}</strong></div>
-        </div>`).join('');
+        </a>`).join('');
     document.getElementById('modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
 }
