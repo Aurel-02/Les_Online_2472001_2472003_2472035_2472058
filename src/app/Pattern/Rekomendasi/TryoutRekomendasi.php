@@ -11,7 +11,7 @@ class TryoutRekomendasi implements RekomendasiStrategy
     public function getRekomendasi(User $user): array
     {
         // 1. Ambil rata-rata utbk_raw_score
-        $avgRaw = ExamScore::where('user_id', $user->id)
+        $avgRaw = ExamScore::where('user_id', $user->getKey())
             ->where('jenis', 'tryout')
             ->avg('utbk_raw_score');
 
@@ -62,14 +62,19 @@ class TryoutRekomendasi implements RekomendasiStrategy
             return $b['selisih'] <=> $a['selisih'];
         });
 
-        // Ambil top 15 rekomendasi terbaik
-        $rekomendasiList = array_slice($semuaProdi, 0, 15);
+        // Ambil top 20 rekomendasi terbaik
+        $rekomendasiList = array_slice($semuaProdi, 0, 20);
+        
+        $groupedRekomendasi = [];
+        foreach($rekomendasiList as $rek) {
+            $groupedRekomendasi[$rek['ptn']][] = $rek;
+        }
 
         return [
             'has_tryout' => true,
             'avg_raw'    => round($avgRaw, 1),
             'utbk_score' => round($utbkScore),
-            'rekomendasi'=> $rekomendasiList
+            'rekomendasi'=> $groupedRekomendasi
         ];
     }
 }

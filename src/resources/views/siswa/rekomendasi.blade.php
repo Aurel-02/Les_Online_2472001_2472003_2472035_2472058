@@ -56,6 +56,16 @@
         .rek-stats { display:flex; align-items:center; justify-content:space-between; background:rgba(217,179,130,.15); padding:10px 14px; border-radius:12px; }
         .rek-target { font-size:13px; font-weight:700; color:#9a7240; }
         .rek-badge { font-size:12px; font-weight:800; padding:4px 10px; border-radius:99px; background:rgba(74,103,65,.15); color:#4A6741; }
+        .ptn-group { background:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.8); border-radius:24px; margin-bottom:20px; overflow:hidden; transition:all .3s ease; }
+        .ptn-header { padding:20px 28px; display:flex; align-items:center; cursor:pointer; background:rgba(255,255,255,.4); transition:background .3s; }
+        .ptn-header:hover { background:rgba(255,255,255,.7); }
+        .ptn-name { font-size:18px; font-weight:800; color:var(--dark-oak); flex:1; }
+        .ptn-count { font-size:14px; font-weight:700; color:var(--muted-sage); background:rgba(142,150,128,.15); padding:6px 14px; border-radius:99px; margin-right:16px; }
+        .ptn-chevron { font-size:12px; color:rgba(61,43,31,.5); transition:transform .3s; }
+        .ptn-group.active .ptn-chevron { transform:rotate(180deg); }
+        .ptn-body { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(0,1,0,1); }
+        .ptn-group.active .ptn-body { max-height:2000px; transition:max-height .5s ease-in-out; }
+        .ptn-body-content { padding:24px 28px; border-top:1px solid rgba(61,43,31,.05); }
         
         .no-data { text-align:center; padding:80px 20px; background:rgba(255,255,255,.5); border-radius:24px; border:1px dashed rgba(61,43,31,.2); margin-bottom:40px; }
         .no-data .emoji { font-size:64px; margin-bottom:16px; }
@@ -161,25 +171,39 @@
                 </div>
 
                 <h2 class="section-title">Jurusan Terbuka Untukmu</h2>
-                <div class="rekomendasi-grid">
-                    @forelse($rekomendasi as $rek)
-                        <a href="{{ route('siswa.jurusan.detail') }}?nama={{ urlencode($rek['prodi']) }}" class="rekomendasi-card">
-                            <div class="rek-ptn">{{ $rek['ptn'] }}</div>
-                            <div class="rek-prodi">{{ $rek['prodi'] }}</div>
-                            <div class="rek-fakultas">Fakultas {{ $rek['fakultas'] }}</div>
-                            <div class="rek-stats">
-                                <div class="rek-target">Target: {{ $rek['target'] }}</div>
-                                @if($rek['selisih'] > 50)
-                                    <div class="rek-badge" style="background:rgba(74,103,65,.15);color:#4A6741;">Sangat Aman</div>
-                                @elseif($rek['selisih'] >= 0)
-                                    <div class="rek-badge" style="background:rgba(217,179,130,.2);color:#B38F60;">Aman</div>
-                                @else
-                                    <div class="rek-badge" style="background:rgba(163,124,118,.15);color:#A37C76;">Ketat</div>
-                                @endif
+                <div class="ptn-accordion-list">
+                    @forelse($rekomendasi as $namaPtn => $prodis)
+                        <div class="ptn-group">
+                            <div class="ptn-header" onclick="this.parentElement.classList.toggle('active')">
+                                <div class="ptn-name">{{ $namaPtn }}</div>
+                                <div class="ptn-count">{{ count($prodis) }} Jurusan</div>
+                                <div class="ptn-chevron">&#x25BC;</div>
                             </div>
-                        </a>
+                            <div class="ptn-body">
+                                <div class="ptn-body-content">
+                                    <div class="rekomendasi-grid">
+                                        @foreach($prodis as $rek)
+                                            <a href="{{ route('siswa.jurusan.detail') }}?nama={{ urlencode($rek['prodi']) }}" class="rekomendasi-card">
+                                                <div class="rek-prodi">{{ $rek['prodi'] }}</div>
+                                                <div class="rek-fakultas">Fakultas {{ $rek['fakultas'] }}</div>
+                                                <div class="rek-stats">
+                                                    <div class="rek-target">Target: {{ $rek['target'] }}</div>
+                                                    @if($rek['selisih'] > 50)
+                                                        <div class="rek-badge" style="background:rgba(74,103,65,.15);color:#4A6741;">Sangat Aman</div>
+                                                    @elseif($rek['selisih'] >= 0)
+                                                        <div class="rek-badge" style="background:rgba(217,179,130,.2);color:#B38F60;">Aman</div>
+                                                    @else
+                                                        <div class="rek-badge" style="background:rgba(163,124,118,.15);color:#A37C76;">Ketat</div>
+                                                    @endif
+                                                </div>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @empty
-                        <div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(61,43,31,.5);font-weight:600;">
+                        <div style="text-align:center;padding:40px;color:rgba(61,43,31,.5);font-weight:600;background:rgba(255,255,255,.5);border-radius:24px;">
                             Belum ada jurusan yang sesuai dengan estimasi skormu. Terus tingkatkan nilaimu!
                         </div>
                     @endforelse
