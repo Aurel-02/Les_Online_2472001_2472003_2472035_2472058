@@ -397,7 +397,7 @@ function openModal(idx) {
         `<div class="mstat"><div class="mstat-num">${p.jalur.length}</div><div class="mstat-lbl">Jalur Masuk</div></div>`;
     document.getElementById('modal-jalur').innerHTML = p.jalur.map(j => `<span class="jalur-pill">${j}</span>`).join('');
     document.getElementById('modal-fakultas').innerHTML = p.fakultas.map(f => `
-        <a href="/siswa/jurusan?nama=${encodeURIComponent(f.n)}" class="fakultas-item" style="text-decoration:none;">
+        <a href="/siswa/fakultas?nama=${encodeURIComponent(f.n)}" class="fakultas-item" style="text-decoration:none;">
             <div class="fak-name">${f.n}</div>
             <div class="fak-prodi">${f.p}</div>
             <div class="fak-utbk">&#x1F4CA; Target UTBK: <strong>${f.utbk}</strong></div>

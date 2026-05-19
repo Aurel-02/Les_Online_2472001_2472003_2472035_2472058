@@ -140,7 +140,7 @@
             <div class="breadcrumb">
                 <a href="{{ route('siswa.ptn') }}">Info PTN</a>
                 <span style="color:rgba(61,43,31,.3);">&#x203A;</span>
-                <a href="{{ route('siswa.jurusan', ['nama' => $jurusanDetail['fakultas']]) }}">Fakultas {{ $jurusanDetail['fakultas'] }}</a>
+                <a href="{{ route('siswa.fakultas', ['nama' => $jurusanDetail['fakultas']]) }}">Fakultas {{ $jurusanDetail['fakultas'] }}</a>
                 <span style="color:rgba(61,43,31,.3);">&#x203A;</span>
                 <span>{{ $jurusanDetail['nama'] }}</span>
             </div>
