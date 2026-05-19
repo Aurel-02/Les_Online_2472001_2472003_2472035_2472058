@@ -15,6 +15,7 @@ class ExamScore extends Model
         'score',
         'correct',
         'total',
+        'utbk_raw_score',
         'questions_snapshot',
         'student_answers',
     ];

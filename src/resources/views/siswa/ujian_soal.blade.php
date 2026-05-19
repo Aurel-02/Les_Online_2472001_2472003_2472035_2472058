@@ -134,7 +134,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
         </svg>
-        <span id="time-display">30:00</span>
+        <span id="time-display">{{ $jenis === 'tryout' ? '90:00' : '30:00' }}</span>
     </div>
 </header>
 
@@ -196,8 +196,14 @@
     <div class="modal-card">
         <h3 class="modal-title">Akhiri Ujian?</h3>
         <p class="modal-desc">
-            Soal yang <strong>belum dijawab</strong> akan dianggap salah dan bernilai 0.
-            Pastikan kamu sudah siap. Ujian tidak bisa dilanjutkan setelah diakhiri.
+            @if($jenis === 'tryout')
+                Soal yang <strong>tidak dijawab</strong> bernilai <strong>0</strong>.
+                Soal yang <strong>salah</strong> dikenakan <strong>pengurangan &minus;1 poin</strong>.
+                Pastikan kamu sudah siap.
+            @else
+                Soal yang <strong>belum dijawab</strong> akan dianggap salah dan bernilai 0.
+                Pastikan kamu sudah siap. Ujian tidak bisa dilanjutkan setelah diakhiri.
+            @endif
         </p>
         <div class="modal-actions">
             <button class="btn-cancel" onclick="closeFinishModal()">Batal</button>
@@ -207,6 +213,7 @@
 </div>
 
 <script>
+    const examJenis = '{{ $jenis }}';
     let currentIndex  = 0;
     const totalQuestions = {{ count($questionsForView) }};
     const answers = {};
@@ -248,7 +255,8 @@
         document.getElementById('exam-form').submit();
     }
 
-    let timeRemaining = 30 * 60;
+    // Timer: tryout = 90 menit, UTS/UAS = 30 menit
+    let timeRemaining = (examJenis === 'tryout' ? 90 : 30) * 60;
     const timeDisplay = document.getElementById('time-display');
     const interval = setInterval(() => {
         if (timeRemaining <= 0) { clearInterval(interval); submitExam(); return; }

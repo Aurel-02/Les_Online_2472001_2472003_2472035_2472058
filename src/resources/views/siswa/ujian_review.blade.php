@@ -75,7 +75,7 @@
             background: #fff; border-radius: 24px; padding: 32px; margin-bottom: 24px;
             border: 1px solid rgba(61,43,31,.06); box-shadow: 0 8px 24px rgba(61,43,31,.04);
         }
-        .question-num { font-size: 13px; font-weight: 700; color: rgba(61,43,31,.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .question-num { font-size: 13px; font-weight: 700; color: rgba(61,43,31,.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
         .question-text { font-size: 17px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; }
         .options-review { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 
@@ -138,18 +138,39 @@
 
     <div class="main-wrapper">
         @php
+            $isUtbk     = $examScore->jenis === 'tryout';
             $bannerClass = $examScore->score >= 75 ? '' : ($examScore->score >= 50 ? 'medium' : 'low');
             $jenisLabel  = match($examScore->jenis) { 'uts' => 'UTS', 'uas' => 'UAS', 'tryout' => 'Try Out UTBK/SNBT', default => strtoupper($examScore->jenis) };
+            $wrong       = $isUtbk ? ($examScore->total - $examScore->correct - (collect($examScore->student_answers ?? [])->count() - $examScore->correct)) : 0;
+            // Hitung unanswered untuk UTBK: total - jawaban yang masuk
+            $answered    = $isUtbk ? count($examScore->student_answers ?? []) : 0;
+            $unanswered  = $isUtbk ? ($examScore->total - $answered) : 0;
+            $wrongCount  = $isUtbk ? ($answered - $examScore->correct) : 0;
+            $maxRaw      = $examScore->total * 4;
         @endphp
 
         <div class="score-banner {{ $bannerClass }}">
             <div class="score-info">
                 <h1>Review Ujian — {{ $jenisLabel }}</h1>
-                <p>{{ $examScore->mapel }} &middot; {{ $examScore->correct }} dari {{ $examScore->total }} soal benar &middot; {{ $examScore->created_at->locale('id')->isoFormat('D MMMM YYYY, HH:mm') }}</p>
+                @if($isUtbk)
+                    <p>
+                        {{ $examScore->mapel !== 'Try Out UTBK' ? $examScore->mapel . ' · ' : '' }}
+                        Benar: {{ $examScore->correct }} (+{{ $examScore->correct * 4 }} poin) &middot;
+                        Salah: {{ $wrongCount }} (−{{ $wrongCount }} poin) &middot;
+                        Kosong: {{ $unanswered }} (0 poin)
+                    </p>
+                @else
+                    <p>{{ $examScore->mapel }} &middot; {{ $examScore->correct }} dari {{ $examScore->total }} soal benar &middot; {{ $examScore->created_at->locale('id')->isoFormat('D MMMM YYYY, HH:mm') }}</p>
+                @endif
             </div>
             <div class="score-circle">
-                <span class="num">{{ $examScore->score }}</span>
-                <span class="lbl">NILAI</span>
+                @if($isUtbk)
+                    <span class="num" style="font-size:22px;">{{ $examScore->utbk_raw_score ?? 0 }}</span>
+                    <span class="lbl">/ {{ $maxRaw }} PTS</span>
+                @else
+                    <span class="num">{{ $examScore->score }}</span>
+                    <span class="lbl">NILAI</span>
+                @endif
             </div>
         </div>
 
@@ -175,9 +196,17 @@
             $chosen    = $studentAnswers[$qid] ?? null;
             $correct   = $q['correct'];
             $isCorrect = $chosen === $correct;
+            $isWrong   = $chosen !== null && $chosen !== $correct;
+            // Badge poin UTBK per soal
+            $pointBadge = '';
+            if ($isUtbk) {
+                if ($isCorrect)     $pointBadge = '<span style="margin-left:auto;background:rgba(39,174,96,.15);color:#1a7a44;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;">+4 poin</span>';
+                elseif ($isWrong)   $pointBadge = '<span style="margin-left:auto;background:rgba(231,76,60,.15);color:#c0392b;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;">−1 poin</span>';
+                else                $pointBadge = '<span style="margin-left:auto;background:rgba(61,43,31,.08);color:rgba(61,43,31,.5);font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;">0 poin</span>';
+            }
         @endphp
         <div class="question-card">
-            <div class="question-num">Soal {{ $loop->iteration }}</div>
+            <div class="question-num">Soal {{ $loop->iteration }} {!! $pointBadge !!}</div>
             <div class="question-text">{{ $q['text'] }}</div>
 
             <div class="options-review">

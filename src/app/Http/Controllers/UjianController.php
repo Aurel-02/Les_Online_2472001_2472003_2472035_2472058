@@ -23,6 +23,7 @@ class UjianController extends Controller
             1 => 6, 2 => 9, 3 => 12, default => 12,
         };
         $kelas = session('selected_kelas', $defaultKelas);
+        $jurusan = session('selected_jurusan', 'ipa');
 
         // Ambil riwayat dari DB — gunakan getKey() agar primary key berapapun benar
         $histories = $user
@@ -33,7 +34,7 @@ class UjianController extends Controller
             : collect();
 
         return view('siswa.ujian', compact(
-            'userName', 'photoProfile', 'jenjangId', 'jenjangName', 'kelas', 'histories'
+            'userName', 'photoProfile', 'jenjangId', 'jenjangName', 'kelas', 'jurusan', 'histories'
         ));
     }
 
@@ -50,6 +51,7 @@ class UjianController extends Controller
         };
         $defaultKelas = match ((int)$jenjangId) { 1 => 6, 2 => 9, 3 => 12, default => 12 };
         $kelas        = session('selected_kelas', $defaultKelas);
+        $jurusan      = session('selected_jurusan', 'ipa');
 
         $mapelList = [];
         if ($jenjangId == 1) {
@@ -66,14 +68,21 @@ class UjianController extends Controller
                 ['title' => 'IPS Terpadu',      'subtitle' => 'Sejarah & Geografi',          'icon' => '🌍', 'color' => 'bg-mauve'],
             ];
         } else {
-            $mapelList = [
-                ['title' => 'Matematika Wajib',  'subtitle' => 'Kalkulus Dasar',              'icon' => '📐', 'color' => 'bg-amber'],
-                ['title' => 'Bahasa Indonesia',  'subtitle' => 'Tata Bahasa',                 'icon' => '📖', 'color' => 'bg-sage'],
-                ['title' => 'Bahasa Inggris',    'subtitle' => 'Reading Comprehension',       'icon' => '🔤', 'color' => 'bg-blue'],
-                ['title' => 'Fisika',            'subtitle' => 'Mekanika & Termodinamika',    'icon' => '⚡', 'color' => 'bg-mauve'],
-                ['title' => 'Biologi',           'subtitle' => 'Genetika & Ekosistem',        'icon' => '🧬', 'color' => 'bg-amber'],
-                ['title' => 'Ekonomi',           'subtitle' => 'Akuntansi & Makro',           'icon' => '💰', 'color' => 'bg-sage'],
-            ];
+            if ($jurusan === 'ips') {
+                $mapelList = [
+                    ['title' => 'Matematika Wajib',  'subtitle' => 'Aljabar Lanjut',              'icon' => '📐', 'color' => 'bg-amber'],
+                    ['title' => 'Ekonomi',           'subtitle' => 'Akuntansi & Makro',           'icon' => '💰', 'color' => 'bg-sage'],
+                    ['title' => 'Geografi',          'subtitle' => 'Pemetaan & Bumi',             'icon' => '🗺️', 'color' => 'bg-blue'],
+                    ['title' => 'Sosiologi',         'subtitle' => 'Masyarakat & Interaksi',      'icon' => '👥', 'color' => 'bg-mauve'],
+                ];
+            } else {
+                $mapelList = [
+                    ['title' => 'Matematika Peminatan','subtitle' => 'Kalkulus & Trigonometri', 'icon' => '📐', 'color' => 'bg-amber'],
+                    ['title' => 'Fisika',            'subtitle' => 'Mekanika & Termodinamika',    'icon' => '⚡', 'color' => 'bg-blue'],
+                    ['title' => 'Kimia',             'subtitle' => 'Reaksi & Unsur',              'icon' => '🧪', 'color' => 'bg-sage'],
+                    ['title' => 'Biologi',           'subtitle' => 'Genetika & Ekosistem',        'icon' => '🧬', 'color' => 'bg-mauve'],
+                ];
+            }
         }
 
         return view('siswa.ujian_mapel', compact(
@@ -142,15 +151,32 @@ class UjianController extends Controller
         $mapel             = session('exam_mapel', '');
         $studentAnswers    = $request->input('answers', []);
 
-        // Hitung skor (kosong = salah = 0)
+        // Hitung skor
         $correct = 0;
+        $wrong   = 0;
         $total   = count($answerKey);
+
         foreach ($answerKey as $qid => $rightAnswer) {
-            if (isset($studentAnswers[$qid]) && $studentAnswers[$qid] === $rightAnswer) {
+            if (!isset($studentAnswers[$qid]) || $studentAnswers[$qid] === '') {
+                // tidak dijawab — 0
+            } elseif ($studentAnswers[$qid] === $rightAnswer) {
                 $correct++;
+            } else {
+                $wrong++;
             }
         }
-        $score = $total > 0 ? round(($correct / $total) * 100) : 0;
+
+        // Penilaian UTBK khusus Try Out: +4 benar, -1 salah, 0 kosong
+        $utbkRawScore = null;
+        if ($jenis === 'tryout') {
+            $utbkRawScore = ($correct * 4) - ($wrong * 1);
+            $utbkRawScore = max(0, $utbkRawScore); // tidak boleh negatif
+            // Normalisasi ke 0-100 untuk progress bar history
+            $maxPossible = $total * 4;
+            $score = $maxPossible > 0 ? round(($utbkRawScore / $maxPossible) * 100) : 0;
+        } else {
+            $score = $total > 0 ? round(($correct / $total) * 100) : 0;
+        }
 
         // Simpan ke exam_scores
         $examScore = ExamScore::create([
@@ -162,12 +188,17 @@ class UjianController extends Controller
             'total'              => $total,
             'questions_snapshot' => $questionsSnapshot,
             'student_answers'    => $studentAnswers,
+            'utbk_raw_score'     => $utbkRawScore,  // null untuk UTS/UAS
         ]);
+
+        $scoreDesc = $jenis === 'tryout'
+            ? "Menyelesaikan Try Out UTBK/SNBT dengan skor raw {$utbkRawScore} (nilai {$score})"
+            : "Menyelesaikan ujian " . strtoupper($jenis) . " " . $mapel . " dengan nilai " . $score;
 
         \App\Models\Activity::create([
             'user_id'     => $user->getKey(),
             'type'        => 'ujian',
-            'description' => "Menyelesaikan ujian " . strtoupper($jenis) . " " . $mapel . " dengan nilai " . $score,
+            'description' => $scoreDesc,
         ]);
 
         // Hapus session exam

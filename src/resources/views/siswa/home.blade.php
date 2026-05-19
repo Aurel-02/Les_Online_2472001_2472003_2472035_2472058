@@ -568,20 +568,28 @@
 
         function initDropdowns() {
             mapelFilters.innerHTML = '';
-            
+
+            // Storage keys per jenjang agar tidak bentrok
+            const STORAGE_KEY_KELAS   = `pintar_kelas_j${userJenjang}`;
+            const STORAGE_KEY_JURUSAN = `pintar_jurusan_j${userJenjang}`;
+
             // Kelas Dropdown
             const kelasSelect = document.createElement('select');
             kelasSelect.className = 'filter-select';
-            
+
             let minKelas, maxKelas;
             if (userJenjang == 1) { minKelas = 1; maxKelas = 6; }
             else if (userJenjang == 2) { minKelas = 7; maxKelas = 9; }
             else { minKelas = 10; maxKelas = 12; }
 
-            for(let i = minKelas; i <= maxKelas; i++) {
+            const savedKelas = localStorage.getItem(STORAGE_KEY_KELAS);
+
+            for (let i = minKelas; i <= maxKelas; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
                 opt.textContent = `Kelas ${i}`;
+                // Restore pilihan terakhir, default ke kelas terkecil
+                if (savedKelas ? String(i) === savedKelas : i === minKelas) opt.selected = true;
                 kelasSelect.appendChild(opt);
             }
             mapelFilters.appendChild(kelasSelect);
@@ -591,11 +599,14 @@
             if (userJenjang == 3) {
                 jurusanSelect = document.createElement('select');
                 jurusanSelect.className = 'filter-select';
-                
+
+                const savedJurusan = localStorage.getItem(STORAGE_KEY_JURUSAN) || 'ipa';
+
                 ['IPA', 'IPS'].forEach(jur => {
                     const opt = document.createElement('option');
                     opt.value = jur.toLowerCase();
                     opt.textContent = `Jurusan ${jur}`;
+                    if (jur.toLowerCase() === savedJurusan) opt.selected = true;
                     jurusanSelect.appendChild(opt);
                 });
                 mapelFilters.appendChild(jurusanSelect);
@@ -603,6 +614,10 @@
 
             // Event Listeners
             const updateCards = () => {
+                // Simpan pilihan saat ini ke localStorage
+                localStorage.setItem(STORAGE_KEY_KELAS, kelasSelect.value);
+                if (jurusanSelect) localStorage.setItem(STORAGE_KEY_JURUSAN, jurusanSelect.value);
+
                 let currentSubjects = [];
                 if (userJenjang == 1) currentSubjects = subjectsData.sd;
                 else if (userJenjang == 2) currentSubjects = subjectsData.smp;
@@ -619,14 +634,17 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({ kelas: kelasSelect.value })
+                    body: JSON.stringify({ 
+                        kelas: kelasSelect.value,
+                        jurusan: jurusanSelect ? jurusanSelect.value : null
+                    })
                 }).catch(err => console.error('Failed to update kelas in session', err));
             };
 
             kelasSelect.addEventListener('change', updateCards);
-            if(jurusanSelect) jurusanSelect.addEventListener('change', updateCards);
+            if (jurusanSelect) jurusanSelect.addEventListener('change', updateCards);
 
-            // Initial render
+            // Initial render (pakai nilai yang sudah di-restore)
             updateCards();
         }
 

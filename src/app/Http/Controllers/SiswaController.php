@@ -83,10 +83,15 @@ class SiswaController extends Controller
     public function setKelas(Request $request)
     {
         $request->validate([
-            'kelas' => 'required|integer'
+            'kelas' => 'required|integer',
+            'jurusan' => 'nullable|string'
         ]);
 
         session(['selected_kelas' => $request->kelas]);
+        
+        if ($request->has('jurusan')) {
+            session(['selected_jurusan' => $request->jurusan]);
+        }
         
         return response()->json(['success' => true]);
     }

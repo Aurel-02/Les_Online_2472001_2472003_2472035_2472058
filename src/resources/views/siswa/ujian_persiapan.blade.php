@@ -121,33 +121,61 @@
             </a>
 
             <div class="prep-card">
-                <div class="prep-icon">📝</div>
-                <h1 class="prep-title">{{ strtoupper($jenis) }} - {{ $mapel }}</h1>
-                <p class="prep-subtitle">Persiapkan dirimu sebelum memulai ujian.</p>
+                <div class="prep-icon">{{ $jenis === 'tryout' ? '🎯' : '📝' }}</div>
+                <h1 class="prep-title">{{ $jenis === 'tryout' ? 'Try Out UTBK/SNBT' : strtoupper($jenis) . ' — ' . $mapel }}</h1>
+                <p class="prep-subtitle">
+                    {{ $jenis === 'tryout' ? 'Simulasi ujian berstandar UTBK/SNBT 2025' : 'Persiapkan dirimu sebelum memulai ujian.' }}
+                </p>
 
                 <div class="prep-details">
-                    <div class="detail-item">
-                        <div class="detail-value">30</div>
-                        <div class="detail-label">Menit Waktu Ujian</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-value">10</div>
-                        <div class="detail-label">Jumlah Soal</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-value">PG</div>
-                        <div class="detail-label">Tipe Soal</div>
-                    </div>
+                    @if($jenis === 'tryout')
+                        <div class="detail-item">
+                            <div class="detail-value">90</div>
+                            <div class="detail-label">Menit Waktu</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">15</div>
+                            <div class="detail-label">Jumlah Soal</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">+4/-1</div>
+                            <div class="detail-label">Sistem Poin</div>
+                        </div>
+                    @else
+                        <div class="detail-item">
+                            <div class="detail-value">30</div>
+                            <div class="detail-label">Menit Waktu Ujian</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">10</div>
+                            <div class="detail-label">Jumlah Soal</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-value">PG</div>
+                            <div class="detail-label">Tipe Soal</div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="prep-rules">
-                    <h4>Peraturan Ujian</h4>
-                    <ul>
-                        <li>Pastikan koneksi internet Anda stabil selama ujian berlangsung.</li>
-                        <li>Waktu ujian akan otomatis berjalan mundur begitu Anda menekan tombol "Kerjakan".</li>
-                        <li>Dilarang keluar dari halaman browser selama ujian berlangsung.</li>
-                        <li>Soal yang sudah dijawab akan tersimpan otomatis.</li>
-                    </ul>
+                    @if($jenis === 'tryout')
+                        <h4>⚡ Sistem Penilaian UTBK</h4>
+                        <ul>
+                            <li><strong>Jawaban Benar: +4 poin</strong> — setiap jawaban benar menambah 4 poin.</li>
+                            <li><strong>Jawaban Salah: −1 poin</strong> — hati-hati, menebak sembarangan merugikan.</li>
+                            <li><strong>Tidak Dijawab: 0 poin</strong> — lebih aman dibiarkan kosong jika ragu.</li>
+                            <li>Skor maksimum = 15 soal × 4 poin = <strong>60 poin</strong>.</li>
+                            <li>Soal mencakup: Penalaran Umum, Literasi Bahasa Indonesia, Literasi Bahasa Inggris, dan Pengetahuan Kuantitatif.</li>
+                        </ul>
+                    @else
+                        <h4>Peraturan Ujian</h4>
+                        <ul>
+                            <li>Pastikan koneksi internet Anda stabil selama ujian berlangsung.</li>
+                            <li>Waktu ujian akan otomatis berjalan mundur begitu Anda menekan tombol "Kerjakan".</li>
+                            <li>Dilarang keluar dari halaman browser selama ujian berlangsung.</li>
+                            <li>Soal yang sudah dijawab akan tersimpan otomatis.</li>
+                        </ul>
+                    @endif
                 </div>
 
                 <a href="{{ route('siswa.ujian.soal', ['jenis' => $jenis, 'mapel' => $mapel]) }}" class="btn-start">
