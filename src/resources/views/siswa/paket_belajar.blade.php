@@ -321,13 +321,14 @@
             background: rgba(61, 43, 31, 0.45);
             backdrop-filter: blur(12px);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             z-index: 1000;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.4s ease;
-            padding: 20px;
+            padding: 40px 20px;
+            overflow-y: auto;
         }
 
         .modal-overlay.active {
@@ -342,14 +343,13 @@
             border-radius: 28px;
             width: 100%;
             max-width: 580px;
-            max-height: 90vh;
-            overflow-y: auto;
             transform: scale(0.9) translateY(20px);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             position: relative;
+            margin: auto;
         }
 
         .modal-overlay.active .detail-modal {
@@ -841,105 +841,128 @@
             </div>
 
             <div class="modal-body">
-                <div class="modal-badge-row">
-                    <span class="modal-badge modal-badge-jenjang" id="modalJenjang">Khusus SMA</span>
-                    <span class="modal-badge modal-badge-aktif" id="modalMasaAktif">30 Hari</span>
-                </div>
-                
-                <div class="modal-icon-container" id="modalIcon">🚀</div>
-                
-                <h2 class="modal-title" id="modalTitle">Persiapan UTBK SBMPTN</h2>
-                
-                <div class="modal-meta-info">
-                    <div class="modal-meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span id="modalMasaAktifText">Masa Aktif: 30 Hari</span>
+                <!-- STEP 1: DETAIL PAKET -->
+                <div id="step-detail">
+                    <div class="modal-badge-row">
+                        <span class="modal-badge modal-badge-jenjang" id="modalJenjang">Khusus SMA</span>
+                        <span class="modal-badge modal-badge-aktif" id="modalMasaAktif">30 Hari</span>
                     </div>
-                    <div class="modal-meta-item">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span id="modalJenjangText">Jenjang: SMA</span>
+                    
+                    <div class="modal-icon-container" id="modalIcon">🚀</div>
+                    
+                    <h2 class="modal-title" id="modalTitle">Persiapan UTBK SBMPTN</h2>
+                    
+                    <div class="modal-meta-info">
+                        <div class="modal-meta-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            <span id="modalMasaAktifText">Masa Aktif: 30 Hari</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <span id="modalJenjangText">Jenjang: SMA</span>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="modal-description" id="modalDescription">
-                    Ini adalah deskripsi paket pembelajaran untuk mempersiapkan diri menghadapi ujian sekolah.
-                </div>
-                
-                <div class="modal-features-section">
-                    <h4 class="modal-features-title">Apa Saja yang Didapat?</h4>
-                    <ul class="modal-features-list">
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Akses Video & Materi Lengkap</span>
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Latihan Soal Interaktif</span>
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Prioritas Tanya Guru via Chat</span>
-                        </li>
-                        <li>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            <span>Rangkuman Materi & E-Book</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="voucher-select-section" style="margin-bottom: 24px;">
-                    <label for="voucherSelect" style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Gunakan Voucher Diskon</label>
-                    <select id="voucherSelect" onchange="applyVoucher()" style="width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid rgba(230, 216, 193, 0.7); background: rgba(255,255,255,0.7); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; color: var(--dark-oak); outline: none; cursor: pointer; transition: all 0.2s;">
-                        <option value="">-- Tanpa Voucher --</option>
-                        @foreach($vouchers as $v)
-                            <option value="{{ $v->id_voucher }}" data-potongan="{{ $v->potongan }}">
-                                {{ $v->kode_voucher }} - Potongan Rp {{ number_format($v->potongan, 0, ',', '.') }}
-                            </option>
-                        @endforeach
-                    </select>
+                    
+                    <div class="modal-description" id="modalDescription">
+                        Ini adalah deskripsi paket pembelajaran untuk mempersiapkan diri menghadapi ujian sekolah.
+                    </div>
+                    
+                    <div class="modal-features-section">
+                        <h4 class="modal-features-title">Apa Saja yang Didapat?</h4>
+                        <ul class="modal-features-list">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Akses Video & Materi Lengkap</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Latihan Soal Interaktif</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Prioritas Tanya Guru via Chat</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Rangkuman Materi & E-Book</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="modal-price-card" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <span class="modal-price-label" style="font-size: 14px; font-weight: 700; color: rgba(61, 43, 31, 0.6); text-transform: uppercase; letter-spacing: 0.5px;">Harga Paket</span>
+                        <span class="modal-price-value" style="font-size: 28px;" id="modalPriceStep1">Rp 450.000</span>
+                    </div>
+
+                    <button class="btn-modal-checkout" id="btnNextToPayment" onclick="showStepPayment()">
+                        <span>Beli Paket</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
                 </div>
 
-                <div class="payment-method-section" style="margin-bottom: 28px;">
-                    <label style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Metode Pembayaran</label>
-                    <div class="payment-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                        <div class="payment-tile" onclick="selectPaymentMethod('DANA')" id="pay-DANA" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                            <span style="font-size: 20px;">💙</span>
-                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">DANA</span>
-                        </div>
-                        <div class="payment-tile" onclick="selectPaymentMethod('GoPay')" id="pay-GoPay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                            <span style="font-size: 20px;">💚</span>
-                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">GoPay</span>
-                        </div>
-                        <div class="payment-tile" onclick="selectPaymentMethod('OVO')" id="pay-OVO" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                            <span style="font-size: 20px;">💜</span>
-                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">OVO</span>
-                        </div>
-                        <div class="payment-tile" onclick="selectPaymentMethod('ShopeePay')" id="pay-ShopeePay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                            <span style="font-size: 20px;">🧡</span>
-                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">ShopeePay</span>
-                        </div>
-                    </div>
-                </div>
+                <!-- STEP 2: PEMBAYARAN -->
+                <div id="step-payment" style="display: none;">
+                    <button onclick="showStepDetail()" style="background: none; border: none; color: var(--dusty-mauve); font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 24px; cursor: pointer; font-size: 15px; outline: none; padding: 0;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        <span>Kembali</span>
+                    </button>
 
-                <div class="modal-price-card" style="flex-direction: column; align-items: stretch; gap: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span class="modal-price-label" style="font-size: 13px;">Harga Paket</span>
-                        <span style="font-size: 16px; font-weight: 700; color: var(--dark-oak);" id="modalOriginalPrice">Rp 450.000</span>
+                    <h3 class="modal-title" style="font-size: 24px; margin-bottom: 20px; font-weight: 800;">Pembayaran Paket</h3>
+                    
+                    <div class="voucher-select-section" style="margin-bottom: 24px;">
+                        <label for="voucherSelect" style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Gunakan Voucher Diskon</label>
+                        <select id="voucherSelect" onchange="applyVoucher()" style="width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid rgba(230, 216, 193, 0.7); background: rgba(255,255,255,0.7); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; color: var(--dark-oak); outline: none; cursor: pointer; transition: all 0.2s;">
+                            <option value="">-- Tanpa Voucher --</option>
+                            @foreach($vouchers as $v)
+                                <option value="{{ $v->id_voucher }}" data-potongan="{{ $v->potongan }}">
+                                    {{ $v->kode_voucher }} - Potongan Rp {{ number_format($v->potongan, 0, ',', '.') }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div style="display: none; justify-content: space-between; align-items: center;" id="modalDiscountRow">
-                        <span class="modal-price-label" style="font-size: 13px; color: var(--dusty-mauve);">Diskon Voucher</span>
-                        <span style="font-size: 16px; font-weight: 700; color: var(--dusty-mauve);" id="modalDiscountValue">- Rp 0</span>
+
+                    <div class="payment-method-section" style="margin-bottom: 28px;">
+                        <label style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Metode Pembayaran</label>
+                        <div class="payment-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            <div class="payment-tile" onclick="selectPaymentMethod('DANA')" id="pay-DANA" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                                <span style="font-size: 20px;">💙</span>
+                                <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">DANA</span>
+                            </div>
+                            <div class="payment-tile" onclick="selectPaymentMethod('GoPay')" id="pay-GoPay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                                <span style="font-size: 20px;">💚</span>
+                                <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">GoPay</span>
+                            </div>
+                            <div class="payment-tile" onclick="selectPaymentMethod('OVO')" id="pay-OVO" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                                <span style="font-size: 20px;">💜</span>
+                                <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">OVO</span>
+                            </div>
+                            <div class="payment-tile" onclick="selectPaymentMethod('ShopeePay')" id="pay-ShopeePay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                                <span style="font-size: 20px;">🧡</span>
+                                <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">ShopeePay</span>
+                            </div>
+                        </div>
                     </div>
-                    <div style="border-top: 1px solid rgba(230, 216, 193, 0.8); margin-top: 6px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <span class="modal-price-label" style="font-size: 14px; font-weight: 800; color: var(--dark-oak);">Total Bayar</span>
-                        <span class="modal-price-value" style="font-size: 28px;" id="modalPrice">Rp 450.000</span>
+
+                    <div class="modal-price-card" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="modal-price-label" style="font-size: 13px;">Harga Paket</span>
+                            <span style="font-size: 16px; font-weight: 700; color: var(--dark-oak);" id="modalOriginalPrice">Rp 450.000</span>
+                        </div>
+                        <div style="display: none; justify-content: space-between; align-items: center;" id="modalDiscountRow">
+                            <span class="modal-price-label" style="font-size: 13px; color: var(--dusty-mauve);">Diskon Voucher</span>
+                            <span style="font-size: 16px; font-weight: 700; color: var(--dusty-mauve);" id="modalDiscountValue">- Rp 0</span>
+                        </div>
+                        <div style="border-top: 1px solid rgba(230, 216, 193, 0.8); margin-top: 6px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+                            <span class="modal-price-label" style="font-size: 14px; font-weight: 800; color: var(--dark-oak);">Total Bayar</span>
+                            <span class="modal-price-value" style="font-size: 28px;" id="modalPrice">Rp 450.000</span>
+                        </div>
                     </div>
+                    
+                    <button class="btn-modal-checkout" id="btnCheckout" onclick="processCheckout()">
+                        <span>Beli Paket Sekarang</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
                 </div>
-                
-                <button class="btn-modal-checkout" id="btnCheckout" onclick="processCheckout()">
-                    <span>Beli Paket Sekarang</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </button>
             </div>
         </div>
     </div>
@@ -949,6 +972,18 @@
         let selectedPaymentMethod = null;
         let originalPriceVal = 0;
         let finalPriceVal = 0;
+
+        function showStepDetail() {
+            document.getElementById('step-detail').style.display = 'block';
+            document.getElementById('step-payment').style.display = 'none';
+            document.getElementById('detailModalOverlay').scrollTop = 0;
+        }
+
+        function showStepPayment() {
+            document.getElementById('step-detail').style.display = 'none';
+            document.getElementById('step-payment').style.display = 'block';
+            document.getElementById('detailModalOverlay').scrollTop = 0;
+        }
 
         function openDetailModal(paket, emoji, harga, accentColor) {
             selectedPaket = paket;
@@ -975,6 +1010,7 @@
             const formattedPrice = formatRupiah(originalPriceVal);
             document.getElementById('modalOriginalPrice').textContent = formattedPrice;
             document.getElementById('modalPrice').textContent = formattedPrice;
+            document.getElementById('modalPriceStep1').textContent = formattedPrice;
             
             document.getElementById('modalIcon').textContent = emoji;
             document.getElementById('modalJenjang').textContent = `Khusus ${paket.jenjang}`;
@@ -986,13 +1022,17 @@
             const checkoutBtn = document.getElementById('btnCheckout');
             checkoutBtn.style.backgroundColor = accentColor;
             
+            const nextBtn = document.getElementById('btnNextToPayment');
+            nextBtn.style.backgroundColor = accentColor;
+            
             const activeBadge = document.getElementById('modalMasaAktif');
             activeBadge.style.backgroundColor = accentColor;
             
             const jenjangBadge = document.getElementById('modalJenjang');
             jenjangBadge.style.backgroundColor = 'var(--dark-oak)';
             
-            // Reset state
+            // Reset state to step 1
+            showStepDetail();
             document.getElementById('successOverlay').classList.remove('active');
             
             // Show Overlay
@@ -1095,9 +1135,8 @@
                 checkoutBtn.innerHTML = originalContent;
                 
                 if (data.success) {
-                    // Show success screen
-                    document.getElementById('successOverlayText').innerHTML = `Selamat! Paket belajar <strong>${selectedPaket.nama}</strong> telah berhasil dibeli menggunakan <strong>${selectedPaymentMethod}</strong> dan sekarang aktif. Mari tingkatkan prestasimu! ✨`;
-                    document.getElementById('successOverlay').classList.add('active');
+                    // Redirect immediately to notifications page
+                    window.location.href = '{{ route("siswa.notifikasi") }}';
                 } else {
                     alert(data.message || 'Gagal memproses transaksi. Coba lagi.');
                 }
@@ -1112,8 +1151,7 @@
 
         function finishPurchase() {
             closeDetailModal();
-            // Refresh to update any status states if needed
-            location.reload();
+            window.location.href = '{{ route("siswa.notifikasi") }}';
         }
     </script>
 

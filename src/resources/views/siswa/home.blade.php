@@ -310,6 +310,8 @@
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%;
             gap: 20px;
             margin-bottom: 40px;
             padding-bottom: 12px;
@@ -331,6 +333,7 @@
 
         .voucher-ticket {
             flex: 0 0 320px;
+            flex-shrink: 0;
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(20px);
             border: 2px dashed var(--warm-amber);
@@ -629,6 +632,9 @@
                             } elseif ($act->type === 'ujian') {
                                 $icon  = '🏆';
                                 $color = 'bg-mauve';
+                            } elseif ($act->type === 'transaksi') {
+                                $icon  = '🛒';
+                                $color = 'bg-green';
                             }
                         @endphp
                         <div class="activity-item">

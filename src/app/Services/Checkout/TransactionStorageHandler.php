@@ -27,7 +27,7 @@ class TransactionStorageHandler extends CheckoutHandler
             // Insert log into activities table
             Activity::create([
                 'user_id' => $context->userId,
-                'type' => 'ujian',
+                'type' => 'transaksi',
                 'description' => 'Membeli paket ' . $context->paket->nama . ' menggunakan ' . $context->metodePembayaran . ($context->voucher ? ' dengan voucher ' . $context->voucher->kode_voucher : '')
             ]);
 

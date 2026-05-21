@@ -354,6 +354,25 @@
             </div>
 
             <div class="notification-list">
+                @if(isset($activities) && count($activities) > 0)
+                    @foreach($activities as $act)
+                        @php
+                            $isPurchase = (strpos(strtolower($act->description), 'membeli paket') !== false);
+                        @endphp
+                        @if($isPurchase)
+                            <div class="notif-card unread">
+                                <div class="notif-icon bg-green">🛒</div>
+                                <div class="notif-content">
+                                    <div class="notif-header">
+                                        <div class="notif-title">Pembelian Paket Berhasil! 🎉</div>
+                                        <div class="notif-time">{{ $act->created_at->diffForHumans() }}</div>
+                                    </div>
+                                    <div class="notif-desc">{{ $act->description }}</div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
                 
                 <!-- Pembelian Paket Belajar -->
                 <div class="notif-card unread">
