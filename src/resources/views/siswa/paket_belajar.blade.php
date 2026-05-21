@@ -178,86 +178,105 @@
             margin-top: 40px;
         }
 
+        /* ── Redesigned Premium Cards ── */
         .paket-card {
-            border: 3px solid;
-            border-radius: 32px;
-            padding: 32px 24px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(230, 216, 193, 0.7);
+            border-radius: 28px;
+            padding: 36px 28px;
             text-align: center;
             position: relative;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            box-shadow: 0 10px 0 rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 30px rgba(61, 43, 31, 0.03);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         .paket-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 16px 0 rgba(0,0,0,0.08);
+            transform: translateY(-8px);
+            border-color: var(--accent-color, var(--warm-amber));
+            box-shadow: 0 20px 40px rgba(61, 43, 31, 0.08), 0 0 0 1px var(--accent-color, var(--warm-amber));
         }
 
         .paket-badge {
             position: absolute;
-            top: 20px;
-            right: -30px;
+            top: 14px;
+            right: 14px;
             color: white;
-            font-size: 13px;
-            font-weight: 800;
-            padding: 6px 30px;
-            transform: rotate(45deg);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 99px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .paket-icon {
-            font-size: 60px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            font-size: 54px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 8px 12px rgba(61, 43, 31, 0.08));
+            transition: transform 0.3s ease;
+        }
+
+        .paket-card:hover .paket-icon {
+            transform: scale(1.15) rotate(5deg);
         }
 
         .paket-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            margin-bottom: 4px;
-            line-height: 1.2;
+            margin-bottom: 6px;
+            line-height: 1.25;
+            color: var(--dark-oak);
         }
 
         .paket-jenjang {
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(61,43,31,0.6);
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(61, 43, 31, 0.5);
             margin-bottom: 24px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .paket-price {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 800;
             color: var(--dark-oak);
-            margin-bottom: 24px;
-            padding: 16px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 20px;
+            margin-bottom: 28px;
+            padding: 12px 20px;
+            background: rgba(230, 216, 193, 0.35);
+            border: 1px solid rgba(230, 216, 193, 0.6);
+            border-radius: 16px;
             display: inline-block;
             margin-left: auto;
             margin-right: auto;
+            transition: all 0.3s;
+        }
+
+        .paket-card:hover .paket-price {
+            background: var(--bg-hover-light, rgba(230, 216, 193, 0.5));
+            border-color: var(--accent-color, var(--warm-amber));
         }
 
         .paket-features {
             list-style: none;
             text-align: left;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
             flex: 1;
-            background: rgba(255,255,255,0.4);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(230, 216, 193, 0.3);
             padding: 20px;
             border-radius: 20px;
         }
 
         .paket-features li {
             margin-bottom: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--dark-oak);
             display: flex;
@@ -269,29 +288,348 @@
             margin-bottom: 0;
         }
 
-        .btn-beli {
+        .btn-card-detail {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark-oak);
+            background: rgba(230, 216, 193, 0.5);
+            border: 1px solid rgba(230, 216, 193, 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .paket-card:hover .btn-card-detail {
+            background: var(--accent-color, var(--warm-amber));
+            color: white;
+            border-color: var(--accent-color, var(--warm-amber));
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        /* ── Premium Modal (Glassmorphic) ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(61, 43, 31, 0.45);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .detail-modal {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 30px 70px rgba(61, 43, 31, 0.2);
+            border-radius: 28px;
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-overlay.active .detail-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(61, 43, 31, 0.05);
+            border: none;
+            color: var(--dark-oak);
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .btn-close-modal:hover {
+            background: rgba(61, 43, 31, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-badge-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .modal-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: white;
+        }
+
+        .modal-badge-jenjang {
+            background: var(--muted-sage);
+        }
+
+        .modal-badge-aktif {
+            background: var(--warm-amber);
+        }
+
+        .modal-icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 24px;
+            background: var(--vintage-cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 20px rgba(61, 43, 31, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--dark-oak);
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .modal-meta-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(61, 43, 31, 0.6);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            align-items: center;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(61, 43, 31, 0.85);
+            margin-bottom: 30px;
+        }
+
+        .modal-features-section {
+            margin-bottom: 30px;
+        }
+
+        .modal-features-title {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--dark-oak);
+            margin-bottom: 14px;
+        }
+
+        .modal-features-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .modal-features-list li {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-oak);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-features-list li svg {
+            color: var(--muted-sage);
+            flex-shrink: 0;
+        }
+
+        .modal-price-card {
+            background: rgba(230, 216, 193, 0.35);
+            border: 1px solid rgba(230, 216, 193, 0.6);
+            border-radius: 20px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .modal-price-card .modal-price-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(61, 43, 31, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-price-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark-oak);
+        }
+
+        .btn-modal-checkout {
+            width: 100%;
+            padding: 20px;
             border-radius: 20px;
             font-size: 18px;
             font-weight: 800;
             color: white;
+            background: var(--dark-oak);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(61, 43, 31, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-modal-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(61, 43, 31, 0.25);
+            background: #4F3827;
+        }
+
+        .btn-modal-checkout:active {
+            transform: translateY(1px);
+        }
+
+        /* ── Success Animation Screen ── */
+        .success-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .success-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .success-checkmark {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            background: rgba(142, 150, 128, 0.15);
+            color: var(--muted-sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            animation: popCheckmark 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popCheckmark {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .success-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--dark-oak);
+            margin-bottom: 12px;
+        }
+
+        .success-text {
+            font-size: 15px;
+            color: rgba(61, 43, 31, 0.7);
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 380px;
+        }
+
+        .btn-success-close {
+            padding: 16px 36px;
+            border-radius: 99px;
+            background: var(--muted-sage);
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
             border: none;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.15);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 6px 16px rgba(142, 150, 128, 0.3);
         }
 
-        .btn-beli:hover {
-            transform: translateY(2px);
-            box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+        .btn-success-close:hover {
+            background: #7D8570;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(142, 150, 128, 0.4);
         }
 
-        .btn-beli:active {
-            transform: translateY(6px);
-            box-shadow: 0 0 0 rgba(0,0,0,0.15);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ── Payment Options ── */
+        .payment-tile {
+            transition: all 0.2s ease;
+        }
+        .payment-tile:hover {
+            transform: translateY(-2px);
+            border-color: var(--dusty-mauve) !important;
+            box-shadow: 0 4px 10px rgba(163, 124, 118, 0.1);
         }
 
         /* ── Responsive ── */
@@ -394,11 +732,50 @@
             <div class="paket-cards">
                 @php
                     $colors = [
-                        ['bg' => '#FFDDEE', 'border' => '#FFB6D9', 'text' => '#D84B8E'], // Pink
-                        ['bg' => '#DDF4FF', 'border' => '#A3E1FF', 'text' => '#3E92CC'], // Blue
-                        ['bg' => '#E8DDFF', 'border' => '#C4A9FF', 'text' => '#7B52D9'], // Purple
-                        ['bg' => '#FFF3DD', 'border' => '#FFDC99', 'text' => '#D99100'], // Yellow
+                        [
+                            'bg' => 'rgba(142, 150, 128, 0.08)',
+                            'border' => 'rgba(142, 150, 128, 0.35)',
+                            'text' => '#6B735F', // Dark Sage
+                            'accent' => '#8E9680', // Sage
+                            'bg_hover' => 'rgba(142, 150, 128, 0.15)'
+                        ], // Sage Theme
+                        [
+                            'bg' => 'rgba(217, 179, 130, 0.08)',
+                            'border' => 'rgba(217, 179, 130, 0.35)',
+                            'text' => '#B28956', // Dark Amber
+                            'accent' => '#D9B382', // Amber
+                            'bg_hover' => 'rgba(217, 179, 130, 0.15)'
+                        ], // Amber Theme
+                        [
+                            'bg' => 'rgba(163, 124, 118, 0.08)',
+                            'border' => 'rgba(163, 124, 118, 0.35)',
+                            'text' => '#8A5C56', // Dark Mauve
+                            'accent' => '#A37C76', // Mauve
+                            'bg_hover' => 'rgba(163, 124, 118, 0.15)'
+                        ], // Mauve Theme
+                        [
+                            'bg' => 'rgba(230, 216, 193, 0.15)',
+                            'border' => 'rgba(230, 216, 193, 0.5)',
+                            'text' => '#3D2B1F', // Dark Oak
+                            'accent' => '#E6D8C1', // Vintage Cream / Dark Oak
+                            'bg_hover' => 'rgba(230, 216, 193, 0.3)'
+                        ], // Cream/Oak Theme
                     ];
+
+                    if (!function_exists('getPaketEmoji')) {
+                        function getPaketEmoji($nama) {
+                            $namaLower = strtolower($nama);
+                            if (str_contains($namaLower, 'matematika')) return '📐';
+                            if (str_contains($namaLower, 'fisika')) return '⚛️';
+                            if (str_contains($namaLower, 'kimia')) return '🧪';
+                            if (str_contains($namaLower, 'biologi')) return '🧬';
+                            if (str_contains($namaLower, 'inggris') || str_contains($namaLower, 'bahasa')) return '✍️';
+                            if (str_contains($namaLower, 'ipa')) return '🔬';
+                            if (str_contains($namaLower, 'ips') || str_contains($namaLower, 'sejarah') || str_contains($namaLower, 'ekonomi') || str_contains($namaLower, 'geografi')) return '🌍';
+                            if (str_contains($namaLower, 'utbk') || str_contains($namaLower, 'sbmptn') || str_contains($namaLower, 'un')) return '🎓';
+                            return '🚀';
+                        }
+                    }
                 @endphp
 
                 @if(isset($paketList) && count($paketList) > 0)
@@ -406,22 +783,38 @@
                         @php
                             $color = $colors[$index % count($colors)];
                             $harga = $paket->harga == 0 ? 'Gratis!' : 'Rp ' . number_format($paket->harga, 0, ',', '.');
+                            $emoji = getPaketEmoji($paket->nama);
                         @endphp
-                        <div class="paket-card" style="background-color: {{ $color['bg'] }}; border-color: {{ $color['border'] }};">
+                        <div class="paket-card" 
+                             style="--accent-color: {{ $color['text'] }}; --bg-hover-light: {{ $color['bg_hover'] }}; background-color: {{ $color['bg'] }}; border-color: {{ $color['border'] }};"
+                             onclick="openDetailModal({{ json_encode($paket) }}, '{{ $emoji }}', '{{ $harga }}', '{{ $color['text'] }}')">
+                            
                             <div class="paket-badge" style="background-color: {{ $color['text'] }};">{{ $paket->masa_aktif }} Hari</div>
-                            <div class="paket-icon">🚀</div>
-                            <div class="paket-name" style="color: {{ $color['text'] }};">{{ $paket->nama }}</div>
+                            <div class="paket-icon">{{ $emoji }}</div>
+                            <div class="paket-name">{{ $paket->nama }}</div>
                             <div class="paket-jenjang">Khusus Anak {{ $paket->jenjang }}</div>
                             
                             <div class="paket-price">{{ $harga }}</div>
                             
                             <ul class="paket-features">
-                                <li>✨ Materi belajar lengkap</li>
-                                <li>✨ Latihan soal interaktif</li>
-                                <li>✨ Akses kapan saja!</li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: {{ $color['text'] }};"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <span>Materi belajar lengkap</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: {{ $color['text'] }};"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <span>Latihan soal interaktif</span>
+                                </li>
+                                <li>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: {{ $color['text'] }};"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <span>Akses kapan saja!</span>
+                                </li>
                             </ul>
                             
-                            <button class="btn-beli" style="background-color: {{ $color['text'] }};" onclick="alert('Kamu memilih {{ $paket->nama }}!')">Beli Paket</button>
+                            <button class="btn-card-detail">
+                                <span>Lihat Detail</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
                         </div>
                     @endforeach
                 @else
@@ -433,6 +826,296 @@
 
         </div>
     </main>
+
+    <!-- ══ DETAIL MODAL ══ -->
+    <div class="modal-overlay" id="detailModalOverlay" onclick="closeDetailModal(event)">
+        <div class="detail-modal" id="detailModal" onclick="event.stopPropagation()">
+            <button class="btn-close-modal" onclick="closeDetailModal(event)">&times;</button>
+            
+            <!-- Success Purchase State Screen -->
+            <div class="success-overlay" id="successOverlay">
+                <div class="success-checkmark">✓</div>
+                <h3 class="success-title">Pembelian Berhasil! 🎉</h3>
+                <p class="success-text" id="successOverlayText">Selamat, paket belajar kamu telah aktif. Mari mulai belajar sekarang!</p>
+                <button class="btn-success-close" onclick="finishPurchase()">Mulai Belajar 🚀</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-badge-row">
+                    <span class="modal-badge modal-badge-jenjang" id="modalJenjang">Khusus SMA</span>
+                    <span class="modal-badge modal-badge-aktif" id="modalMasaAktif">30 Hari</span>
+                </div>
+                
+                <div class="modal-icon-container" id="modalIcon">🚀</div>
+                
+                <h2 class="modal-title" id="modalTitle">Persiapan UTBK SBMPTN</h2>
+                
+                <div class="modal-meta-info">
+                    <div class="modal-meta-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span id="modalMasaAktifText">Masa Aktif: 30 Hari</span>
+                    </div>
+                    <div class="modal-meta-item">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <span id="modalJenjangText">Jenjang: SMA</span>
+                    </div>
+                </div>
+                
+                <div class="modal-description" id="modalDescription">
+                    Ini adalah deskripsi paket pembelajaran untuk mempersiapkan diri menghadapi ujian sekolah.
+                </div>
+                
+                <div class="modal-features-section">
+                    <h4 class="modal-features-title">Apa Saja yang Didapat?</h4>
+                    <ul class="modal-features-list">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Akses Video & Materi Lengkap</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Latihan Soal Interaktif</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Prioritas Tanya Guru via Chat</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Rangkuman Materi & E-Book</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="voucher-select-section" style="margin-bottom: 24px;">
+                    <label for="voucherSelect" style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Gunakan Voucher Diskon</label>
+                    <select id="voucherSelect" onchange="applyVoucher()" style="width: 100%; padding: 14px 20px; border-radius: 16px; border: 2px solid rgba(230, 216, 193, 0.7); background: rgba(255,255,255,0.7); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600; color: var(--dark-oak); outline: none; cursor: pointer; transition: all 0.2s;">
+                        <option value="">-- Tanpa Voucher --</option>
+                        @foreach($vouchers as $v)
+                            <option value="{{ $v->id_voucher }}" data-potongan="{{ $v->potongan }}">
+                                {{ $v->kode_voucher }} - Potongan Rp {{ number_format($v->potongan, 0, ',', '.') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="payment-method-section" style="margin-bottom: 28px;">
+                    <label style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Metode Pembayaran</label>
+                    <div class="payment-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        <div class="payment-tile" onclick="selectPaymentMethod('DANA')" id="pay-DANA" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                            <span style="font-size: 20px;">💙</span>
+                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">DANA</span>
+                        </div>
+                        <div class="payment-tile" onclick="selectPaymentMethod('GoPay')" id="pay-GoPay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                            <span style="font-size: 20px;">💚</span>
+                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">GoPay</span>
+                        </div>
+                        <div class="payment-tile" onclick="selectPaymentMethod('OVO')" id="pay-OVO" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                            <span style="font-size: 20px;">💜</span>
+                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">OVO</span>
+                        </div>
+                        <div class="payment-tile" onclick="selectPaymentMethod('ShopeePay')" id="pay-ShopeePay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
+                            <span style="font-size: 20px;">🧡</span>
+                            <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">ShopeePay</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-price-card" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="modal-price-label" style="font-size: 13px;">Harga Paket</span>
+                        <span style="font-size: 16px; font-weight: 700; color: var(--dark-oak);" id="modalOriginalPrice">Rp 450.000</span>
+                    </div>
+                    <div style="display: none; justify-content: space-between; align-items: center;" id="modalDiscountRow">
+                        <span class="modal-price-label" style="font-size: 13px; color: var(--dusty-mauve);">Diskon Voucher</span>
+                        <span style="font-size: 16px; font-weight: 700; color: var(--dusty-mauve);" id="modalDiscountValue">- Rp 0</span>
+                    </div>
+                    <div style="border-top: 1px solid rgba(230, 216, 193, 0.8); margin-top: 6px; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <span class="modal-price-label" style="font-size: 14px; font-weight: 800; color: var(--dark-oak);">Total Bayar</span>
+                        <span class="modal-price-value" style="font-size: 28px;" id="modalPrice">Rp 450.000</span>
+                    </div>
+                </div>
+                
+                <button class="btn-modal-checkout" id="btnCheckout" onclick="processCheckout()">
+                    <span>Beli Paket Sekarang</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPaket = null;
+        let selectedPaymentMethod = null;
+        let originalPriceVal = 0;
+        let finalPriceVal = 0;
+
+        function openDetailModal(paket, emoji, harga, accentColor) {
+            selectedPaket = paket;
+            originalPriceVal = parseFloat(paket.harga);
+            finalPriceVal = originalPriceVal;
+            selectedPaymentMethod = null;
+
+            // Reset UI selections
+            document.getElementById('voucherSelect').value = '';
+            document.getElementById('modalDiscountRow').style.display = 'none';
+            
+            // Reset Payment Tiles styling
+            document.querySelectorAll('.payment-tile').forEach(tile => {
+                tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
+                tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
+                tile.style.boxShadow = 'none';
+            });
+            
+            // Populate Modal Content
+            document.getElementById('modalTitle').textContent = paket.nama;
+            document.getElementById('modalDescription').textContent = paket.deskripsi || 'Tidak ada deskripsi tersedia untuk paket ini.';
+            
+            // Prices format
+            const formattedPrice = formatRupiah(originalPriceVal);
+            document.getElementById('modalOriginalPrice').textContent = formattedPrice;
+            document.getElementById('modalPrice').textContent = formattedPrice;
+            
+            document.getElementById('modalIcon').textContent = emoji;
+            document.getElementById('modalJenjang').textContent = `Khusus ${paket.jenjang}`;
+            document.getElementById('modalJenjangText').textContent = `Jenjang: ${paket.jenjang}`;
+            document.getElementById('modalMasaAktif').textContent = `${paket.masa_aktif} Hari`;
+            document.getElementById('modalMasaAktifText').textContent = `Masa Aktif: ${paket.masa_aktif} Hari`;
+            
+            // Apply accents
+            const checkoutBtn = document.getElementById('btnCheckout');
+            checkoutBtn.style.backgroundColor = accentColor;
+            
+            const activeBadge = document.getElementById('modalMasaAktif');
+            activeBadge.style.backgroundColor = accentColor;
+            
+            const jenjangBadge = document.getElementById('modalJenjang');
+            jenjangBadge.style.backgroundColor = 'var(--dark-oak)';
+            
+            // Reset state
+            document.getElementById('successOverlay').classList.remove('active');
+            
+            // Show Overlay
+            const overlay = document.getElementById('detailModalOverlay');
+            overlay.classList.add('active');
+            
+            // Disable body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function formatRupiah(amount) {
+            if (amount === 0) return 'Gratis!';
+            return 'Rp ' + amount.toLocaleString('id-ID', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        function applyVoucher() {
+            const selectEl = document.getElementById('voucherSelect');
+            const selectedOpt = selectEl.options[selectEl.selectedIndex];
+            
+            if (selectedOpt && selectedOpt.value) {
+                const potongan = parseFloat(selectedOpt.getAttribute('data-potongan'));
+                const discountValueStr = formatRupiah(potongan);
+                
+                finalPriceVal = Math.max(0, originalPriceVal - potongan);
+                
+                document.getElementById('modalDiscountValue').textContent = '- ' + discountValueStr;
+                document.getElementById('modalDiscountRow').style.display = 'flex';
+                document.getElementById('modalPrice').textContent = formatRupiah(finalPriceVal);
+            } else {
+                finalPriceVal = originalPriceVal;
+                document.getElementById('modalDiscountRow').style.display = 'none';
+                document.getElementById('modalPrice').textContent = formatRupiah(finalPriceVal);
+            }
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Reset all tiles
+            document.querySelectorAll('.payment-tile').forEach(tile => {
+                tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
+                tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
+                tile.style.boxShadow = 'none';
+            });
+            
+            // Activate selected tile
+            const activeTile = document.getElementById('pay-' + method);
+            if (activeTile) {
+                activeTile.style.borderColor = 'var(--muted-sage)';
+                activeTile.style.backgroundColor = 'rgba(142, 150, 128, 0.1)';
+                activeTile.style.boxShadow = '0 4px 12px rgba(142, 150, 128, 0.15)';
+            }
+        }
+
+        function closeDetailModal(event) {
+            const overlay = document.getElementById('detailModalOverlay');
+            overlay.classList.remove('active');
+            
+            // Enable body scroll
+            document.body.style.overflow = '';
+        }
+
+        function processCheckout() {
+            if (!selectedPaket) return;
+            
+            if (!selectedPaymentMethod) {
+                alert('Silakan pilih metode pembayaran terlebih dahulu!');
+                return;
+            }
+            
+            // Get voucher value
+            const idVoucher = document.getElementById('voucherSelect').value;
+            
+            // Animate button loading state
+            const checkoutBtn = document.getElementById('btnCheckout');
+            const originalContent = checkoutBtn.innerHTML;
+            checkoutBtn.disabled = true;
+            checkoutBtn.innerHTML = `
+                <svg class="spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite; margin-right: 8px;"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+                <span>Memproses Pembayaran...</span>
+            `;
+            
+            // Send AJAX POST Request
+            fetch('{{ route("siswa.transaksi.store") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id_paket: selectedPaket.id_paket,
+                    id_voucher: idVoucher || null,
+                    metode_pembayaran: selectedPaymentMethod
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Restore button
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = originalContent;
+                
+                if (data.success) {
+                    // Show success screen
+                    document.getElementById('successOverlayText').innerHTML = `Selamat! Paket belajar <strong>${selectedPaket.nama}</strong> telah berhasil dibeli menggunakan <strong>${selectedPaymentMethod}</strong> dan sekarang aktif. Mari tingkatkan prestasimu! ✨`;
+                    document.getElementById('successOverlay').classList.add('active');
+                } else {
+                    alert(data.message || 'Gagal memproses transaksi. Coba lagi.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = originalContent;
+                alert('Terjadi kesalahan koneksi atau server.');
+            });
+        }
+
+        function finishPurchase() {
+            closeDetailModal();
+            // Refresh to update any status states if needed
+            location.reload();
+        }
+    </script>
 
 </body>
 </html>

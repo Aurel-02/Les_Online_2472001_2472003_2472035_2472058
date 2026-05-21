@@ -40,6 +40,7 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/jurusan/detail', [PTNController::class, 'jurusanDetail'])->name('siswa.jurusan.detail');
     Route::get('/siswa/chat', [SiswaController::class, 'chat'])->name('siswa.chat');
     Route::get('/siswa/paket-belajar', [SiswaController::class, 'paketBelajar'])->name('siswa.paket-belajar');
+    Route::post('/siswa/transaksi', [SiswaController::class, 'storeTransaksi'])->name('siswa.transaksi.store');
     Route::get('/siswa/notifikasi', [SiswaController::class, 'notifikasi'])->name('siswa.notifikasi');
     Route::post('/siswa/set-kelas', [SiswaController::class, 'setKelas'])->name('siswa.set-kelas');
     Route::get('/siswa/ujian', [\App\Http\Controllers\UjianController::class, 'index'])->name('siswa.ujian');

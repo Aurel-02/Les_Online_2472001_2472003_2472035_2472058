@@ -305,6 +305,105 @@
         .mapel-title { font-size: 16px; font-weight: 800; color: var(--dark-oak); line-height: 1.2; }
         .mapel-subtitle { font-size: 12px; color: rgba(61,43,31,0.5); margin-top: 4px; font-weight: 600; }
 
+        /* ── Voucher Ticket ── */
+        .voucher-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding-bottom: 12px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .voucher-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+        .voucher-grid::-webkit-scrollbar-track {
+            background: rgba(230, 216, 193, 0.2);
+            border-radius: 99px;
+        }
+        .voucher-grid::-webkit-scrollbar-thumb {
+            background: var(--muted-sage);
+            border-radius: 99px;
+        }
+
+        .voucher-ticket {
+            flex: 0 0 320px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            border: 2px dashed var(--warm-amber);
+            border-radius: 24px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(61, 43, 31, 0.03);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .voucher-ticket:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 36px rgba(217, 179, 130, 0.15);
+            border-color: var(--dusty-mauve);
+        }
+
+        .voucher-ticket::before, .voucher-ticket::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #F7F4F0;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .voucher-ticket::before {
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-right: 2px dashed var(--warm-amber);
+        }
+
+        .voucher-ticket::after {
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 2px dashed var(--warm-amber);
+        }
+
+        .voucher-ticket:hover::before {
+            border-right-color: var(--dusty-mauve);
+        }
+
+        .voucher-ticket:hover::after {
+            border-left-color: var(--dusty-mauve);
+        }
+
+        .btn-use-voucher {
+            background: var(--dark-oak);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 14px rgba(61, 43, 31, 0.1);
+        }
+
+        .btn-use-voucher:hover {
+            background: var(--dusty-mauve);
+            box-shadow: 0 8px 18px rgba(163, 124, 118, 0.25);
+            transform: translateY(-2px);
+        }
+
         /* ── Responsive ── */
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); transition: 0.3s; }
@@ -400,27 +499,58 @@
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
 
+            @if(!$activePackageName)
             <!-- BANNER PAKET BELAJAR -->
             <div class="package-banner">
                 <div class="package-left">
                     <h2>Upgrade Belajarmu<br>Sekarang!</h2>
                     <p>Dapatkan akses penuh ke seluruh video pembelajaran, tryout premium, dan prioritas chat dengan guru ahlinya.</p>
-                    <a href="#" class="btn-upgrade">Lihat Paket Belajar ✨</a>
+                    <a href="{{ route('siswa.paket-belajar') }}" class="btn-upgrade">Lihat Paket Belajar ✨</a>
                 </div>
                 <div class="package-illustration">🚀</div>
             </div>
+            @endif
 
-            <!-- STATUS MASA AKTIF PAKET -->
-            <div class="status-container">
+            <!-- STATUS MASA AKTIF PAKET & VOUCHER -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-bottom: 48px;">
                 <div class="stat-card">
                     <div class="stat-icon bg-amber">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </div>
                     <div class="stat-info">
-                        <h3>45 Hari</h3>
-                        <p>Masa Aktif Paket</p>
+                        @if($activePackageName)
+                            <h3>{{ $sisaHari }} Hari</h3>
+                            <p>Paket Aktif: {{ $activePackageName }}</p>
+                        @else
+                            <h3>Belum Aktif</h3>
+                            <p>Masa Aktif Paket Belajar</p>
+                        @endif
                     </div>
                 </div>
+            </div>
+
+            <!-- VOUCHER DISKON SPESIAL -->
+            <h2 class="section-title" style="margin-bottom: 20px;">Voucher Diskon Spesial Untukmu 🎟️</h2>
+            <div class="voucher-grid">
+                @if(isset($vouchers) && count($vouchers) > 0)
+                    @foreach($vouchers as $v)
+                        <div class="voucher-ticket">
+                            <div style="padding-left: 10px; z-index: 5;">
+                                <div style="font-size: 12px; font-weight: 700; color: var(--muted-sage); text-transform: uppercase; letter-spacing: 1px;">Voucher Diskon</div>
+                                <div style="font-size: 24px; font-weight: 800; color: var(--dark-oak); margin: 6px 0;">Rp {{ number_format($v->potongan, 0, ',', '.') }}</div>
+                                <div style="font-size: 14px; font-weight: 600; color: rgba(61,43,31,0.65);">Kode: <strong style="color: var(--dusty-mauve); font-size: 16px;">{{ $v->kode_voucher }}</strong></div>
+                                <div style="font-size: 11px; color: rgba(61,43,31,0.5); margin-top: 8px; font-weight: 600;">Berlaku s/d: {{ date('d M Y', strtotime($v->tanggal_berakhir)) }}</div>
+                            </div>
+                            <div style="text-align: right; padding-right: 10px; z-index: 5;">
+                                <a href="{{ route('siswa.paket-belajar') }}" class="btn-use-voucher">Gunakan</a>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 32px; color: rgba(61,43,31,0.55); font-weight: 600; background: rgba(230, 216, 193, 0.2); border-radius: 24px; border: 1px solid rgba(230, 216, 193, 0.4);">
+                        Belum ada voucher tersedia saat ini.
+                    </div>
+                @endif
             </div>
             <!-- MATA PELAJARAN DINAMIS -->
             <div class="section-header-flex" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
