@@ -290,6 +290,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 </span> Dashboard
             </a>
+            @if(auth()->user() && !in_array((int)auth()->user()->id_jenjang, [1, 2]))
             <a href="{{ route('siswa.ptn') }}" class="sidebar-item {{ request()->routeIs('siswa.ptn') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
@@ -300,6 +301,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                 </span> Rekomendasi Jurusan
             </a>
+            @endif
             <a href="{{ route('siswa.paket-belajar') }}" class="sidebar-item {{ request()->routeIs('siswa.paket-belajar') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
@@ -354,12 +356,15 @@
             </div>
 
             <div class="notification-list">
-                @if(isset($activities) && count($activities) > 0)
-                    @foreach($activities as $act)
-                        @php
-                            $isPurchase = (strpos(strtolower($act->description), 'membeli paket') !== false);
-                        @endphp
-                        @if($isPurchase)
+                @php
+                    $filteredActivities = isset($activities) ? $activities->filter(function($act) {
+                        return in_array($act->type, ['transaksi', 'ujian']);
+                    }) : collect();
+                @endphp
+
+                @if($filteredActivities->count() > 0)
+                    @foreach($filteredActivities as $act)
+                        @if($act->type === 'transaksi')
                             <div class="notif-card unread">
                                 <div class="notif-icon bg-green">🛒</div>
                                 <div class="notif-content">
@@ -370,58 +375,26 @@
                                     <div class="notif-desc">{{ $act->description }}</div>
                                 </div>
                             </div>
+                        @elseif($act->type === 'ujian')
+                            <div class="notif-card unread">
+                                <div class="notif-icon bg-blue">📝</div>
+                                <div class="notif-content">
+                                    <div class="notif-header">
+                                        <div class="notif-title">Hasil Ujian Tersedia! 📝</div>
+                                        <div class="notif-time">{{ $act->created_at->diffForHumans() }}</div>
+                                    </div>
+                                    <div class="notif-desc">{{ $act->description }}</div>
+                                </div>
+                            </div>
                         @endif
                     @endforeach
+                @else
+                    <div class="empty-state-card" style="background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.7); border-radius: 24px; padding: 48px; text-align: center; box-shadow: 0 8px 32px rgba(61, 43, 31, 0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; min-height: 250px;">
+                        <div style="font-size: 48px; filter: drop-shadow(0 4px 8px rgba(61, 43, 31, 0.05));">🔔</div>
+                        <h3 style="font-size: 20px; font-weight: 800; color: var(--dark-oak); margin-bottom: 4px;">Tidak ada notifikasi</h3>
+                        <p style="font-size: 14px; color: rgba(61, 43, 31, 0.6); max-width: 320px; line-height: 1.5;">Kamu belum memiliki notifikasi transaksi atau ujian saat ini. Aktivitas terbarumu akan muncul di sini.</p>
+                    </div>
                 @endif
-                
-                <!-- Pembelian Paket Belajar -->
-                <div class="notif-card unread">
-                    <div class="notif-icon bg-green">🛒</div>
-                    <div class="notif-content">
-                        <div class="notif-header">
-                            <div class="notif-title">Pembelian Paket Pro Berhasil!</div>
-                            <div class="notif-time">Baru saja</div>
-                        </div>
-                        <div class="notif-desc">Selamat! Pembayaran kamu untuk Paket Pro (1 Bulan) telah dikonfirmasi. Semua fitur premium sekarang sudah dapat kamu akses. Selamat belajar!</div>
-                    </div>
-                </div>
-
-                <!-- Hasil Ujian -->
-                <div class="notif-card unread">
-                    <div class="notif-icon bg-blue">📝</div>
-                    <div class="notif-content">
-                        <div class="notif-header">
-                            <div class="notif-title">Nilai Tryout UTBK #4 Keluar</div>
-                            <div class="notif-time">2 jam yang lalu</div>
-                        </div>
-                        <div class="notif-desc">Hasil tryout UTBK terbarumu sudah bisa dilihat. Skor rata-rata kamu adalah 680. Yuk, cek detail pembahasannya untuk perbaikan di materi Matematika!</div>
-                    </div>
-                </div>
-
-                <!-- Paket Belajar Habis -->
-                <div class="notif-card">
-                    <div class="notif-icon bg-red">⚠️</div>
-                    <div class="notif-content">
-                        <div class="notif-header">
-                            <div class="notif-title">Paket Belajar Kamu Akan Habis!</div>
-                            <div class="notif-time">Kemarin</div>
-                        </div>
-                        <div class="notif-desc">Paket Elite kamu akan kedaluwarsa dalam 3 hari (17 Mei 2026). Segera perpanjang paketmu agar tidak kehilangan akses konseling dengan guru!</div>
-                    </div>
-                </div>
-
-                <!-- Pengumuman Umum -->
-                <div class="notif-card">
-                    <div class="notif-icon bg-amber">📢</div>
-                    <div class="notif-content">
-                        <div class="notif-header">
-                            <div class="notif-title">Pendaftaran UTBK SNBT 2026 Dibuka</div>
-                            <div class="notif-time">3 hari yang lalu</div>
-                        </div>
-                        <div class="notif-desc">Halo pejuang PTN! Pendaftaran UTBK SNBT tahun 2026 telah resmi dibuka. Pastikan kamu sudah menyiapkan seluruh berkas dan dokumen yang diperlukan ya.</div>
-                    </div>
-                </div>
-
             </div>
 
         </div>

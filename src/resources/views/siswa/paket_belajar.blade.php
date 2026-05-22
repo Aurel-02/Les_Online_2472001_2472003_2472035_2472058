@@ -178,6 +178,7 @@
             margin-top: 40px;
         }
 
+        /* ── Redesigned Premium Cards ── */
         .paket-card {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(10px);
@@ -661,6 +662,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 </span> Dashboard
             </a>
+            @if(auth()->user() && !in_array((int)auth()->user()->id_jenjang, [1, 2]))
             <a href="{{ route('siswa.ptn') }}" class="sidebar-item {{ request()->routeIs('siswa.ptn') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
@@ -671,6 +673,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                 </span> Rekomendasi Jurusan
             </a>
+            @endif
             <a href="{{ route('siswa.paket-belajar') }}" class="sidebar-item {{ request()->routeIs('siswa.paket-belajar') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
@@ -924,19 +927,36 @@
                         <label style="font-size: 14px; font-weight: 800; color: var(--dark-oak); display: block; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Metode Pembayaran</label>
                         <div class="payment-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                             <div class="payment-tile" onclick="selectPaymentMethod('DANA')" id="pay-DANA" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                                <span style="font-size: 20px;">💙</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                    <rect width="24" height="24" rx="6" fill="#118EEA"/>
+                                    <path d="M2 9h2.5c1 0 1.8.8 1.8 1.8s-.8 1.8-1.8 1.8H2V9Zm1 2.6h1.5c.4 0 .8-.3.8-.8s-.4-.8-.8-.8H3v1.6Z" fill="white"/>
+                                    <path d="M9 9L7 13.5h1.1l.4-.9h1.5l.4.9h1.1L9.5 9Zm-.1 2.8l.4-1 .4 1h-.8Z" fill="white"/>
+                                    <path d="M13 9v4.5h1l1.5-2.9v2.9h1V9h-1l-1.5 2.9V9h-1Z" fill="white"/>
+                                    <path d="M20 9L18 13.5h1.1l.4-.9h1.5l.4.9h1.1L20.5 9Zm-.1 2.8l.4-1 .4 1h-.8Z" fill="white"/>
+                                </svg>
                                 <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">DANA</span>
                             </div>
                             <div class="payment-tile" onclick="selectPaymentMethod('GoPay')" id="pay-GoPay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                                <span style="font-size: 20px;">💚</span>
+                                <svg width="24" height="24" viewBox="-2 -2 18 18" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                    <ellipse cx="6.811" cy="6.857" fill="#00AED6" rx="6.811" ry="6.857"/>
+                                    <path fill="#FFF" d="M10.778 6.644a1.587 1.587 0 0 0-1.652-1.5H4.824a.285.285 0 0 1-.284-.286c0-.158.127-.286.284-.286h4.359a1.362 1.362 0 0 0-.993-1.26 10.97 10.97 0 0 0-3.84 0 1.82 1.82 0 0 0-1.362 1.526 13.711 13.711 0 0 0 0 4.06 1.92 1.92 0 0 0 1.552 1.526 19.13 19.13 0 0 0 4.748 0 1.669 1.669 0 0 0 1.317-1.44c.14-.772.199-1.556.173-2.34zm-1.413.96v.254a.285.285 0 0 1-.284.286.285.285 0 0 1-.284-.286v-.254a.427.427 0 0 1 .284-.746.427.427 0 0 1 .284.746z"/>
+                                </svg>
                                 <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">GoPay</span>
                             </div>
                             <div class="payment-tile" onclick="selectPaymentMethod('OVO')" id="pay-OVO" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                                <span style="font-size: 20px;">💜</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                    <rect width="24" height="24" rx="6" fill="#4C2A86"/>
+                                    <circle cx="6.5" cy="12" r="2.5" stroke="white" stroke-width="1.8"/>
+                                    <path d="M10.5 9.5L12.5 14L14.5 9.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="18.5" cy="12" r="2.5" stroke="white" stroke-width="1.8"/>
+                                </svg>
                                 <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">OVO</span>
                             </div>
                             <div class="payment-tile" onclick="selectPaymentMethod('ShopeePay')" id="pay-ShopeePay" style="border: 2px solid rgba(230, 216, 193, 0.7); padding: 14px; border-radius: 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; background: rgba(255, 255, 255, 0.45); transition: all 0.2s;">
-                                <span style="font-size: 20px;">🧡</span>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                    <rect width="24" height="24" rx="6" fill="#EE4D2D"/>
+                                    <path d="M5 7H17C18.1 7 19 7.9 19 9V10H20C20.55 10 21 10.45 21 11V13C21 13.55 20.55 14 20 14H19V15C19 16.1 18.1 17 17 17H5C3.9 17 3 16.1 3 15V9C3 7.9 3.9 7.72 5 7ZM17 10.5C16.17 10.5 15.5 11.17 15.5 12C15.5 12.83 16.17 13.5 17 13.5C17.83 13.5 18.5 12.83 18.5 12C18.5 11.17 17.83 10.5 17 10.5Z" fill="white"/>
+                                </svg>
                                 <span style="font-weight: 700; font-size: 14px; color: var(--dark-oak);">ShopeePay</span>
                             </div>
                         </div>
@@ -990,18 +1010,22 @@
             finalPriceVal = originalPriceVal;
             selectedPaymentMethod = null;
 
+            // Reset UI selections
             document.getElementById('voucherSelect').value = '';
             document.getElementById('modalDiscountRow').style.display = 'none';
             
+            // Reset Payment Tiles styling
             document.querySelectorAll('.payment-tile').forEach(tile => {
                 tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
                 tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
                 tile.style.boxShadow = 'none';
             });
             
+            // Populate Modal Content
             document.getElementById('modalTitle').textContent = paket.nama;
             document.getElementById('modalDescription').textContent = paket.deskripsi || 'Tidak ada deskripsi tersedia untuk paket ini.';
             
+            // Prices format
             const formattedPrice = formatRupiah(originalPriceVal);
             document.getElementById('modalOriginalPrice').textContent = formattedPrice;
             document.getElementById('modalPrice').textContent = formattedPrice;
@@ -1013,6 +1037,7 @@
             document.getElementById('modalMasaAktif').textContent = `${paket.masa_aktif} Hari`;
             document.getElementById('modalMasaAktifText').textContent = `Masa Aktif: ${paket.masa_aktif} Hari`;
             
+            // Apply accents
             const checkoutBtn = document.getElementById('btnCheckout');
             checkoutBtn.style.backgroundColor = accentColor;
             
@@ -1025,12 +1050,15 @@
             const jenjangBadge = document.getElementById('modalJenjang');
             jenjangBadge.style.backgroundColor = 'var(--dark-oak)';
             
+            // Reset state to step 1
             showStepDetail();
             document.getElementById('successOverlay').classList.remove('active');
             
+            // Show Overlay
             const overlay = document.getElementById('detailModalOverlay');
             overlay.classList.add('active');
             
+            // Disable body scroll when modal is open
             document.body.style.overflow = 'hidden';
         }
 
@@ -1062,12 +1090,14 @@
         function selectPaymentMethod(method) {
             selectedPaymentMethod = method;
             
+            // Reset all tiles
             document.querySelectorAll('.payment-tile').forEach(tile => {
                 tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
                 tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
                 tile.style.boxShadow = 'none';
             });
             
+            // Activate selected tile
             const activeTile = document.getElementById('pay-' + method);
             if (activeTile) {
                 activeTile.style.borderColor = 'var(--muted-sage)';
@@ -1080,6 +1110,7 @@
             const overlay = document.getElementById('detailModalOverlay');
             overlay.classList.remove('active');
             
+            // Enable body scroll
             document.body.style.overflow = '';
         }
 
@@ -1091,8 +1122,10 @@
                 return;
             }
             
+            // Get voucher value
             const idVoucher = document.getElementById('voucherSelect').value;
             
+            // Animate button loading state
             const checkoutBtn = document.getElementById('btnCheckout');
             const originalContent = checkoutBtn.innerHTML;
             checkoutBtn.disabled = true;
@@ -1101,6 +1134,7 @@
                 <span>Memproses Pembayaran...</span>
             `;
             
+            // Send AJAX POST Request
             fetch('{{ route("siswa.transaksi.store") }}', {
                 method: 'POST',
                 headers: {
@@ -1115,10 +1149,12 @@
             })
             .then(response => response.json())
             .then(data => {
+                // Restore button
                 checkoutBtn.disabled = false;
                 checkoutBtn.innerHTML = originalContent;
                 
                 if (data.success) {
+                    // Redirect immediately to notifications page
                     window.location.href = '{{ route("siswa.notifikasi") }}';
                 } else {
                     alert(data.message || 'Gagal memproses transaksi. Coba lagi.');
