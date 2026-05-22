@@ -12,19 +12,17 @@ class TransactionStorageHandler extends CheckoutHandler
         try {
             DB::beginTransaction();
 
-            // Insert into transaksi table
             DB::table('transaksi')->insert([
                 'id_user' => $context->userId,
                 'id_paket' => $context->idPaket,
                 'id_voucher' => $context->idVoucher,
                 'subtotal' => $context->subtotal,
-                'status' => $context->status, // 'berhasil'
+                'status' => $context->status,
                 'metode_pembayaran' => $context->metodePembayaran,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
 
-            // Insert log into activities table
             Activity::create([
                 'user_id' => $context->userId,
                 'type' => 'transaksi',

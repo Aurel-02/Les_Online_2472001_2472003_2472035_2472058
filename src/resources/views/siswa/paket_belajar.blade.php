@@ -178,7 +178,6 @@
             margin-top: 40px;
         }
 
-        /* ── Redesigned Premium Cards ── */
         .paket-card {
             background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(10px);
@@ -991,22 +990,18 @@
             finalPriceVal = originalPriceVal;
             selectedPaymentMethod = null;
 
-            // Reset UI selections
             document.getElementById('voucherSelect').value = '';
             document.getElementById('modalDiscountRow').style.display = 'none';
             
-            // Reset Payment Tiles styling
             document.querySelectorAll('.payment-tile').forEach(tile => {
                 tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
                 tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
                 tile.style.boxShadow = 'none';
             });
             
-            // Populate Modal Content
             document.getElementById('modalTitle').textContent = paket.nama;
             document.getElementById('modalDescription').textContent = paket.deskripsi || 'Tidak ada deskripsi tersedia untuk paket ini.';
             
-            // Prices format
             const formattedPrice = formatRupiah(originalPriceVal);
             document.getElementById('modalOriginalPrice').textContent = formattedPrice;
             document.getElementById('modalPrice').textContent = formattedPrice;
@@ -1018,7 +1013,6 @@
             document.getElementById('modalMasaAktif').textContent = `${paket.masa_aktif} Hari`;
             document.getElementById('modalMasaAktifText').textContent = `Masa Aktif: ${paket.masa_aktif} Hari`;
             
-            // Apply accents
             const checkoutBtn = document.getElementById('btnCheckout');
             checkoutBtn.style.backgroundColor = accentColor;
             
@@ -1031,15 +1025,12 @@
             const jenjangBadge = document.getElementById('modalJenjang');
             jenjangBadge.style.backgroundColor = 'var(--dark-oak)';
             
-            // Reset state to step 1
             showStepDetail();
             document.getElementById('successOverlay').classList.remove('active');
             
-            // Show Overlay
             const overlay = document.getElementById('detailModalOverlay');
             overlay.classList.add('active');
             
-            // Disable body scroll when modal is open
             document.body.style.overflow = 'hidden';
         }
 
@@ -1071,14 +1062,12 @@
         function selectPaymentMethod(method) {
             selectedPaymentMethod = method;
             
-            // Reset all tiles
             document.querySelectorAll('.payment-tile').forEach(tile => {
                 tile.style.borderColor = 'rgba(230, 216, 193, 0.7)';
                 tile.style.backgroundColor = 'rgba(255, 255, 255, 0.45)';
                 tile.style.boxShadow = 'none';
             });
             
-            // Activate selected tile
             const activeTile = document.getElementById('pay-' + method);
             if (activeTile) {
                 activeTile.style.borderColor = 'var(--muted-sage)';
@@ -1091,7 +1080,6 @@
             const overlay = document.getElementById('detailModalOverlay');
             overlay.classList.remove('active');
             
-            // Enable body scroll
             document.body.style.overflow = '';
         }
 
@@ -1103,10 +1091,8 @@
                 return;
             }
             
-            // Get voucher value
             const idVoucher = document.getElementById('voucherSelect').value;
             
-            // Animate button loading state
             const checkoutBtn = document.getElementById('btnCheckout');
             const originalContent = checkoutBtn.innerHTML;
             checkoutBtn.disabled = true;
@@ -1115,7 +1101,6 @@
                 <span>Memproses Pembayaran...</span>
             `;
             
-            // Send AJAX POST Request
             fetch('{{ route("siswa.transaksi.store") }}', {
                 method: 'POST',
                 headers: {
@@ -1130,12 +1115,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Restore button
                 checkoutBtn.disabled = false;
                 checkoutBtn.innerHTML = originalContent;
                 
                 if (data.success) {
-                    // Redirect immediately to notifications page
                     window.location.href = '{{ route("siswa.notifikasi") }}';
                 } else {
                     alert(data.message || 'Gagal memproses transaksi. Coba lagi.');

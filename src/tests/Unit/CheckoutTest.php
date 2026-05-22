@@ -15,35 +15,27 @@ use stdClass;
 
 class CheckoutTest extends TestCase
 {
-    /**
-     * Test the Decorator Pattern for learning packages (Base, Voucher Discount, and Premium Features).
-     */
     public function test_paket_belajar_decorators()
     {
-        // 1. Create a dummy package object matching the DB structure
         $paketData = new stdClass();
         $paketData->nama = 'Paket Intensif UTBK';
         $paketData->harga = 100000.0;
         $paketData->deskripsi = 'Persiapan UTBK Intensif';
         $paketData->masa_aktif = 30;
 
-        // 2. Base learning package
         $basePaket = new BasePaketBelajar($paketData);
         $this->assertEquals('Paket Intensif UTBK', $basePaket->getNama());
         $this->assertEquals(100000.0, $basePaket->getHarga());
         $this->assertEquals(30, $basePaket->getMasaAktif());
         $this->assertContains('Materi belajar lengkap', $basePaket->getFeatures());
 
-        // 3. Decorator: Voucher Discount
         $discountedPaket = new VoucherDiscountDecorator($basePaket, 25000.0);
         $this->assertEquals(75000.0, $discountedPaket->getHarga());
         $this->assertEquals('Paket Intensif UTBK', $discountedPaket->getNama());
 
-        // 4. Decorator: Voucher Discount exceeding price (must not go below 0)
         $heavilyDiscountedPaket = new VoucherDiscountDecorator($basePaket, 150000.0);
         $this->assertEquals(0.0, $heavilyDiscountedPaket->getHarga());
 
-        // 5. Decorator: Premium Features
         $premiumDiscountedPaket = new PremiumFeatureDecorator($discountedPaket);
         $features = $premiumDiscountedPaket->getFeatures();
         $this->assertContains('Prioritas Tanya Guru via Chat', $features);
@@ -51,9 +43,6 @@ class CheckoutTest extends TestCase
         $this->assertEquals(75000.0, $premiumDiscountedPaket->getHarga());
     }
 
-    /**
-     * Test CheckoutContext tracking.
-     */
     public function test_checkout_context()
     {
         $context = new CheckoutContext(1, 10, null, 'DANA');
@@ -65,14 +54,10 @@ class CheckoutTest extends TestCase
         $this->assertEquals('Metode pembayaran tidak valid.', $context->errorMessage);
     }
 
-    /**
-     * Test PaymentMethodValidationHandler logic.
-     */
     public function test_payment_method_validation()
     {
         $handler = new PaymentMethodValidationHandler();
 
-        // Valid method
         $context1 = new CheckoutContext(1, 10, null, 'DANA');
         $handler->handle($context1);
         $this->assertTrue($context1->isSuccess);
@@ -81,13 +66,11 @@ class CheckoutTest extends TestCase
         $handler->handle($context2);
         $this->assertTrue($context2->isSuccess);
 
-        // Invalid method
         $context3 = new CheckoutContext(1, 10, null, 'TransferBank');
         $handler->handle($context3);
         $this->assertFalse($context3->isSuccess);
         $this->assertEquals('Metode pembayaran tidak didukung.', $context3->errorMessage);
 
-        // Empty method
         $context4 = new CheckoutContext(1, 10, null, '');
         $handler->handle($context4);
         $this->assertFalse($context4->isSuccess);
