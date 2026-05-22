@@ -13,6 +13,7 @@ class PremiumFeatureDecorator implements PaketBelajarInterface
 
     public function getNama(): string
     {
+        // Add a premium marker to the name
         return $this->paketBelajar->getNama();
     }
 
@@ -33,6 +34,7 @@ class PremiumFeatureDecorator implements PaketBelajarInterface
 
     public function getFeatures(): array
     {
+        // Add additional features to the decorated package
         $features = $this->paketBelajar->getFeatures();
         $features[] = 'Prioritas Tanya Guru via Chat';
         $features[] = 'Rangkuman Materi & E-Book Premium';

@@ -23,6 +23,10 @@ class PTNController extends Controller
     public function index(Request $request)
     {
         $session      = UserSession::getInstance();
+        $user         = $session->getUser();
+        if ($user && in_array((int)$user->id_jenjang, [1, 2])) {
+            abort(403, 'Akses ditolak.');
+        }
         $userName     = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
@@ -37,6 +41,10 @@ class PTNController extends Controller
     public function jurusan(Request $request)
     {
         $session      = UserSession::getInstance();
+        $user         = $session->getUser();
+        if ($user && in_array((int)$user->id_jenjang, [1, 2])) {
+            abort(403, 'Akses ditolak.');
+        }
         $userName     = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
@@ -49,6 +57,10 @@ class PTNController extends Controller
     public function jurusanDetail(Request $request)
     {
         $session      = UserSession::getInstance();
+        $user         = $session->getUser();
+        if ($user && in_array((int)$user->id_jenjang, [1, 2])) {
+            abort(403, 'Akses ditolak.');
+        }
         $userName     = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 

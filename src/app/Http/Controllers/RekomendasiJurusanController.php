@@ -18,6 +18,9 @@ class RekomendasiJurusanController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        if ($user && in_array((int)$user->id_jenjang, [1, 2])) {
+            abort(403, 'Akses ditolak.');
+        }
         
         $session      = UserSession::getInstance();
         $userName     = $session->getName();

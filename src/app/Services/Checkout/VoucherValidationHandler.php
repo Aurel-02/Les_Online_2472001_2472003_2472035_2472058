@@ -29,6 +29,7 @@ class VoucherValidationHandler extends CheckoutHandler
         $context->voucher = $voucher;
         $context->potongan = (float) $voucher->potongan;
 
+        // Apply Voucher Decorator & PremiumFeatureDecorator
         $basePaket = new BasePaketBelajar($context->paket);
         $discountedPaket = new VoucherDiscountDecorator($basePaket, $context->potongan);
         $decoratedPaket = new PremiumFeatureDecorator($discountedPaket);
