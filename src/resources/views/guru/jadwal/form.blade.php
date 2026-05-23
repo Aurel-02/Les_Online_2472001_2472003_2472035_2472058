@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ isset($materi) ? 'Edit' : 'Tambah' }} Materi - Pintar.id</title>
+    <title>{{ isset($jadwal) ? 'Edit' : 'Tambah' }} Jadwal - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --dark-oak:#3D2B1F; --muted-sage:#8E9680; --dusty-mauve:#A37C76; --warm-amber:#D9B382; --vintage-cream:#E6D8C1; --sidebar-width:260px; }
@@ -20,15 +20,15 @@
         .sidebar-item-icon { font-size:20px; flex-shrink:0; }
         .logout-container { margin-top:auto; }
         .btn-logout { width:100%; padding:14px; border-radius:16px; font-size:15px; font-weight:600; color:var(--dusty-mauve); background:rgba(163,124,118,0.1); border:none; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; justify-content:center; gap:10px; }
-        .btn-logout:hover { background:rgba(163,124,118,0.2); color:#8a655f; }
+        .btn-logout:hover { background:rgba(163,124,118,0.2); }
         .main-wrapper { flex:1; margin-left:var(--sidebar-width); height:100vh; overflow-y:auto; position:relative; z-index:5; }
         .topbar { padding:24px 48px; display:flex; justify-content:flex-end; align-items:center; position:sticky; top:0; z-index:40; }
-        .user-profile { display:flex; align-items:center; gap:16px; background:rgba(255,255,255,0.6); backdrop-filter:blur(12px); padding:8px 10px 8px 24px; border-radius:99px; border:1px solid rgba(255,255,255,0.8); box-shadow:0 4px 14px rgba(61,43,31,0.04); cursor:pointer; text-decoration:none; transition:transform 0.3s ease; }
+        .user-profile { display:flex; align-items:center; gap:16px; background:rgba(255,255,255,0.6); backdrop-filter:blur(12px); padding:8px 10px 8px 24px; border-radius:99px; border:1px solid rgba(255,255,255,0.8); box-shadow:0 4px 14px rgba(61,43,31,0.04); text-decoration:none; transition:transform 0.3s ease; }
         .user-profile:hover { transform:translateY(-2px); }
         .user-greeting { font-size:15px; font-weight:500; color:rgba(61,43,31,0.7); }
         .user-greeting span { font-weight:800; color:var(--dark-oak); }
         .user-avatar { width:42px; height:42px; border-radius:50%; background:var(--muted-sage); display:flex; align-items:center; justify-content:center; font-weight:800; color:white; font-size:18px; overflow:hidden; }
-        .content-body { padding:0 48px 80px; max-width:800px; margin:0 auto; }
+        .content-body { padding:0 48px 80px; max-width:700px; margin:0 auto; }
         .section-title { font-size:28px; font-weight:800; color:var(--dark-oak); margin-bottom:24px; }
         .glass-card { background:rgba(255,255,255,0.6); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.8); border-radius:24px; padding:40px; box-shadow:0 10px 30px rgba(61,43,31,0.04); }
         .form-group { margin-bottom:20px; }
@@ -36,15 +36,13 @@
         .form-label { display:block; font-weight:600; margin-bottom:8px; color:var(--dark-oak); font-size:14px; }
         .form-label span { color:var(--dusty-mauve); }
         .form-control { width:100%; padding:14px 18px; border-radius:12px; border:1px solid rgba(61,43,31,0.2); background:rgba(255,255,255,0.8); font-family:'Outfit'; font-size:15px; transition:all 0.3s ease; outline:none; color:var(--dark-oak); }
-        .form-control:focus { border-color:var(--muted-sage); box-shadow:0 0 0 3px rgba(142,150,128,0.2); }
-        textarea.form-control { resize:vertical; min-height:120px; }
-        .file-hint { font-size:12px; color:rgba(61,43,31,0.5); margin-top:6px; font-weight:500; }
-        .current-file { display:inline-flex; align-items:center; gap:6px; background:rgba(142,150,128,0.15); padding:6px 12px; border-radius:8px; font-size:13px; font-weight:600; color:#6A725D; margin-top:8px; text-decoration:none; }
-        .btn-submit { background:var(--muted-sage); color:white; padding:14px 28px; border-radius:12px; font-weight:600; font-size:16px; border:none; cursor:pointer; transition:all 0.3s ease; width:100%; margin-top:10px; }
-        .btn-submit:hover { background:#7b846e; transform:translateY(-2px); box-shadow:0 4px 14px rgba(142,150,128,0.3); }
+        .form-control:focus { border-color:var(--warm-amber); box-shadow:0 0 0 3px rgba(217,179,130,0.2); }
+        .btn-submit { background:var(--warm-amber); color:var(--dark-oak); padding:14px 28px; border-radius:12px; font-weight:700; font-size:16px; border:none; cursor:pointer; transition:all 0.3s ease; width:100%; margin-top:10px; }
+        .btn-submit:hover { background:#c9a36a; transform:translateY(-2px); box-shadow:0 4px 14px rgba(217,179,130,0.4); }
         .btn-back { display:inline-flex; align-items:center; gap:8px; text-decoration:none; color:rgba(61,43,31,0.6); font-weight:600; margin-bottom:24px; transition:color 0.3s ease; }
         .btn-back:hover { color:var(--dark-oak); }
         .error-message { color:var(--dusty-mauve); font-size:13px; font-weight:600; margin-top:6px; }
+        .time-hint { font-size:12px; color:rgba(61,43,31,0.5); margin-top:5px; font-weight:500; }
         @media(max-width:768px) { .form-row { grid-template-columns:1fr; } }
     </style>
 </head>
@@ -65,16 +63,16 @@
                 <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>
                 Dashboard
             </a>
-            <a href="{{ route('guru.jadwal.index') }}" class="sidebar-item">
+            <a href="{{ route('guru.jadwal.index') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
                 Jadwal Mengajar
             </a>
             <a href="{{ route('guru.siswa.index') }}" class="sidebar-item">
-                <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+                <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></span>
                 Kelas &amp; Siswa
             </a>
-            <a href="{{ route('guru.materi.index') }}" class="sidebar-item active">
-                <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>
+            <a href="{{ route('guru.materi.index') }}" class="sidebar-item">
+                <span class="sidebar-item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></span>
                 Materi Belajar
             </a>
             <a href="{{ route('guru.tugas.index') }}" class="sidebar-item">
@@ -106,71 +104,60 @@
         </header>
 
         <div class="content-body">
-            <a href="{{ route('guru.materi.index') }}" class="btn-back">
+            <a href="{{ route('guru.jadwal.index') }}" class="btn-back">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Kembali ke Daftar Materi
+                Kembali ke Jadwal
             </a>
 
-            <h2 class="section-title">{{ isset($materi) ? 'Edit Materi' : 'Tambah Materi Baru' }}</h2>
+            <h2 class="section-title">{{ isset($jadwal) ? 'Edit Jadwal' : 'Tambah Jadwal Mengajar' }}</h2>
 
             <div class="glass-card">
-                <form action="{{ isset($materi) ? route('guru.materi.update', $materi->id_materi) : route('guru.materi.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ isset($jadwal) ? route('guru.jadwal.update', $jadwal->id_jadwal) : route('guru.jadwal.store') }}" method="POST">
                     @csrf
-                    @if(isset($materi)) @method('PUT') @endif
+                    @if(isset($jadwal)) @method('PUT') @endif
 
                     <div class="form-group">
-                        <label class="form-label" for="judul">Judul Materi <span>*</span></label>
-                        <input type="text" id="judul" name="judul" class="form-control" value="{{ old('judul', $materi->judul ?? '') }}" required placeholder="Contoh: Pengantar Aljabar">
-                        @error('judul') <div class="error-message">{{ $message }}</div> @enderror
+                        <label class="form-label" for="hari">Hari <span>*</span></label>
+                        <select id="hari" name="hari" class="form-control" required>
+                            <option value="" disabled {{ !isset($jadwal) ? 'selected' : '' }}>Pilih Hari...</option>
+                            @foreach(['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'] as $h)
+                                <option value="{{ $h }}" {{ old('hari', $jadwal->hari ?? '') == $h ? 'selected' : '' }}>{{ $h }}</option>
+                            @endforeach
+                        </select>
+                        @error('hari') <div class="error-message">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-row">
                         <div>
-                            <label class="form-label" for="jenjang">Jenjang <span>*</span></label>
-                            <select id="jenjang" name="jenjang" class="form-control" required>
-                                <option value="" disabled {{ !isset($materi) ? 'selected' : '' }}>Pilih Jenjang...</option>
-                                <option value="SD"  {{ old('jenjang', $materi->jenjang ?? '') == 'SD'  ? 'selected' : '' }}>SD</option>
-                                <option value="SMP" {{ old('jenjang', $materi->jenjang ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                <option value="SMA" {{ old('jenjang', $materi->jenjang ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
-                            </select>
-                            @error('jenjang') <div class="error-message">{{ $message }}</div> @enderror
+                            <label class="form-label" for="jam_mulai">Jam Mulai <span>*</span></label>
+                            <input type="time" id="jam_mulai" name="jam_mulai" class="form-control"
+                                value="{{ old('jam_mulai', isset($jadwal) ? substr($jadwal->jam_mulai, 0, 5) : '') }}" required>
+                            @error('jam_mulai') <div class="error-message">{{ $message }}</div> @enderror
                         </div>
                         <div>
-                            <label class="form-label" for="mapel">Mata Pelajaran</label>
-                            <input type="text" id="mapel" name="mapel" class="form-control" value="{{ old('mapel', $materi->mapel ?? '') }}" placeholder="Contoh: Matematika">
-                            @error('mapel') <div class="error-message">{{ $message }}</div> @enderror
+                            <label class="form-label" for="jam_selesai">Jam Selesai <span>*</span></label>
+                            <input type="time" id="jam_selesai" name="jam_selesai" class="form-control"
+                                value="{{ old('jam_selesai', isset($jadwal) ? substr($jadwal->jam_selesai, 0, 5) : '') }}" required>
+                            @error('jam_selesai') <div class="error-message">{{ $message }}</div> @enderror
                         </div>
+                    </div>
+                    <div class="time-hint">⏱ Jam selesai harus lebih dari jam mulai.</div>
+
+                    <div class="form-group" style="margin-top:20px;">
+                        <label class="form-label" for="mapel">Mata Pelajaran <span>*</span></label>
+                        <input type="text" id="mapel" name="mapel" class="form-control"
+                            value="{{ old('mapel', $jadwal->mapel ?? '') }}" required placeholder="Contoh: Matematika">
+                        @error('mapel') <div class="error-message">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="kelas">Kelas</label>
-                        <input type="text" id="kelas" name="kelas" class="form-control" value="{{ old('kelas', $materi->kelas ?? '') }}" placeholder="Contoh: X IPA 1, VII A">
+                        <label class="form-label" for="kelas">Kelas <span>*</span></label>
+                        <input type="text" id="kelas" name="kelas" class="form-control"
+                            value="{{ old('kelas', $jadwal->kelas ?? '') }}" required placeholder="Contoh: X IPA 1">
                         @error('kelas') <div class="error-message">{{ $message }}</div> @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="deskripsi">Deskripsi Singkat</label>
-                        <textarea id="deskripsi" name="deskripsi" class="form-control" placeholder="Jelaskan secara singkat tentang materi ini...">{{ old('deskripsi', $materi->deskripsi ?? '') }}</textarea>
-                        @error('deskripsi') <div class="error-message">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="link_video">Link Video (Opsional)</label>
-                        <input type="url" id="link_video" name="link_video" class="form-control" value="{{ old('link_video', $materi->link_video ?? '') }}" placeholder="https://youtube.com/...">
-                        @error('link_video') <div class="error-message">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="file_materi">Upload File Materi (Opsional)</label>
-                        <input type="file" id="file_materi" name="file_materi" class="form-control" accept=".pdf,.doc,.docx,.ppt,.pptx">
-                        <div class="file-hint">Format: PDF, DOC, DOCX, PPT, PPTX. Maks 10MB.</div>
-                        @if(isset($materi) && $materi->file_materi)
-                            <a href="{{ asset('storage/' . $materi->file_materi) }}" target="_blank" class="current-file">📎 File saat ini (klik untuk lihat)</a>
-                        @endif
-                        @error('file_materi') <div class="error-message">{{ $message }}</div> @enderror
-                    </div>
-
-                    <button type="submit" class="btn-submit">{{ isset($materi) ? '💾 Simpan Perubahan' : '➕ Tambahkan Materi' }}</button>
+                    <button type="submit" class="btn-submit">{{ isset($jadwal) ? '💾 Simpan Perubahan' : '📅 Tambahkan Jadwal' }}</button>
                 </form>
             </div>
         </div>

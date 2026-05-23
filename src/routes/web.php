@@ -69,4 +69,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
+
+    // Tugas CRUD
+    Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
+    Route::get('/guru/tugas/create', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
+    Route::post('/guru/tugas', [GuruController::class, 'tugasStore'])->name('guru.tugas.store');
+    Route::get('/guru/tugas/{id}/edit', [GuruController::class, 'tugasEdit'])->name('guru.tugas.edit');
+    Route::put('/guru/tugas/{id}', [GuruController::class, 'tugasUpdate'])->name('guru.tugas.update');
+    Route::delete('/guru/tugas/{id}', [GuruController::class, 'tugasDestroy'])->name('guru.tugas.destroy');
+
+    // Jadwal Mengajar CRUD
+    Route::get('/guru/jadwal', [GuruController::class, 'jadwalIndex'])->name('guru.jadwal.index');
+    Route::get('/guru/jadwal/create', [GuruController::class, 'jadwalCreate'])->name('guru.jadwal.create');
+    Route::post('/guru/jadwal', [GuruController::class, 'jadwalStore'])->name('guru.jadwal.store');
+    Route::get('/guru/jadwal/{id}/edit', [GuruController::class, 'jadwalEdit'])->name('guru.jadwal.edit');
+    Route::put('/guru/jadwal/{id}', [GuruController::class, 'jadwalUpdate'])->name('guru.jadwal.update');
+    Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
 });
