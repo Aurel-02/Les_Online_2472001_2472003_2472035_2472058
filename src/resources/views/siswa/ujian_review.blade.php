@@ -36,12 +36,12 @@
         .sidebar-item:hover, .sidebar-item.active { background: rgba(255,255,255,.5); color: var(--dark-oak); }
         .sidebar-item-icon { font-size: 20px; }
         .btn-logout {
-            width: 100%; padding: 14px; border-radius: 16px; font-size: 15px; font-weight: 600;
-            color: var(--dusty-mauve); background: rgba(163,124,118,.1); border: none;
+            width: 100%; padding: 14px; border-radius: 99px; font-size: 15px; font-weight: 600;
+            color: var(--dusty-mauve); background: rgba(163, 124, 118, 0.08); border: none;
             cursor: pointer; transition: all .3s ease;
             display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: auto;
         }
-        .btn-logout:hover { background: rgba(163,124,118,.2); }
+        .btn-logout:hover { background: rgba(163, 124, 118, 0.15); color: #8a655f; }
 
         .main-wrapper { flex: 1; margin-left: var(--sidebar-width); padding: 40px 48px 80px; max-width: calc(960px + var(--sidebar-width)); }
 
@@ -127,10 +127,14 @@
                 Ujian
             </a>
         </div>
-        <form action="{{ route('logout') }}" method="POST">
+        <form action="{{ route('logout') }}" method="POST" style="margin-top: auto;">
             @csrf
             <button type="submit" class="btn-logout">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
                 Logout
             </button>
         </form>
