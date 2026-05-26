@@ -28,7 +28,10 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/home', [SiswaController::class, 'index'])->name('siswa.home');
     Route::get('/siswa/materi', [SiswaController::class, 'daftarMateri'])->name('siswa.materi');
     Route::get('/siswa/video', [VideoController::class, 'index'])->name('siswa.video');
-    Route::get('/siswa/video/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
+    Route::get('/siswa/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
+    Route::get('/siswa/catatan/tulis', [CatatanController::class, 'create'])->name('siswa.catatan.tulis');
+    Route::get('/siswa/catatan/edit/{id}', [CatatanController::class, 'edit'])->name('siswa.catatan.edit');
+    Route::post('/siswa/catatan/simpan', [CatatanController::class, 'store'])->name('siswa.catatan.store');
     Route::get('/siswa/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('siswa.profile');
     Route::post('/siswa/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('siswa.profile.update');
     Route::post('/siswa/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('siswa.profile.photo');

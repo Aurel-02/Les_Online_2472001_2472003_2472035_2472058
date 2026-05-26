@@ -395,7 +395,7 @@
                 @endif
                 <div class="video-top-overlay" style="top:12px; left:12px;">
                     <div class="video-overlay-badge" style="background:rgba(217,179,130,0.88); color:var(--dark-oak);">📚 {{ $mapel }}</div>
-                    <a href="{{ route('siswa.catatan') }}?mapel={{ urlencode($mapel) }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
+                    <a href="{{ route('siswa.catatan.tulis') }}?mapel={{ urlencode($mapel) }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
                 </div>
             </div>
             <div class="video-info">

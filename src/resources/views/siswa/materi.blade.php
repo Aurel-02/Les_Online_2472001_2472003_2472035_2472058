@@ -318,8 +318,7 @@
             <div class="center-nav">
                 <a href="{{ route('siswa.home') }}" class="nav-pill">Beranda</a>
                 <div class="nav-pill active">Video Materi</div>
-                <div class="nav-pill">Latihan Soal</div>
-                <div class="nav-pill">Tryout</div>
+                <a href="{{ route('siswa.catatan') }}?mapel={{ urlencode($mapel ?? '') }}" class="nav-pill">Catatan</a>
             </div>
             
             <div class="right-nav">
@@ -389,14 +388,8 @@
                 </div>
             </div>
 
-            <div class="category-row">
-                @foreach($tags as $index => $tag)
-                    <div class="cat-pill {{ $index === 0 ? 'active' : '' }}">{{ $tag }}</div>
-                @endforeach
-            </div>
-
-            <div class="section-header">
-                <h3 class="section-title">Trending in {{ $mapel }}</h3>
+            <div class="section-header" style="margin-top: 30px;">
+                <h3 class="section-title">Daftar Video {{ $mapel }}</h3>
                 <div class="filter-icons">
                     <div class="active">
                         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
