@@ -70,3 +70,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
 });
+
+    Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
+});
