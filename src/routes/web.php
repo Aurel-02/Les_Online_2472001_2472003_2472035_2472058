@@ -76,4 +76,11 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
+    Route::get('/orangtua/profile', [\App\Http\Controllers\ProfileController::class, 'indexOrangTua'])->name('orangtua.profile');
+    Route::post('/orangtua/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('orangtua.profile.update');
+    Route::post('/orangtua/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('orangtua.profile.photo');
+    Route::get('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordFormOrangTua'])->name('orangtua.profile.password');
+    Route::post('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordOrangTua'])->name('orangtua.profile.password.update');
+    Route::get('/orangtua/paket-belajar', [\App\Http\Controllers\OrangTuaController::class, 'paketBelajar'])->name('orangtua.paket-belajar');
+    Route::post('/orangtua/transaksi', [\App\Http\Controllers\OrangTuaController::class, 'storeTransaksi'])->name('orangtua.transaksi.store');
 });
