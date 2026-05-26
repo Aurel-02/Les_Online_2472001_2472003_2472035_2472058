@@ -17,6 +17,14 @@ class Materi extends Model
         'deskripsi',
         'link_video',
         'jenjang',
+        'mapel',
+        'kelas',
+        'file_materi',
         'id_guru',
     ];
+
+    public function guru()
+    {
+        return $this->belongsTo(User::class, 'id_guru', 'id_user');
+    }
 }
