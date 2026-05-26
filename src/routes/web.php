@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
+<<<<<<< HEAD
 
     // Tugas CRUD
     Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
@@ -85,4 +86,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/jadwal/{id}/edit', [GuruController::class, 'jadwalEdit'])->name('guru.jadwal.edit');
     Route::put('/guru/jadwal/{id}', [GuruController::class, 'jadwalUpdate'])->name('guru.jadwal.update');
     Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
+=======
+});
+
+Route::middleware(['auth', 'role:orang tua'])->group(function () {
+    Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
+>>>>>>> progress-4
 });
