@@ -318,8 +318,7 @@
             <div class="center-nav">
                 <a href="{{ route('siswa.home') }}" class="nav-pill">Beranda</a>
                 <div class="nav-pill active">Video Materi</div>
-                <div class="nav-pill">Latihan Soal</div>
-                <div class="nav-pill">Tryout</div>
+                <a href="{{ route('siswa.catatan') }}?mapel={{ urlencode($mapel ?? '') }}" class="nav-pill">Catatan</a>
             </div>
             
             <div class="right-nav">
@@ -340,11 +339,39 @@
         </header>
 
         <main class="main-content">
+            @php
+                $banner1 = "Jelajahi<br>" . $mapel;
+                $banner2 = "Serunya<br>" . $mapel;
+                $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                
+                if (stripos($mapel, 'Matematika') !== false) {
+                    $banner1 = "Petualangan<br>Aljabar Linear";
+                    $banner2 = "Misteri<br>Persamaan Kuadrat";
+                    $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "📐 Geometri", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                } elseif (stripos($mapel, 'Fisika') !== false) {
+                    $banner1 = "Mekanika<br>Kuantum Dasar";
+                    $banner2 = "Rahasia<br>Hukum Newton";
+                    $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "⚛️ Kinematika", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                } elseif (stripos($mapel, 'Ekonomi') !== false) {
+                    $banner1 = "Dinamika<br>Pasar Global";
+                    $banner2 = "Pengantar<br>Akuntansi Dasar";
+                    $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "📉 Akuntansi", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                } elseif (stripos($mapel, 'Kimia') !== false) {
+                    $banner1 = "Keajaiban<br>Reaksi Kimia";
+                    $banner2 = "Misteri<br>Tabel Periodik";
+                    $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "🧪 Senyawa", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                } elseif (stripos($mapel, 'Biologi') !== false) {
+                    $banner1 = "Eksplorasi<br>Dunia Sel";
+                    $banner2 = "Rahasia<br>Genetika Manusia";
+                    $tags = ["🔥 Trending", "⚡ Cepat Paham", "❤️ Materi Disukai", "🧬 Evolusi", "🤯 Soal Sulit", "🎓 Spesial UN"];
+                }
+            @endphp
+
             <div class="featured-grid">
                 <div class="featured-card banner-1">
                     <div class="banner-content">
-                        <h2>Petualangan<br>Aljabar Linear</h2>
-                        <a href="{{ route('siswa.video') }}" class="play-btn">
+                        <h2>{!! $banner1 !!}</h2>
+                        <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="play-btn">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             Mulai Belajar
                         </a>
@@ -352,8 +379,8 @@
                 </div>
                 <div class="featured-card banner-2">
                     <div class="banner-content">
-                        <h2>Misteri<br>Persamaan Kuadrat</h2>
-                        <a href="{{ route('siswa.video') }}" class="play-btn">
+                        <h2>{!! $banner2 !!}</h2>
+                        <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="play-btn">
                             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             Mulai Belajar
                         </a>
@@ -361,17 +388,8 @@
                 </div>
             </div>
 
-            <div class="category-row">
-                <div class="cat-pill active">🔥 Trending</div>
-                <div class="cat-pill">⚡ Cepat Paham</div>
-                <div class="cat-pill">❤️ Materi Disukai</div>
-                <div class="cat-pill">📐 Geometri</div>
-                <div class="cat-pill">🤯 Soal Sulit</div>
-                <div class="cat-pill">🎓 Spesial UN</div>
-            </div>
-
-            <div class="section-header">
-                <h3 class="section-title">Trending in {{ $mapel }}</h3>
+            <div class="section-header" style="margin-top: 30px;">
+                <h3 class="section-title">Daftar Video {{ $mapel }}</h3>
                 <div class="filter-icons">
                     <div class="active">
                         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
@@ -383,45 +401,39 @@
             </div>
 
             <div class="video-grid">
-                <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="video-card">
-                    <div class="video-poster poster-1"></div>
+                @forelse($materis as $materi)
+                @php
+                    $youtubeId = '';
+                    if($materi->link_video && preg_match('/embed\/([a-zA-Z0-9_-]+)/', $materi->link_video, $matches)) {
+                        $youtubeId = $matches[1];
+                    }
+                @endphp
+                <a href="{{ route('siswa.video') }}?id={{ $materi->id_materi }}&mapel={{ urlencode($mapel) }}" class="video-card" style="text-decoration: none;">
+                    @if($youtubeId)
+                        <div class="video-poster" style="aspect-ratio: 16/9; background-image: url('https://img.youtube.com/vi/{{ $youtubeId }}/hqdefault.jpg'); background-size: cover; background-position: center; position:relative;">
+                            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); border-radius:16px;">
+                                <div style="width:48px; height:48px; background:rgba(255,255,255,0.8); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--dark-oak); font-size:20px; padding-left:4px;">▶</div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="video-poster poster-{{ ($loop->index % 5) + 1 }}" style="aspect-ratio: 16/9; position:relative;">
+                            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; border-radius:16px;">
+                                <div style="width:48px; height:48px; background:rgba(255,255,255,0.8); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--dark-oak); font-size:20px; padding-left:4px;">▶</div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="video-info">
-                        <h4 class="video-title">Fungsi Kuadrat</h4>
-                        <div class="video-meta"><span style="color:var(--accent);">★</span> 9.8 <span>|</span> 2024</div>
+                        <h4 class="video-title">{{ $materi->judul }}</h4>
+                        <div class="video-meta">
+                            <span style="color:var(--accent);">👤</span> {{ $materi->nama_guru }}
+                        </div>
                     </div>
                 </a>
-                
-                <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="video-card">
-                    <div class="video-poster poster-2"></div>
-                    <div class="video-info">
-                        <h4 class="video-title">Trigonometri Dasar</h4>
-                        <div class="video-meta"><span style="color:var(--accent);">★</span> 8.5 <span>|</span> 2024</div>
-                    </div>
-                </a>
-                
-                <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="video-card">
-                    <div class="video-poster poster-3"></div>
-                    <div class="video-info">
-                        <h4 class="video-title">Limit Fungsi</h4>
-                        <div class="video-meta"><span style="color:var(--accent);">★</span> 9.1 <span>|</span> 2024</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="video-card">
-                    <div class="video-poster poster-4"></div>
-                    <div class="video-info">
-                        <h4 class="video-title">Matriks & Vektor</h4>
-                        <div class="video-meta"><span style="color:var(--accent);">★</span> 8.7 <span>|</span> 2023</div>
-                    </div>
-                </a>
-
-                <a href="{{ route('siswa.video') }}?mapel={{ urlencode($mapel) }}" class="video-card">
-                    <div class="video-poster poster-5"></div>
-                    <div class="video-info">
-                        <h4 class="video-title">Integral Lanjut</h4>
-                        <div class="video-meta"><span style="color:var(--accent);">★</span> 9.9 <span>|</span> 2023</div>
-                    </div>
-                </a>
+                @empty
+                <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px;">
+                    Belum ada video materi untuk saat ini.
+                </div>
+                @endforelse
             </div>
         </main>
     </div>

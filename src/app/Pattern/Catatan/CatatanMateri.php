@@ -16,15 +16,24 @@ class CatatanMateri implements MateriInterface
     {
         $session = UserSession::getInstance();
         $userName = $session->getName();
+        $user = $session->getUser();
         if (!$userName) {
             $userName = 'Siswa Pintar';
         }
         $mapel = request()->query('mapel', 'Matematika');
         
+        $catatans = [];
+        if ($user) {
+            $catatans = \App\Models\Catatan::where('id_user', $user->getKey())
+                        ->orderBy('updated_at', 'desc')
+                        ->get();
+        }
+        
         return [
             'userName' => $userName,
             'mapel' => $mapel,
-            'photoProfile' => $session->getPhotoProfile()
+            'photoProfile' => $session->getPhotoProfile(),
+            'catatans' => $catatans
         ];
     }
 }

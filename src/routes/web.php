@@ -28,7 +28,10 @@ Route::middleware(['auth', 'role:siswa'])->group(function () {
     Route::get('/siswa/home', [SiswaController::class, 'index'])->name('siswa.home');
     Route::get('/siswa/materi', [SiswaController::class, 'daftarMateri'])->name('siswa.materi');
     Route::get('/siswa/video', [VideoController::class, 'index'])->name('siswa.video');
-    Route::get('/siswa/video/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
+    Route::get('/siswa/catatan', [CatatanController::class, 'index'])->name('siswa.catatan');
+    Route::get('/siswa/catatan/tulis', [CatatanController::class, 'create'])->name('siswa.catatan.tulis');
+    Route::get('/siswa/catatan/edit/{id}', [CatatanController::class, 'edit'])->name('siswa.catatan.edit');
+    Route::post('/siswa/catatan/simpan', [CatatanController::class, 'store'])->name('siswa.catatan.store');
     Route::get('/siswa/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('siswa.profile');
     Route::post('/siswa/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('siswa.profile.update');
     Route::post('/siswa/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('siswa.profile.photo');
@@ -69,8 +72,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
-<<<<<<< HEAD
-
     // Tugas CRUD
     Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
     Route::get('/guru/tugas/create', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
@@ -86,10 +87,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/jadwal/{id}/edit', [GuruController::class, 'jadwalEdit'])->name('guru.jadwal.edit');
     Route::put('/guru/jadwal/{id}', [GuruController::class, 'jadwalUpdate'])->name('guru.jadwal.update');
     Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
-=======
 });
 
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
->>>>>>> progress-4
+    Route::get('/orangtua/profile', [\App\Http\Controllers\ProfileController::class, 'indexOrangTua'])->name('orangtua.profile');
+    Route::post('/orangtua/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('orangtua.profile.update');
+    Route::post('/orangtua/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('orangtua.profile.photo');
+    Route::get('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordFormOrangTua'])->name('orangtua.profile.password');
+    Route::post('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordOrangTua'])->name('orangtua.profile.password.update');
+    Route::get('/orangtua/paket-belajar', [\App\Http\Controllers\OrangTuaController::class, 'paketBelajar'])->name('orangtua.paket-belajar');
+    Route::post('/orangtua/transaksi', [\App\Http\Controllers\OrangTuaController::class, 'storeTransaksi'])->name('orangtua.transaksi.store');
 });

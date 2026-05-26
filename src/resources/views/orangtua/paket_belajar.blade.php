@@ -632,6 +632,33 @@
             box-shadow: 0 4px 10px rgba(163, 124, 118, 0.1);
         }
 
+        /* ── Promo Tickets (Vouchers) ── */
+        .voucher-grid { display: flex; flex-direction: column; gap: 16px; }
+        .voucher-ticket { background: white; border: 2px dashed var(--warm-amber); border-radius: 20px; padding: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 6px 18px rgba(61, 43, 31, 0.02); position: relative; overflow: hidden; transition: all 0.3s ease; }
+        .voucher-ticket:hover { transform: translateY(-2px); border-color: var(--dusty-mauve); box-shadow: 0 10px 24px rgba(217, 179, 130, 0.15); }
+        .voucher-ticket::before, .voucher-ticket::after { content: ''; position: absolute; width: 16px; height: 16px; background-color: #F7F4F0; border-radius: 50%; z-index: 2; }
+        .voucher-ticket::before { left: -8px; top: 50%; transform: translateY(-50%); border-right: 2px dashed var(--warm-amber); }
+        .voucher-ticket::after { right: -8px; top: 50%; transform: translateY(-50%); border-left: 2px dashed var(--warm-amber); }
+        .voucher-ticket:hover::before { border-right-color: var(--dusty-mauve); }
+        .voucher-ticket:hover::after { border-left-color: var(--dusty-mauve); }
+        .vc-discount { font-size: 20px; font-weight: 800; color: var(--dark-oak); }
+        .vc-code { font-size: 13px; font-weight: 700; color: var(--dusty-mauve); background: rgba(163, 124, 118, 0.1); padding: 2px 8px; border-radius: 6px; margin-top: 4px; display: inline-block; }
+
+        /* ── Poster Penawaran (Offer Banner) ── */
+        .offer-banner { background: linear-gradient(135deg, #A37C76 0%, #D9B382 100%); border-radius: 32px; padding: 36px 48px; color: white; position: relative; overflow: hidden; box-shadow: 0 16px 36px rgba(163, 124, 118, 0.2); margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+        .offer-banner::after { content: '✨'; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: 0.15; pointer-events: none; }
+        .offer-banner-content { flex: 1; }
+        .offer-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .offer-desc { font-size: 15px; line-height: 1.5; color: rgba(255,255,255,0.95); margin-bottom: 0; max-width: 600px; }
+        .offer-benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; list-style: none; flex: 1; position: relative; z-index: 2; }
+        .offer-benefits li { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .benefit-bullet { background: rgba(255,255,255,0.25); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+        
+        @media (max-width: 992px) {
+            .offer-banner { flex-direction: column; align-items: flex-start; padding: 24px; gap: 24px; }
+            .offer-benefits { grid-template-columns: 1fr; }
+        }
+
         /* ── Responsive ── */
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); transition: 0.3s; }
@@ -657,42 +684,15 @@
         </a>
 
         <div class="sidebar-menu">
-            <a href="{{ route('siswa.home') }}" class="sidebar-item {{ request()->routeIs('siswa.home') ? 'active' : '' }}">
+            <a href="{{ route('orangtua.home') }}" class="sidebar-item {{ request()->routeIs('orangtua.home') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
             </a>
-            @if(auth()->user() && !in_array((int)auth()->user()->id_jenjang, [1, 2]))
-            <a href="{{ route('siswa.ptn') }}" class="sidebar-item {{ request()->routeIs('siswa.ptn') ? 'active' : '' }}">
-                <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-                </span> Info Univ & PTN
-            </a>
-            <a href="{{ route('siswa.jurusan') }}" class="sidebar-item {{ request()->routeIs('siswa.jurusan') ? 'active' : '' }}">
-                <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-                </span> Rekomendasi Jurusan
-            </a>
-            @endif
-            <a href="{{ route('siswa.paket-belajar') }}" class="sidebar-item {{ request()->routeIs('siswa.paket-belajar') ? 'active' : '' }}">
+            <a href="{{ route('orangtua.paket-belajar') }}" class="sidebar-item {{ request()->routeIs('orangtua.paket-belajar') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
                 </span> Paket Belajar
-            </a>
-                        <a href="{{ route('siswa.ujian') }}" class="sidebar-item {{ request()->routeIs('siswa.ujian') ? 'active' : '' }}">
-                <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                </span> Ujian
-            </a>
-            <a href="{{ route('siswa.chat') }}" class="sidebar-item {{ request()->routeIs('siswa.chat') ? 'active' : '' }}">
-                <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                </span> Chat 
-            </a>
-            <a href="{{ route('siswa.notifikasi') }}" class="sidebar-item {{ request()->routeIs('siswa.notifikasi') ? 'active' : '' }}">
-                <span class="sidebar-item-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                </span> Notifikasi
             </a>
         </div>
 
@@ -715,26 +715,99 @@
     <main class="main-wrapper">
         <!-- ── HEADER ── -->
         <header class="topbar">
-            <div></div>
-            <a href="{{ route('siswa.profile') }}" class="user-profile" style="text-decoration:none;">
-                <div class="user-greeting">Hi, <span>{{ explode(' ', $userName)[0] }}</span></div>
-                    <div class="user-avatar">
-                        @if(isset($photoProfile) && $photoProfile)
-                            <img src="{{ asset('uploads/profiles/' . $photoProfile) }}" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
-                        @else
-                            {{ strtoupper(substr($userName, 0, 1)) }}
-                        @endif
-                    </div>
-                </a>
+            <div class="page-badge" style="background: rgba(142, 150, 128, 0.15); color: #5D6652; padding: 6px 16px; border-radius: 99px; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Pembelian Paket Belajar</div>
+            <a href="{{ route('orangtua.profile') }}" class="user-profile" style="text-decoration:none;">
+                <div class="user-greeting">Hi, Orang Tua <span>{{ explode(' ', $parentName)[0] }}</span></div>
+                <div class="user-avatar">
+                    @if(isset($parentPhoto) && $parentPhoto)
+                        <img src="{{ asset('uploads/profiles/' . $parentPhoto) }}" alt="Profile" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+                    @else
+                        {{ strtoupper(substr($parentName, 0, 1)) }}
+                    @endif
+                </div>
+            </a>
         </header>
 
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
+
+            <!-- CHILD SELECTOR DROPDOWN -->
+            <div class="selector-card" style="background: linear-gradient(135deg, rgba(230, 216, 193, 0.5) 0%, rgba(217, 179, 130, 0.2) 100%); border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.8); padding: 24px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(61,43,31,0.03);">
+                <div class="selector-left" style="display: flex; align-items: center; gap: 16px;">
+                    <label class="selector-label" for="child-select" style="font-weight: 700; font-size: 16px; color: var(--dark-oak);">Pilih Anak yang Ingin Dibelikan Paket:</label>
+                    <select id="child-select" class="select-child" onchange="changeChild(this.value)" style="padding: 10px 24px; border-radius: 99px; border: 2px solid rgba(61, 43, 31, 0.15); background: white; color: var(--dark-oak); font-size: 15px; font-weight: 700; outline: none; cursor: pointer; min-width: 220px;">
+                        @foreach($students as $std)
+                            <option value="{{ $std->id_user }}" {{ $selectedStudent && $selectedStudent->id_user == $std->id_user ? 'selected' : '' }}>
+                                {{ $std->nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                @if($selectedStudent)
+                <div class="child-profile-info" style="display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.6); padding: 8px 18px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.8);">
+                    <span class="child-badge" style="background: var(--muted-sage); color: white; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 99px; text-transform: uppercase;">{{ $jenjangName ?? 'SMA' }}</span>
+                    <span class="child-name" style="font-weight: 800; font-size: 15px;">{{ $selectedStudent->nama }}</span>
+                </div>
+                @endif
+            </div>
+
+            <script>
+                function changeChild(siswaId) {
+                    window.location.href = "{{ route('orangtua.paket-belajar') }}?siswa_id=" + siswaId;
+                }
+            </script>
+
+            <!-- OFFER BANNER -->
+            <div class="offer-banner">
+                <div class="offer-banner-content">
+                    <h3 class="offer-title">Kunci Sukses Belajar Anak! 🚀</h3>
+                    <p class="offer-desc">Dukung anak Anda meraih nilai impian dan menembus universitas idaman dengan meningkatkan akun ke <strong>Premium Access</strong>.</p>
+                </div>
+                <ul class="offer-benefits">
+                    <li>
+                        <span class="benefit-bullet">✓</span>
+                        <span>Akses ke semua Video Pembelajaran</span>
+                    </li>
+                    <li>
+                        <span class="benefit-bullet">✓</span>
+                        <span>Latihan Soal &amp; Try Out UTBK Tanpa Batas</span>
+                    </li>
+                    <li>
+                        <span class="benefit-bullet">✓</span>
+                        <span>Prioritas Chat Diskusi dengan Guru Ahli</span>
+                    </li>
+                    <li>
+                        <span class="benefit-bullet">✓</span>
+                        <span>Rekomendasi Jurusan Berbasis AI Akurat</span>
+                    </li>
+                </ul>
+            </div>
             
             <div class="page-header">
-                <h1 class="page-title">Pilih Paket Belajar Kamu! ✨</h1>
+                <h1 class="page-title">Pilih Paket Belajar Anak! ✨</h1>
                 <p class="page-subtitle">Pilihan paket <strong>{{ $jenjangName ?? 'Semua Jenjang' }}</strong> yang bikin belajar makin asik dan anti-bosan!</p>
             </div>
+
+            @if(isset($vouchers) && $vouchers->count() > 0)
+                <div class="glass-card" style="margin-bottom: 40px; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(10px); border: 2px solid rgba(230, 216, 193, 0.7); border-radius: 28px; padding: 28px;">
+                    <h2 class="section-title" style="font-size: 22px; font-weight: 800; color: var(--dark-oak); display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">🎟️ Promo Spesial</h2>
+                    <div class="voucher-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                        @foreach($vouchers as $vc)
+                            <div class="voucher-ticket">
+                                <div>
+                                    <div class="vc-discount">Potongan {{ number_format($vc->potongan / 1000, 0) }}K</div>
+                                    <div style="font-size:12px; color:rgba(61,43,31,0.6); font-weight:600; margin-top:2px;">Diskon Paket Belajar Anak</div>
+                                    <span class="vc-code">{{ $vc->kode_voucher }}</span>
+                                </div>
+                                <div style="text-align: right; font-size: 11px; color: rgba(61,43,31,0.5); font-weight:700;">
+                                    Berlaku s/d<br>
+                                    {{ date('d M Y', strtotime($vc->tanggal_berakhir)) }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <div class="paket-cards">
                 @php
@@ -1140,7 +1213,7 @@
             `;
             
             // Send AJAX POST Request
-            fetch('{{ route("siswa.transaksi.store") }}', {
+            fetch('{{ route("orangtua.transaksi.store") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1149,7 +1222,8 @@
                 body: JSON.stringify({
                     id_paket: selectedPaket.id_paket,
                     id_voucher: idVoucher || null,
-                    metode_pembayaran: selectedPaymentMethod
+                    metode_pembayaran: selectedPaymentMethod,
+                    siswa_id: {{ $selectedStudent ? $selectedStudent->id_user : 'null' }}
                 })
             })
             .then(response => response.json())

@@ -60,7 +60,7 @@
 
         .logo-text { font-size: 26px; font-weight: 800; color: var(--dark-oak); letter-spacing: -0.5px; }
 
-        .sidebar-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; } .sidebar-menu::-webkit-scrollbar { display: none; }
 
         .sidebar-item {
             display: flex; align-items: center; gap: 14px;

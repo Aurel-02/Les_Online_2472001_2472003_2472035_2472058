@@ -209,7 +209,7 @@
         /* ── Grid Layout ── */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 32px;
             margin-bottom: 48px;
         }
@@ -596,10 +596,15 @@
         </a>
 
         <div class="sidebar-menu">
-            <a href="#" class="sidebar-item active">
+            <a href="{{ route('orangtua.home') }}" class="sidebar-item {{ request()->routeIs('orangtua.home') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
+            </a>
+            <a href="{{ route('orangtua.paket-belajar') }}" class="sidebar-item {{ request()->routeIs('orangtua.paket-belajar') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </span> Paket Belajar
             </a>
         </div>
 
@@ -623,7 +628,7 @@
         <!-- ── HEADER ── -->
         <header class="topbar">
             <div class="page-badge">Monitoring Orang Tua</div>
-            <div class="user-profile">
+            <a href="{{ route('orangtua.profile') }}" class="user-profile" style="text-decoration:none;">
                 <div class="user-greeting">Hi, Orang Tua <span>{{ explode(' ', $parentName)[0] }}</span></div>
                 <div class="user-avatar">
                     @if(isset($parentPhoto) && $parentPhoto)
@@ -632,7 +637,7 @@
                         {{ strtoupper(substr($parentName, 0, 1)) }}
                     @endif
                 </div>
-            </div>
+            </a>
         </header>
 
         <!-- ── DASHBOARD BODY ── -->
@@ -752,67 +757,6 @@
                                 <p>Anak Anda belum memiliki riwayat pengerjaan ujian UTS, UAS, atau Try Out UTBK.</p>
                             </div>
                         @endif
-                    </div>
-
-                </div>
-
-                <!-- RIGHT COLUMN: PROMOS & MARKETING OFFER POSTER -->
-                <div class="right-column">
-                    
-                    <!-- Promo Vouchers -->
-                    <div class="glass-card">
-                        <div class="card-header-flex">
-                            <h2 class="section-title">🎟️ Promo Spesial</h2>
-                        </div>
-                        
-                        <div class="voucher-grid">
-                            @forelse($vouchers as $vc)
-                                <div class="voucher-ticket">
-                                    <div>
-                                        <div class="vc-discount">Potongan {{ number_format($vc->potongan / 1000, 0) }}K</div>
-                                        <div style="font-size:12px; color:rgba(61,43,31,0.6); font-weight:600; margin-top:2px;">Diskon Paket Belajar Anak</div>
-                                        <span class="vc-code">{{ $vc->kode_voucher }}</span>
-                                    </div>
-                                    <div style="text-align: right; font-size: 11px; color: rgba(61,43,31,0.5); font-weight:700;">
-                                        Berlaku s/d<br>
-                                        {{ date('d M Y', strtotime($vc->tanggal_berakhir)) }}
-                                    </div>
-                                </div>
-                            @empty
-                                <div style="text-align:center; padding:20px; color:rgba(61,43,31,0.5); font-weight:600;">
-                                    Belum ada promo voucher tersedia saat ini.
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    <!-- Offer Poster (Poster Penawaran Premium) -->
-                    <div class="offer-poster">
-                        <h3 class="offer-title">Kunci Sukses<br>Belajar Anak! 🚀</h3>
-                        <p class="offer-desc">Dukung anak Anda meraih nilai impian dan menembus universitas idaman dengan meningkatkan akun ke <strong>Premium Access</strong>.</p>
-                        
-                        <ul class="offer-benefits">
-                            <li>
-                                <span class="benefit-bullet">✓</span>
-                                <span>Akses ke semua Video Pembelajaran</span>
-                            </li>
-                            <li>
-                                <span class="benefit-bullet">✓</span>
-                                <span>Latihan Soal &amp; Try Out UTBK Tanpa Batas</span>
-                            </li>
-                            <li>
-                                <span class="benefit-bullet">✓</span>
-                                <span>Prioritas Chat Diskusi dengan Guru Ahli</span>
-                            </li>
-                            <li>
-                                <span class="benefit-bullet">✓</span>
-                                <span>Rekomendasi Jurusan Berbasis AI Akurat</span>
-                            </li>
-                        </ul>
-
-                        <button class="btn-offer" onclick="alert('Halaman Pembelian Paket Belajar Anak akan segera hadir di modul berikutnya! Terima kasih atas dukungannya.')">
-                            Tingkatkan Sekarang ✨
-                        </button>
                     </div>
 
                 </div>

@@ -69,7 +69,13 @@ class SiswaController extends Controller
         $photoProfile = $session->getPhotoProfile();
         $mapel = $request->query('mapel', 'Matematika');
         
-        return view('siswa.materi', compact('userName', 'mapel', 'photoProfile'));
+        $materis = \Illuminate\Support\Facades\DB::table('materi')
+            ->join('user', 'materi.id_guru', '=', 'user.id_user')
+            ->where('materi.judul', 'LIKE', '%' . $mapel . '%')
+            ->select('materi.*', 'user.nama as nama_guru')
+            ->get();
+            
+        return view('siswa.materi', compact('userName', 'mapel', 'photoProfile', 'materis'));
     }
     public function chat(Request $request)
     {

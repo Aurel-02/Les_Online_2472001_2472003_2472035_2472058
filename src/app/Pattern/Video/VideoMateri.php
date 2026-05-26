@@ -20,11 +20,32 @@ class VideoMateri implements MateriInterface
             $userName = 'Siswa Pintar';
         }
         $mapel = request()->query('mapel', 'Matematika');
+        $idMateri = request()->query('id');
+
+        $materiData = null;
+        $nextVideos = [];
+        if ($idMateri) {
+            $materiData = \Illuminate\Support\Facades\DB::table('materi')
+                ->join('user', 'materi.id_guru', '=', 'user.id_user')
+                ->where('materi.id_materi', $idMateri)
+                ->select('materi.*', 'user.nama as nama_guru')
+                ->first();
+                
+            $nextVideos = \Illuminate\Support\Facades\DB::table('materi')
+                ->join('user', 'materi.id_guru', '=', 'user.id_user')
+                ->where('materi.id_materi', '!=', $idMateri)
+                ->where('materi.judul', 'LIKE', '%' . $mapel . '%')
+                ->select('materi.*', 'user.nama as nama_guru')
+                ->limit(5)
+                ->get();
+        }
         
         return [
             'userName' => $userName,
             'mapel' => $mapel,
-            'photoProfile' => $session->getPhotoProfile()
+            'photoProfile' => $session->getPhotoProfile(),
+            'materiData' => $materiData,
+            'nextVideos' => $nextVideos
         ];
     }
 }
