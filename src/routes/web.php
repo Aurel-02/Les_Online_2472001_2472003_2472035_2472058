@@ -71,5 +71,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
 });
 
+Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
 });
