@@ -14,7 +14,7 @@
         .sidebar { width:var(--sidebar-width); background:rgba(230,216,193,.85); backdrop-filter:blur(20px); border-right:1px solid rgba(255,255,255,.6); height:100vh; padding:32px 24px; display:flex; flex-direction:column; position:fixed; left:0; top:0; z-index:50; }
         .logo-container { display:flex; align-items:center; gap:12px; text-decoration:none; margin-bottom:60px; }
         .logo-text { font-size:26px; font-weight:800; color:var(--dark-oak); letter-spacing:-.5px; }
-        .sidebar-menu { flex:1; display:flex; flex-direction:column; gap:8px; }
+        .sidebar-menu { flex: 1; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; } .sidebar-menu::-webkit-scrollbar { display: none; }
         .sidebar-item { display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:16px; text-decoration:none; color:rgba(61,43,31,.7); font-weight:600; font-size:15px; transition:all .3s ease; }
         .sidebar-item:hover, .sidebar-item.active { background:rgba(255,255,255,.5); color:var(--dark-oak); box-shadow:0 4px 12px rgba(61,43,31,.03); }
         .sidebar-item-icon { font-size:20px; }
