@@ -384,24 +384,30 @@
     <div class="right-col">
 
         <div class="glass-card video-card">
-            <div class="video-wrapper">
-                <div class="video-placeholder">
-                    <div class="video-placeholder-icon">▶</div>
-                    <p>Video akan ditampilkan di sini</p>
-                </div>
-                <div class="video-top-overlay">
-                    <div class="video-overlay-badge">📚 {{ $mapel }} · Bab 5</div>
+            <div class="video-wrapper" style="height: auto; min-height: 380px;">
+                @if(isset($materiData) && $materiData->link_video)
+                    <iframe width="100%" height="450" src="{{ $materiData->link_video }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:18px 18px 0 0; display:block;"></iframe>
+                @else
+                    <div class="video-placeholder" style="padding-top:150px; padding-bottom:150px;">
+                        <div class="video-placeholder-icon">▶</div>
+                        <p>Video tidak tersedia</p>
+                    </div>
+                @endif
+                <div class="video-top-overlay" style="top:12px; left:12px;">
+                    <div class="video-overlay-badge" style="background:rgba(217,179,130,0.88); color:var(--dark-oak);">📚 {{ $mapel }}</div>
                     <a href="{{ route('siswa.catatan') }}?mapel={{ urlencode($mapel) }}" class="btn-note" style="text-decoration:none;">📝 Buat Catatan</a>
                 </div>
             </div>
             <div class="video-info">
-                <div class="video-subject-tag">📚 {{ $mapel }} · Bab 5</div>
-                <div class="video-title">Persamaan Linear Dua Variabel — Metode Substitusi &amp; Eliminasi</div>
+                <div class="video-subject-tag">📚 {{ $mapel }}</div>
+                <div class="video-title">{{ isset($materiData) ? $materiData->judul : 'Materi Pembelajaran' }}</div>
                 <div class="video-meta">
-                    <span>👁️ 1.2k ditonton</span>
-                    <span>⏱️ 18:42</span>
-                    <span>👩‍🏫 Bu Dewi Sartika</span>
-                    <span>📅 2 Mei 2025</span>
+                    @if(isset($materiData))
+                        <span>👩‍🏫 {{ $materiData->nama_guru }}</span>
+                        <span>📅 {{ \Carbon\Carbon::parse($materiData->created_at)->format('d M Y') }}</span>
+                    @else
+                        <span>👁️ 0 ditonton</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -409,87 +415,85 @@
         <div class="next-card">
             <div class="next-header">Video Selanjutnya</div>
             <div class="next-scroll-wrap">
-
-                <a href="#" class="next-item thumb-1">
-                    <div class="next-item-overlay">
-                        <div class="next-item-top">
-                            <span class="next-badge">Bab 6</span>
-                            <div class="btn-more">•••</div>
-                        </div>
-                        <div class="next-item-bottom">
-                            <div class="next-item-text">
-                                <div class="next-item-title">Pertidaksamaan Linear</div>
-                                <div class="next-item-sub">Matematika · Durasi 14:20</div>
+                @if(isset($nextVideos) && count($nextVideos) > 0)
+                    @foreach($nextVideos as $nv)
+                        @php
+                            $ytId = '';
+                            if($nv->link_video && preg_match('/embed\/([a-zA-Z0-9_-]+)/', $nv->link_video, $matches)) {
+                                $ytId = $matches[1];
+                            }
+                        @endphp
+                        <a href="{{ route('siswa.video') }}?id={{ $nv->id_materi }}&mapel={{ urlencode($mapel) }}" class="next-item" style="background-image: url('https://img.youtube.com/vi/{{ $ytId }}/hqdefault.jpg'); background-size: cover; background-position: center;">
+                            <div class="next-item-overlay">
+                                <div class="next-item-top">
+                                    <span class="next-badge">Terkait</span>
+                                    <div class="btn-more">•••</div>
+                                </div>
+                                <div class="next-item-bottom">
+                                    <div class="next-item-text">
+                                        <div class="next-item-title">{{ $nv->judul }}</div>
+                                        <div class="next-item-sub">{{ $nv->nama_guru }}</div>
+                                    </div>
+                                    <div class="play-icon">▶</div>
+                                </div>
                             </div>
-                            <div class="play-icon">▶</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="next-item thumb-2">
-                    <div class="next-item-overlay">
-                        <div class="next-item-top">
-                            <span class="next-badge">Bab 7</span>
-                            <div class="btn-more">•••</div>
-                        </div>
-                        <div class="next-item-bottom">
-                            <div class="next-item-text">
-                                <div class="next-item-title">Sistem Persamaan Tiga Variabel</div>
-                                <div class="next-item-sub">Matematika · Durasi 22:05</div>
+                        </a>
+                    @endforeach
+                @else
+                    @php
+                        $fallbackIds = ['AIS6lYgI1As', 'LS949g6wkKQ', '4J95ZYD387o'];
+                        if (stripos($mapel, 'Ekonomi') !== false) $fallbackIds = ['kPW_fq-mCt4', 'q34Ml8no9gc', 'kPW_fq-mCt4'];
+                        elseif (stripos($mapel, 'Kimia') !== false) $fallbackIds = ['3nsOlPrpdsA', 'oD0tDw7B0eU', '3nsOlPrpdsA'];
+                        elseif (stripos($mapel, 'Biologi') !== false) $fallbackIds = ['6_GpcjuFTfE', '-1iU8EKV6iY', '6_GpcjuFTfE'];
+                        elseif (stripos($mapel, 'Inggris') !== false) $fallbackIds = ['B2IldXHBDA0', 'k2_2H3qT9q0', 'B2IldXHBDA0'];
+                        elseif (stripos($mapel, 'Sejarah') !== false) $fallbackIds = ['nM4mitSBQKk', 'vVCEgErLqF8', 'nM4mitSBQKk'];
+                    @endphp
+                    <a href="#" class="next-item thumb-1" style="background-image: url('https://img.youtube.com/vi/{{ $fallbackIds[0] }}/hqdefault.jpg'); background-size: cover; background-position: center;">
+                        <div class="next-item-overlay">
+                            <div class="next-item-top">
+                                <span class="next-badge">Terkait</span>
+                                <div class="btn-more">•••</div>
                             </div>
-                            <div class="play-icon">▶</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="next-item thumb-3">
-                    <div class="next-item-overlay">
-                        <div class="next-item-top">
-                            <span class="next-badge">Bab 7</span>
-                            <div class="btn-more">•••</div>
-                        </div>
-                        <div class="next-item-bottom">
-                            <div class="next-item-text">
-                                <div class="next-item-title">Latihan Soal</div>
-                                <div class="next-item-sub">Matematika · Durasi 09:30</div>
+                            <div class="next-item-bottom">
+                                <div class="next-item-text">
+                                    <div class="next-item-title">Materi Lanjutan</div>
+                                    <div class="next-item-sub">{{ $mapel }}</div>
+                                </div>
+                                <div class="play-icon">▶</div>
                             </div>
-                            <div class="play-icon">▶</div>
                         </div>
-                    </div>
-                </a>
-
-                <a href="#" class="next-item thumb-4">
-                    <div class="next-item-overlay">
-                        <div class="next-item-top">
-                            <span class="next-badge">Bab 8</span>
-                            <div class="btn-more">•••</div>
-                        </div>
-                        <div class="next-item-bottom">
-                            <div class="next-item-text">
-                                <div class="next-item-title">Grafik Fungsi Linear</div>
-                                <div class="next-item-sub">Matematika · Durasi 17:48</div>
+                    </a>
+                    <a href="#" class="next-item thumb-2" style="background-image: url('https://img.youtube.com/vi/{{ $fallbackIds[1] }}/hqdefault.jpg'); background-size: cover; background-position: center;">
+                        <div class="next-item-overlay">
+                            <div class="next-item-top">
+                                <span class="next-badge">Review</span>
+                                <div class="btn-more">•••</div>
                             </div>
-                            <div class="play-icon">▶</div>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="#" class="next-item thumb-5">
-                    <div class="next-item-overlay">
-                        <div class="next-item-top">
-                            <span class="next-badge">Bab 9</span>
-                            <div class="btn-more">•••</div>
-                        </div>
-                        <div class="next-item-bottom">
-                            <div class="next-item-text">
-                                <div class="next-item-title">Fungsi Kuadrat</div>
-                                <div class="next-item-sub">Matematika · Durasi 20:15</div>
+                            <div class="next-item-bottom">
+                                <div class="next-item-text">
+                                    <div class="next-item-title">Latihan Soal</div>
+                                    <div class="next-item-sub">{{ $mapel }}</div>
+                                </div>
+                                <div class="play-icon">▶</div>
                             </div>
-                            <div class="play-icon">▶</div>
                         </div>
-                    </div>
-                </a>
-
+                    </a>
+                    <a href="#" class="next-item thumb-3" style="background-image: url('https://img.youtube.com/vi/{{ $fallbackIds[2] }}/hqdefault.jpg'); background-size: cover; background-position: center;">
+                        <div class="next-item-overlay">
+                            <div class="next-item-top">
+                                <span class="next-badge">Kuis</span>
+                                <div class="btn-more">•••</div>
+                            </div>
+                            <div class="next-item-bottom">
+                                <div class="next-item-text">
+                                    <div class="next-item-title">Pembahasan Kuis</div>
+                                    <div class="next-item-sub">{{ $mapel }}</div>
+                                </div>
+                                <div class="play-icon">▶</div>
+                            </div>
+                        </div>
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -509,9 +513,14 @@
         const el = document.createElement('div');
         el.className = 'comment-item';
         el.innerHTML = `<div class="comment-avatar ${color}">${initial}</div><div class="comment-body"><div class="comment-name">${name} <span class="comment-time">Baru saja</span></div><div class="comment-text">${text}</div><div class="comment-like">❤️ 0 Suka</div></div>`;
-        list.insertBefore(el, list.firstChild);
+        list.appendChild(el);
         box.value = '';
-        list.scrollTop = 0;
+        list.scrollTop = list.scrollHeight;
+        
+        const countSpan = document.querySelector('.comment-count');
+        if (countSpan) {
+            countSpan.textContent = parseInt(countSpan.textContent) + 1;
+        }
     }
     document.getElementById('commentList').addEventListener('click', e => {
         if (e.target.classList.contains('comment-like')) {
