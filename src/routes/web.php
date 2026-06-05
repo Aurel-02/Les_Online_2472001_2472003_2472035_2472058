@@ -9,7 +9,7 @@ use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PTNController;
 use App\Http\Controllers\ChatController;
-
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('landing');
@@ -113,4 +113,8 @@ Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::post('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordOrangTua'])->name('orangtua.profile.password.update');
     Route::get('/orangtua/paket-belajar', [\App\Http\Controllers\OrangTuaController::class, 'paketBelajar'])->name('orangtua.paket-belajar');
     Route::post('/orangtua/transaksi', [\App\Http\Controllers\OrangTuaController::class, 'storeTransaksi'])->name('orangtua.transaksi.store');
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
