@@ -316,6 +316,11 @@ class PtnExtendedData
             'ITS'=>'/images/ptn/its.png','UNAIR'=>'/images/ptn/unair.png','UNPAD'=>'/images/ptn/unpad.png',
             'UNDIP'=>'/images/ptn/undip.png','UB'=>'/images/ptn/ub.png','UNHAS'=>'/images/ptn/unhas.png',
             'USU'=>'/images/ptn/usu.png','UNS'=>'/images/ptn/uns.png','UPI'=>'/images/ptn/upi.png',
+            'UNSRI'=>'/images/ptn/unsri.png','USK'=>'/images/ptn/usk.png','UNUD'=>'/images/ptn/unud.png',
+            'UNMUL'=>'/images/ptn/unmul.png','UNSOED'=>'/images/ptn/unsoed.png','UNNES'=>'/images/ptn/unnes.png',
+            'UNESA'=>'/images/ptn/unesa.png','UNEJ'=>'/images/ptn/unej.png','UNTAN'=>'/images/ptn/untan.png',
+            'ULM'=>'/images/ptn/ulm.png','UNRAM'=>'/images/ptn/unram.png','UNPATTI'=>'/images/ptn/unpatti.png',
+            'UNSRAT'=>'/images/ptn/unsrat.png','UNTAD'=>'/images/ptn/untad.png',
         ];
     }
 }
