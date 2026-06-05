@@ -372,4 +372,13 @@ class GuruController extends Controller
         $jadwal->delete();
         return redirect()->route('guru.jadwal.index')->with('success', 'Jadwal berhasil dihapus!');
     }
+
+    public function chat()
+    {
+        $s = $this->sessionData();
+        return view('guru.chat', [
+            'userName' => $s['userName'],
+            'photoProfile' => $s['photoProfile'],
+        ]);
+    }
 }

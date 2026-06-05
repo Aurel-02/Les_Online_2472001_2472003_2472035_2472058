@@ -336,7 +336,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15l8.38-8.38a2 2 0 0 0-2.83-2.83L12 9.17l-5.55-5.55a2 2 0 0 0-2.83 2.83L12 15z"></path><path d="M5.636 18.364a9 9 0 0 1 0-12.728"></path><path d="M18.364 18.364a9 9 0 0 0 0-12.728"></path></svg>
                 </span> Evaluasi Nilai
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="{{ route('guru.chat') }}" class="sidebar-item {{ request()->routeIs('guru.chat') ? 'active' : '' }}">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </span> Chat 

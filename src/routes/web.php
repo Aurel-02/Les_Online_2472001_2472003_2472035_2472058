@@ -8,6 +8,8 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PTNController;
+use App\Http\Controllers\ChatController;
+
 
 Route::get('/', function () {
     return view('landing');
@@ -22,6 +24,15 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// ─── Chat API (shared siswa & guru) ──────────────────────────────────────────
+Route::middleware(['auth'])->prefix('chat')->group(function () {
+    Route::get('/contacts', [ChatController::class, 'contacts'])->name('chat.contacts');
+    Route::get('/messages/{contactId}', [ChatController::class, 'messages'])->name('chat.messages');
+    Route::post('/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/poll/{contactId}', [ChatController::class, 'poll'])->name('chat.poll');
+});
+
 
 // ─── Route untuk Siswa (dilindungi middleware auth & role) ───────────────────────────
 Route::middleware(['auth', 'role:siswa'])->group(function () {
@@ -64,6 +75,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Siswa
     Route::get('/guru/siswa', [GuruController::class, 'daftarSiswa'])->name('guru.siswa.index');
+
+    // Chat
+    Route::get('/guru/chat', [GuruController::class, 'chat'])->name('guru.chat');
+
 
     // Materi CRUD
     Route::get('/guru/materi', [GuruController::class, 'materiIndex'])->name('guru.materi.index');
