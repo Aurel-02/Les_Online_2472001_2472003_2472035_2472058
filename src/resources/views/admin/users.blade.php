@@ -183,6 +183,7 @@
         .styled-table th, .styled-table td {
             padding: 16px 20px;
             border-bottom: 1px solid rgba(61, 43, 31, 0.05);
+            white-space: nowrap;
         }
 
         .styled-table tbody tr {
@@ -231,6 +232,22 @@
             font-size: 13px;
             font-weight: 600;
             cursor: not-allowed;
+        }
+
+        .btn-restore {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restore:hover {
+            background-color: #27ae60;
         }
 
         /* ── Modal Styles ── */
@@ -391,8 +408,11 @@
         <header class="topbar">
             <div></div>
             <div style="display: flex; align-items: center;">
-                <a href="#" class="notification-icon" style="margin-right: 20px; color: var(--dark-oak); position: relative; display: flex; align-items: center; text-decoration: none;">
+                <a href="{{ route('admin.users') }}" class="notification-icon" style="margin-right: 20px; color: var(--dark-oak); position: relative; display: flex; align-items: center; text-decoration: none;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    @if(isset($reactivationRequestsCount) && $reactivationRequestsCount > 0)
+                        <span style="position: absolute; top: -5px; right: -5px; background: #ff6b6b; color: white; font-size: 10px; font-weight: 800; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #F7F4F0;">{{ $reactivationRequestsCount }}</span>
+                    @endif
                 </a>
                 <a href="{{ route('admin.profile') }}" class="user-profile" style="text-decoration:none;">
                     <div class="user-greeting">Hi, <span>{{ explode(' ', $userName ?? 'Admin')[0] }}</span></div>
@@ -435,7 +455,12 @@
                         @foreach($users as $index => $user)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td><strong>{{ $user->nama }}</strong></td>
+                            <td>
+                                <strong>{{ $user->nama }}</strong>
+                                @if($user->reactivation_requested)
+                                    <span style="display:inline-block; margin-left:8px; padding:4px 8px; background:#fff3cd; color:#856404; font-size:11px; font-weight:700; border-radius:99px; border:1px solid #ffeeba;">Minta Reaktivasi</span>
+                                @endif
+                            </td>
                             <td>{{ $user->email }}</td>
                             <td>
                                 @php
@@ -444,16 +469,24 @@
                                     elseif ($user->role == 'orang tua') $roleClass = 'role-orangtua';
                                     elseif ($user->role == 'admin') $roleClass = 'role-admin';
                                 @endphp
-                                <span class="role-badge {{ $roleClass }}">{{ ucfirst($user->role) }}</span>
+                                @if($user->trashed())
+                                    <span class="role-badge" style="background-color: #e0e0e0; color: #555;">Nonaktif</span>
+                                @else
+                                    <span class="role-badge {{ $roleClass }}">{{ ucfirst($user->role) }}</span>
+                                @endif
                             </td>
                             <td>{{ $user->created_at->format('d M Y') }}</td>
                             <td>
-                                @if($user->id_user !== auth()->id())
+                                @if($user->id_user === auth()->id())
+                                    <button type="button" class="btn-disabled" disabled>Anda</button>
+                                @elseif($user->trashed())
+                                    <button type="button" class="btn-restore" onclick="confirmRestore({{ $user->id_user }}, '{{ addslashes($user->nama) }}')">
+                                        Aktifkan Kembali
+                                    </button>
+                                @else
                                     <button type="button" class="btn-delete" onclick="confirmDelete({{ $user->id_user }}, '{{ addslashes($user->nama) }}')">
                                         Nonaktifkan
                                     </button>
-                                @else
-                                    <button type="button" class="btn-disabled" disabled>Anda</button>
                                 @endif
                             </td>
                         </tr>
@@ -476,8 +509,26 @@
                 @csrf
                 @method('DELETE')
                 <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+                    <button type="button" class="btn-cancel" onclick="closeModal('deleteModal')">Batal</button>
                     <button type="submit" class="btn-confirm">Ya, Nonaktifkan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Restore -->
+    <div class="modal-overlay" id="restoreModal">
+        <div class="modal-card">
+            <div class="modal-icon">✅</div>
+            <h3 class="modal-title">Aktifkan Kembali Pengguna?</h3>
+            <p class="modal-desc">Anda yakin ingin mengaktifkan kembali akun <strong id="restoreUserName"></strong>? Pengguna ini akan dapat login dan menggunakan sistem seperti biasa.</p>
+            
+            <form id="restoreForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('restoreModal')">Batal</button>
+                    <button type="submit" class="btn-restore" style="flex:1;">Ya, Aktifkan</button>
                 </div>
             </form>
         </div>
@@ -490,8 +541,14 @@
             document.getElementById('deleteModal').classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('deleteModal').classList.remove('active');
+        function confirmRestore(userId, userName) {
+            document.getElementById('restoreUserName').innerText = userName;
+            document.getElementById('restoreForm').action = '/admin/pengguna/' + userId + '/restore';
+            document.getElementById('restoreModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
     </script>
 </body>

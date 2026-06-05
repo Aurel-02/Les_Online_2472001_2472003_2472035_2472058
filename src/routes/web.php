@@ -23,7 +23,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Account deactivated routes
+Route::get('/account-deactivated/{id}', [AuthController::class, 'showDeactivated'])->name('account.deactivated');
+Route::post('/request-reactivation/{id}', [AuthController::class, 'requestReactivation'])->name('account.reactivate.request');
 
 // ─── Chat API (shared siswa & guru) ──────────────────────────────────────────
 Route::middleware(['auth'])->prefix('chat')->group(function () {
@@ -119,6 +123,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengguna', [AdminController::class, 'users'])->name('admin.users');
     Route::delete('/admin/pengguna/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+    Route::put('/admin/pengguna/{id}/restore', [AdminController::class, 'restoreUser'])->name('admin.users.restore');
     
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
     Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');

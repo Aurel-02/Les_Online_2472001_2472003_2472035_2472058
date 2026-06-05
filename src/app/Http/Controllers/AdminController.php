@@ -13,7 +13,9 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        return view('admin.dashboard', compact('userName', 'photoProfile'));
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+
+        return view('admin.dashboard', compact('userName', 'photoProfile', 'reactivationRequestsCount'));
     }
 
     public function users()
@@ -22,11 +24,14 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $users = \App\Models\User::where('role', '!=', 'admin')
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+
+        $users = \App\Models\User::withTrashed()
+            ->where('role', '!=', 'admin')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.users', compact('userName', 'photoProfile', 'users'));
+        return view('admin.users', compact('userName', 'photoProfile', 'users', 'reactivationRequestsCount'));
     }
 
     public function destroyUser($id)
@@ -41,5 +46,17 @@ class AdminController extends Controller
         $user->delete();
 
         return redirect()->back()->with('success', 'Pengguna berhasil dinonaktifkan.');
+    }
+
+    public function restoreUser($id)
+    {
+        $user = \App\Models\User::withTrashed()->findOrFail($id);
+        $user->restore();
+        
+        // Clear reactivation requested flag
+        $user->reactivation_requested = false;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Pengguna berhasil diaktifkan kembali.');
     }
 }

@@ -28,6 +28,12 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        // Check if user is deactivated
+        $user = User::withTrashed()->where('email', $credentials['email'])->first();
+        if ($user && $user->trashed()) {
+            return redirect()->route('account.deactivated', $user->id_user);
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -45,6 +51,31 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Email atau password yang Anda masukkan salah.',
         ])->onlyInput('email');
+    }
+
+    public function showDeactivated($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        
+        if (!$user->trashed()) {
+            return redirect()->route('login');
+        }
+
+        return view('auth.deactivated', compact('user'));
+    }
+
+    public function requestReactivation($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        
+        if ($user->trashed()) {
+            $user->reactivation_requested = true;
+            $user->save();
+            
+            return redirect()->back()->with('success', 'Permohonan pengaktifan kembali telah dikirim ke Admin.');
+        }
+
+        return redirect()->route('login');
     }
 
     public function register(Request $request)
