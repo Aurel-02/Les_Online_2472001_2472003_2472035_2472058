@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Pintar.id</title>
+    <title>Kelola Pengguna - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -151,136 +151,185 @@
             margin: 0 auto;
         }
 
-        /* ── Banner ── */
-        .package-banner {
-            background: linear-gradient(135deg, var(--dusty-mauve) 0%, #B8928C 100%);
-            border-radius: 32px;
-            padding: 40px 48px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 48px;
-            box-shadow: 0 16px 40px rgba(163, 124, 118, 0.3);
-            position: relative;
-            overflow: hidden;
-            color: white;
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark-oak);
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
         }
 
-        .package-banner::after {
-            content: ''; position: absolute; right: -50px; top: -50px;
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
-            border-radius: 50%; pointer-events: none;
-        }
-
-        .package-left h2 {
-            font-size: 36px; font-weight: 800; color: white; margin-bottom: 12px; line-height: 1.1; letter-spacing: -1px;
-        }
-        .package-left p {
-            font-size: 16px; color: rgba(255,255,255,0.9); max-width: 440px; margin-bottom: 28px; line-height: 1.5;
-        }
-
-        .btn-upgrade {
-            background: white; color: var(--dusty-mauve);
-            padding: 16px 32px; border-radius: 99px;
-            font-weight: 700; font-size: 15px; text-decoration: none;
-            display: inline-block; transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .btn-upgrade:hover {
-            transform: translateY(-4px); box-shadow: 0 14px 28px rgba(0,0,0,0.15);
-        }
-
-        .package-illustration {
-            font-size: 110px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-
-        /* ── Welcome Stats ── */
-        .status-container {
-            margin-bottom: 40px;
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.5); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.8); border-radius: 24px;
-            padding: 20px 24px; display: inline-flex; align-items: center; gap: 16px;
-            box-shadow: 0 10px 30px rgba(61,43,31,0.03);
-            transition: transform 0.3s ease;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .stat-card:hover { transform: translateY(-4px); }
-
-        .stat-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
-        .bg-sage { background: rgba(142, 150, 128, 0.2); color: #6A725D; }
-        .bg-mauve { background: rgba(163, 124, 118, 0.2); color: #8a655f; }
-        .bg-amber { background: rgba(217, 179, 130, 0.2); color: #B38F60; }
-        .bg-blue { background: rgba(112, 161, 255, 0.2); color: #5B8BEB; }
-
-        .stat-info h3 { font-size: 24px; font-weight: 800; color: var(--dark-oak); line-height: 1; margin-bottom: 6px; }
-        .stat-info p { font-size: 12px; font-weight: 700; color: rgba(61,43,31,0.55); text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* ── Sections ── */
-        .section-title { font-size: 24px; font-weight: 800; color: var(--dark-oak); margin-bottom: 20px; }
-        
         .glass-card {
             background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 32px;
             padding: 36px; box-shadow: 0 10px 30px rgba(61, 43, 31, 0.04);
             margin-bottom: 48px;
+            overflow-x: auto;
         }
 
-        /* ── Schedule List ── */
-        .schedule-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 16px 20px; border-radius: 20px;
-            background: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);
-            margin-bottom: 16px; transition: all 0.3s ease;
+        /* ── Table Styles ── */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
         }
-        .schedule-item:last-child { margin-bottom: 0; }
-        .schedule-item:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 8px 24px rgba(61,43,31,0.06); }
-        
-        .schedule-info { display: flex; align-items: center; gap: 16px; }
-        .schedule-icon { 
-            background: var(--dark-oak); color: white; 
-            width: 48px; height: 48px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center;
+
+        .styled-table thead tr {
+            background-color: rgba(230, 216, 193, 0.5);
+            color: var(--dark-oak);
+            text-align: left;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(61, 43, 31, 0.05);
+        }
+
+        .styled-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .styled-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .role-siswa { background-color: rgba(142, 150, 128, 0.2); color: #6A725D; }
+        .role-guru { background-color: rgba(112, 161, 255, 0.2); color: #5B8BEB; }
+        .role-orangtua { background-color: rgba(217, 179, 130, 0.2); color: #B38F60; }
+        .role-admin { background-color: rgba(163, 124, 118, 0.2); color: #8a655f; }
+
+        .btn-delete {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #ff5252;
+        }
+
+        .btn-disabled {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: #ccc;
+            color: #666;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: not-allowed;
+        }
+
+        /* ── Modal Styles ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(61, 43, 31, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
             font-size: 20px;
+            font-weight: 800;
+            color: var(--dark-oak);
+            margin-bottom: 12px;
         }
-        .schedule-details h4 { font-size: 18px; font-weight: 700; color: var(--dark-oak); margin-bottom: 4px; }
-        .schedule-details p { font-size: 14px; color: rgba(61,43,31,0.6); font-weight: 500; }
-        
-        .btn-action {
-            padding: 10px 20px; border-radius: 99px;
-            font-size: 14px; font-weight: 600; text-decoration: none;
-            transition: all 0.3s ease; border: 1px solid transparent;
-        }
-        .btn-primary { background: var(--dark-oak); color: white; }
-        .btn-primary:hover { background: #2A1D14; }
 
-        /* ── Responsive ── */
-        @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); transition: 0.3s; }
-            .main-wrapper { margin-left: 0; }
-            .package-banner { flex-direction: column; text-align: center; gap: 32px; padding: 32px; }
-            .package-left p { margin: 0 auto 24px; }
-            .content-body { padding: 0 24px 60px; }
-            .topbar { padding: 24px; justify-content: space-between; }
-            .schedule-item { flex-direction: column; align-items: flex-start; gap: 16px; }
-            .btn-action { width: 100%; text-align: center; }
+        .modal-desc {
+            font-size: 15px;
+            color: rgba(61, 43, 31, 0.7);
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            color: var(--dark-oak);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-cancel:hover { background: #e4e4e4; }
+
+        .btn-confirm {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-confirm:hover { background: #ff5252; }
+
+        /* ── Alerts ── */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
     </style>
 </head>
 <body>
@@ -299,12 +348,12 @@
         </a>
 
         <div class="sidebar-menu">
-            <a href="{{ route('admin.dashboard') }}" class="sidebar-item active">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
             </a>
-            <a href="{{ route('admin.users') }}" class="sidebar-item">
+            <a href="{{ route('admin.users') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </span> Kelola Pengguna
@@ -360,84 +409,90 @@
 
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
+            
+            <h1 class="page-title">Kelola Pengguna</h1>
 
-            <!-- BANNER ADMIN -->
-            <div class="package-banner">
-                <div class="package-left">
-                    <h2>Selamat Datang<br>di Control Panel</h2>
-                    <p>Kelola seluruh operasional sistem, pantau perkembangan pengguna, dan atur konfigurasi dari satu tempat.</p>
-                    <a href="#" class="btn-upgrade">Lihat Laporan ✨</a>
-                </div>
-                <div class="package-illustration">⚙️</div>
-            </div>
+            @if(session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-error">{{ session('error') }}</div>
+            @endif
 
-            <!-- STATUS STATS -->
-            <div class="status-container">
-                <div class="stat-card">
-                    <div class="stat-icon bg-amber">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>1,240</h3>
-                        <p>Total Siswa</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon bg-sage">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>85</h3>
-                        <p>Total Guru</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon bg-blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>142</h3>
-                        <p>Total Kelas</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUICK ACTIONS -->
-            <h2 class="section-title">Aksi Cepat</h2>
             <div class="glass-card">
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">👥</div>
-                        <div class="schedule-details">
-                            <h4>Manajemen Pengguna</h4>
-                            <p>Tambah, edit, atau hapus data siswa dan guru di dalam sistem.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="btn-action btn-primary">Kelola</a>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">💳</div>
-                        <div class="schedule-details">
-                            <h4>Verifikasi Transaksi</h4>
-                            <p>Ada 5 transaksi baru yang menunggu untuk diverifikasi.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="btn-action btn-primary">Lihat Transaksi</a>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">📢</div>
-                        <div class="schedule-details">
-                            <h4>Buat Pengumuman</h4>
-                            <p>Siarkan pengumuman baru ke semua guru atau siswa.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="btn-action btn-primary">Buat Baru</a>
-                </div>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Terdaftar Pada</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($users as $index => $user)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td><strong>{{ $user->nama }}</strong></td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                @php
+                                    $roleClass = 'role-siswa';
+                                    if ($user->role == 'guru') $roleClass = 'role-guru';
+                                    elseif ($user->role == 'orang tua') $roleClass = 'role-orangtua';
+                                    elseif ($user->role == 'admin') $roleClass = 'role-admin';
+                                @endphp
+                                <span class="role-badge {{ $roleClass }}">{{ ucfirst($user->role) }}</span>
+                            </td>
+                            <td>{{ $user->created_at->format('d M Y') }}</td>
+                            <td>
+                                @if($user->id_user !== auth()->id())
+                                    <button type="button" class="btn-delete" onclick="confirmDelete({{ $user->id_user }}, '{{ addslashes($user->nama) }}')">
+                                        Nonaktifkan
+                                    </button>
+                                @else
+                                    <button type="button" class="btn-disabled" disabled>Anda</button>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
         </div>
     </main>
+
+    <!-- Modal Konfirmasi Delete -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-card">
+            <div class="modal-icon">⚠️</div>
+            <h3 class="modal-title">Nonaktifkan Pengguna?</h3>
+            <p class="modal-desc">Anda yakin ingin menonaktifkan akun <strong id="deleteUserName"></strong>? Pengguna ini tidak akan bisa login lagi.</p>
+            
+            <form id="deleteForm" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn-confirm">Ya, Nonaktifkan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(userId, userName) {
+            document.getElementById('deleteUserName').innerText = userName;
+            document.getElementById('deleteForm').action = '/admin/pengguna/' + userId;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+    </script>
 </body>
 </html>

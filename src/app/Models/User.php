@@ -10,13 +10,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 #[Fillable(['nama', 'email', 'password', 'role', 'id_jenjang', 'photo_profile'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     const UPDATED_AT = null;
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The table associated with the model.

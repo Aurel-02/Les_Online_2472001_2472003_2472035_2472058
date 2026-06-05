@@ -117,4 +117,6 @@ Route::middleware(['auth', 'role:orang tua'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/pengguna', [AdminController::class, 'users'])->name('admin.users');
+    Route::delete('/admin/pengguna/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 });
