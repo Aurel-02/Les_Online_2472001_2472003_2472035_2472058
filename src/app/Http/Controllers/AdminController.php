@@ -59,4 +59,19 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Pengguna berhasil diaktifkan kembali.');
     }
+
+    public function notifications()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+        $reactivationRequests = \App\Models\User::withTrashed()
+            ->where('reactivation_requested', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.notifications', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'reactivationRequests'));
+    }
 }

@@ -188,25 +188,26 @@ class ProfileController extends Controller
     public function indexAdmin()
     {
         $session = UserSession::getInstance();
-        $user = $session->getUser();
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $userName = $user->nama;
+        $userEmail = $user->email;
+        $userRole = $user->role;
+        $photoProfile = $user->photo_profile;
         
-        return view('admin.profile', [
-            'userName' => $user->nama,
-            'userEmail' => $user->email,
-            'userRole' => $user->role,
-            'photoProfile' => $user->photo_profile
-        ]);
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+
+        return view('admin.profile', compact('userName', 'userEmail', 'userRole', 'photoProfile', 'user', 'reactivationRequestsCount'));
     }
 
-    public function showChangePasswordFormAdmin()
+    public function changePasswordAdmin()
     {
         $session = UserSession::getInstance();
-        $user = $session->getUser();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+        
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
 
-        return view('admin.change_password', [
-            'userName' => $user->nama,
-            'photoProfile' => $user->photo_profile
-        ]);
+        return view('admin.change_password', compact('userName', 'photoProfile', 'reactivationRequestsCount'));
     }
 
     public function updatePasswordAdmin(Request $request)
