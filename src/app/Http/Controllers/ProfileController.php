@@ -184,4 +184,47 @@ class ProfileController extends Controller
 
         return redirect()->route('orangtua.profile')->with('success_password', 'Password berhasil diubah!');
     }
+
+    public function indexAdmin()
+    {
+        $session = UserSession::getInstance();
+        $user = $session->getUser();
+        
+        return view('admin.profile', [
+            'userName' => $user->nama,
+            'userEmail' => $user->email,
+            'userRole' => $user->role,
+            'photoProfile' => $user->photo_profile
+        ]);
+    }
+
+    public function showChangePasswordFormAdmin()
+    {
+        $session = UserSession::getInstance();
+        $user = $session->getUser();
+
+        return view('admin.change_password', [
+            'userName' => $user->nama,
+            'photoProfile' => $user->photo_profile
+        ]);
+    }
+
+    public function updatePasswordAdmin(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'Password lama tidak cocok']);
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('admin.profile')->with('success_password', 'Password berhasil diubah!');
+    }
 }

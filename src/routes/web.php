@@ -119,4 +119,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/pengguna', [AdminController::class, 'users'])->name('admin.users');
     Route::delete('/admin/pengguna/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+    
+    Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
+    Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::post('/admin/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('admin.profile.photo');
+    Route::get('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordFormAdmin'])->name('admin.profile.password');
+    Route::post('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordAdmin'])->name('admin.profile.password.update');
 });

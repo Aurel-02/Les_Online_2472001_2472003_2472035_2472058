@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Pintar.id</title>
+    <title>Profil Saya - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -270,6 +270,61 @@
         .btn-primary { background: var(--dark-oak); color: white; }
         .btn-primary:hover { background: #2A1D14; }
 
+        /* ── Profile Styles ── */
+        .profile-card {
+            background:rgba(255,255,255,0.4);
+            backdrop-filter:blur(24px);
+            border:1px solid rgba(255,255,255,0.6);
+            border-radius:32px;
+            padding:40px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            box-shadow:0 12px 40px rgba(61,43,31,0.08);
+            max-width: 600px;
+            margin: 40px auto;
+            width: 100%;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--muted-sage);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.8);
+            box-shadow: 0 8px 24px rgba(61,43,31,0.1);
+        }
+        .avatar-large img { width:100%; height:100%; object-fit:cover; }
+
+        .profile-name { font-size: 28px; font-weight: 800; color: var(--dark-oak); margin-bottom: 4px; }
+        .profile-role { font-size: 16px; font-weight: 600; color: var(--muted-sage); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr; gap: 16px; width: 100%; margin-bottom: 32px; }
+        .info-label { font-size: 12px; font-weight: 700; color: rgba(61,43,31,0.5); text-transform: uppercase; margin-bottom: 4px; display:block; }
+        .info-value { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(61,43,31,0.1); background: rgba(255,255,255,0.6); font-family: 'Outfit', sans-serif; font-size: 15px; color: var(--dark-oak); outline: none; transition: border 0.2s; }
+        .info-value:focus { border-color: var(--muted-sage); background: rgba(255,255,255,0.9); }
+        .info-value:disabled, .info-value[readonly] { background: rgba(255,255,255,0.4); color: rgba(61,43,31,0.6); cursor: not-allowed; }
+
+        .password-row { display: flex; gap: 12px; align-items: center; }
+        .password-row .info-value { flex: 1; }
+
+        .form-actions { display: flex; width: 100%; margin-top: 24px; }
+        .btn-save { flex: 1; background: var(--muted-sage); color: #fff; border: none; padding: 14px; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Outfit', sans-serif; }
+        .btn-save:hover { background: #7b846e; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(142,150,128,0.3); }
+        .btn-password { flex: 0 0 auto; background: transparent; color: var(--dark-oak); border: 1.5px solid var(--dark-oak); padding: 10px 20px; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Outfit', sans-serif; }
+        .btn-password:hover { background: var(--dark-oak); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(61,43,31,0.2); }
+
+        .alert-success { background: #d4edda; color: #155724; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; font-size: 14px; font-weight: 600; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; font-size: 14px; font-weight: 600; border: 1px solid #f5c6cb; }
+
         /* ── Responsive ── */
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); transition: 0.3s; }
@@ -299,7 +354,7 @@
         </a>
 
         <div class="sidebar-menu">
-            <a href="{{ route('admin.dashboard') }}" class="sidebar-item active">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
@@ -345,7 +400,7 @@
                 <a href="#" class="notification-icon" style="margin-right: 20px; color: var(--dark-oak); position: relative; display: flex; align-items: center; text-decoration: none;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 </a>
-                <a href="{{ route('admin.profile') }}" class="user-profile" style="text-decoration:none;">
+                <a href="#" class="user-profile" style="text-decoration:none;">
                     <div class="user-greeting">Hi, <span>{{ explode(' ', $userName ?? 'Admin')[0] }}</span></div>
                     <div class="user-avatar">
                         @if(isset($photoProfile) && $photoProfile)
@@ -360,84 +415,118 @@
 
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
+            <div class="profile-card">
+                @if(session('success_password'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: '{{ session("success_password") }}',
+                            confirmButtonColor: '#8E9680',
+                        });
+                    </script>
+                @endif
+                @if(session('success_profile'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Tersimpan!',
+                            text: '{{ session("success_profile") }}',
+                            confirmButtonColor: '#8E9680',
+                        });
+                    </script>
+                @endif
+                @if(session('success'))
+                    <div class="alert-success">{{ session('success') }}</div>
+                @endif
+                @if(session('error'))
+                    <div class="alert-error">{{ session('error') }}</div>
+                @endif
+                @if($errors->any())
+                    <div class="alert-error">{{ $errors->first() }}</div>
+                @endif
 
-            <!-- BANNER ADMIN -->
-            <div class="package-banner">
-                <div class="package-left">
-                    <h2>Selamat Datang<br>di Control Panel</h2>
-                    <p>Kelola seluruh operasional sistem, pantau perkembangan pengguna, dan atur konfigurasi dari satu tempat.</p>
-                    <a href="#" class="btn-upgrade">Lihat Laporan ✨</a>
+                <div style="display:flex; flex-direction:column; align-items:center; margin-bottom: 20px;">
+                    <div class="avatar-large" style="margin-bottom: 12px;">
+                        @if($photoProfile)
+                            <img src="{{ asset('uploads/profiles/' . $photoProfile) }}" alt="Profile">
+                        @else
+                            {{ strtoupper(substr($userName, 0, 1)) }}
+                        @endif
+                    </div>
+                    <form action="{{ route('admin.profile.photo') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label for="photo-upload" style="cursor:pointer; color:var(--dark-oak); font-size:14px; font-weight:700; text-decoration:underline; display:inline-block;">ubah photo profil</label>
+                        <input id="photo-upload" type="file" name="photo" accept="image/png, image/jpeg, image/jpg, image/gif" required style="display:none;" onchange="this.form.submit()">
+                    </form>
                 </div>
-                <div class="package-illustration">⚙️</div>
-            </div>
+                
+                <div class="profile-name">{{ $userName }}</div>
+                <div class="profile-role">{{ $userRole }}</div>
 
-            <!-- STATUS STATS -->
-            <div class="status-container">
-                <div class="stat-card">
-                    <div class="stat-icon bg-amber">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>1,240</h3>
-                        <p>Total Siswa</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon bg-sage">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>85</h3>
-                        <p>Total Guru</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon bg-blue">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                    </div>
-                    <div class="stat-info">
-                        <h3>142</h3>
-                        <p>Total Kelas</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUICK ACTIONS -->
-            <h2 class="section-title">Aksi Cepat</h2>
-            <div class="glass-card">
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">👥</div>
-                        <div class="schedule-details">
-                            <h4>Manajemen Pengguna</h4>
-                            <p>Tambah, edit, atau hapus data siswa dan guru di dalam sistem.</p>
+                <form action="{{ route('admin.profile.update') }}" method="POST" id="profileForm" style="width: 100%;">
+                    @csrf
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label class="info-label">Alamat Email</label>
+                            <input type="email" name="email" class="info-value" value="{{ old('email', $userEmail) }}" required>
+                        </div>
+                        
+                        <div class="info-item">
+                            <label class="info-label">Password</label>
+                            <div class="password-row">
+                                <input type="password" class="info-value" value="********" readonly>
+                                <button type="button" class="btn-password" onclick="confirmChangePassword()">Ubah Password</button>
+                            </div>
                         </div>
                     </div>
-                    <a href="#" class="btn-action btn-primary">Kelola</a>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">💳</div>
-                        <div class="schedule-details">
-                            <h4>Verifikasi Transaksi</h4>
-                            <p>Ada 5 transaksi baru yang menunggu untuk diverifikasi.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="btn-action btn-primary">Lihat Transaksi</a>
-                </div>
-                <div class="schedule-item">
-                    <div class="schedule-info">
-                        <div class="schedule-icon">📢</div>
-                        <div class="schedule-details">
-                            <h4>Buat Pengumuman</h4>
-                            <p>Siarkan pengumuman baru ke semua guru atau siswa.</p>
-                        </div>
-                    </div>
-                    <a href="#" class="btn-action btn-primary">Buat Baru</a>
-                </div>
-            </div>
 
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save" id="btnSave">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let isDirty = false;
+        const profileForm = document.getElementById('profileForm');
+        const inputs = profileForm.querySelectorAll('input, select');
+        
+        inputs.forEach(input => {
+            input.addEventListener('change', () => { isDirty = true; });
+            input.addEventListener('input', () => { isDirty = true; });
+        });
+
+        profileForm.addEventListener('submit', () => {
+            isDirty = false;
+        });
+
+        window.addEventListener('beforeunload', (e) => {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        function confirmChangePassword() {
+            Swal.fire({
+                title: 'Yakin ingin mengubah password?',
+                text: "Anda akan dialihkan ke halaman ubah password.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3D2B1F',
+                cancelButtonColor: '#A37C76',
+                confirmButtonText: 'Ya, Ubah Password',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('admin.profile.password') }}";
+                }
+            });
+        }
+    </script>
 </body>
 </html>
