@@ -15,7 +15,8 @@ class CatatanController extends Controller
         $user    = $session->getUser();
 
         if ($user) {
-            Activity::create([
+            // Menggunakan Observer Pattern untuk Notifikasi
+            \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
                 'user_id'     => $user->getKey(),
                 'type'        => 'catatan',
                 'description' => 'Membuka daftar catatan',
