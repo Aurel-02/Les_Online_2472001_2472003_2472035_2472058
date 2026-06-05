@@ -125,6 +125,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('/admin/pengguna/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
     Route::put('/admin/pengguna/{id}/restore', [AdminController::class, 'restoreUser'])->name('admin.users.restore');
     Route::get('/admin/notifikasi', [AdminController::class, 'notifications'])->name('admin.notifications');
+    Route::get('/admin/transaksi', [AdminController::class, 'transactions'])->name('admin.transactions');
     
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
     Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifikasi Admin - Pintar.id</title>
+    <title>Transaksi & Income - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -124,7 +124,7 @@
 
         /* ── Content Body ── */
         .content-body {
-            padding: 0 48px 80px; max-width: 900px; margin: 0 auto; width: 100%;
+            padding: 0 48px 80px; max-width: 1200px; margin: 0 auto; width: 100%;
         }
 
         .page-title {
@@ -132,66 +132,68 @@
             margin-bottom: 32px; color: var(--dark-oak);
         }
 
-        /* ── Notifications ── */
+        /* ── Stats Container ── */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 24px;
+            padding: 32px; display: flex; align-items: center; gap: 24px;
+            box-shadow: 0 10px 30px rgba(61, 43, 31, 0.04);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover { transform: translateY(-4px); }
+
+        .stat-icon {
+            width: 72px; height: 72px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; flex-shrink: 0;
+        }
+
+        .bg-income { background: rgba(142, 150, 128, 0.2); color: #6A725D; }
+        .bg-trans { background: rgba(163, 124, 118, 0.2); color: #8a655f; }
+
+        .stat-info h3 { font-size: 36px; font-weight: 800; color: var(--dark-oak); line-height: 1; margin-bottom: 8px; }
+        .stat-info p { font-size: 14px; font-weight: 700; color: rgba(61,43,31,0.55); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* ── Table Container ── */
         .glass-card {
             background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 32px;
             padding: 36px; box-shadow: 0 10px 30px rgba(61, 43, 31, 0.04);
+            overflow: hidden;
         }
 
-        .notification-item {
-            display: flex; align-items: flex-start; justify-content: space-between;
-            padding: 20px; border-radius: 20px;
-            background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.9);
-            margin-bottom: 16px; transition: all 0.3s ease;
-            text-decoration: none; color: var(--dark-oak);
-        }
+        .table-responsive { width: 100%; overflow-x: auto; }
 
-        .notification-item:last-child { margin-bottom: 0; }
-        .notification-item:hover {
-            transform: translateY(-2px);
-            background: #fff;
-            box-shadow: 0 12px 30px rgba(61,43,31,0.06);
+        .styled-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        .styled-table th {
+            text-align: left; padding: 16px 20px; font-size: 13px; font-weight: 700;
+            color: rgba(61,43,31,0.5); text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 2px solid rgba(61,43,31,0.1);
         }
-
-        .notif-info { display: flex; gap: 20px; align-items: center; }
-
-        .notif-icon {
-            background: #fff3cd; color: #856404;
-            width: 52px; height: 52px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px; flex-shrink: 0;
-            border: 1px solid #ffeeba;
+        .styled-table td {
+            padding: 20px; border-bottom: 1px solid rgba(61,43,31,0.05);
+            font-size: 15px; font-weight: 500; color: var(--dark-oak);
         }
+        .styled-table tr:hover td { background: rgba(255,255,255,0.4); }
+        .styled-table tr:last-child td { border-bottom: none; }
 
-        .notif-details h4 {
-            font-size: 17px; font-weight: 700; color: var(--dark-oak); margin-bottom: 6px;
+        .badge {
+            padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 700;
+            display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;
         }
-
-        .notif-details p {
-            font-size: 14px; color: rgba(61,43,31,0.7); font-weight: 500; margin-bottom: 6px; line-height: 1.4;
-        }
-
-        .notif-time {
-            font-size: 12px; color: rgba(61,43,31,0.5); font-weight: 600;
-        }
-
-        .notif-action {
-            padding: 8px 16px; border-radius: 99px;
-            background: var(--dark-oak); color: white;
-            font-size: 13px; font-weight: 600; text-decoration: none;
-            display: flex; align-items: center; gap: 6px;
-            white-space: nowrap; transition: 0.3s;
-            margin-top: 10px;
-        }
+        .badge-sukses { background: #d4edda; color: #155724; }
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-batal { background: #f8d7da; color: #721c24; }
         
-        .notification-item:hover .notif-action {
-            background: #2A1D14;
-        }
-
-        .empty-state {
-            text-align: center; padding: 48px 24px;
-        }
+        .empty-state { text-align: center; padding: 48px 24px; }
         .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
         .empty-text { font-size: 18px; color: rgba(61,43,31,0.5); font-weight: 600; }
     </style>
@@ -222,7 +224,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </span> Kelola Pengguna
             </a>
-            <a href="{{ route('admin.transactions') }}" class="sidebar-item">
+            <a href="{{ route('admin.transactions') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </span> Transaksi & Income
@@ -276,31 +278,71 @@
 
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
-            <h1 class="page-title">Notifikasi</h1>
+            <h1 class="page-title">Transaksi & Income</h1>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon bg-income">💰</div>
+                    <div class="stat-info">
+                        <h3>Rp {{ number_format($totalIncome ?? 0, 0, ',', '.') }}</h3>
+                        <p>Total Pendapatan</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon bg-trans">🧾</div>
+                    <div class="stat-info">
+                        <h3>{{ $totalTransactions ?? 0 }}</h3>
+                        <p>Total Transaksi</p>
+                    </div>
+                </div>
+            </div>
 
             <div class="glass-card">
-                @if($reactivationRequests->count() > 0)
-                    @foreach($reactivationRequests as $request)
-                        <a href="{{ route('admin.users') }}" class="notification-item">
-                            <div class="notif-info">
-                                <div class="notif-icon">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                                </div>
-                                <div class="notif-details">
-                                    <h4>Permintaan Reaktivasi Akun</h4>
-                                    <p>Pengguna <strong>{{ $request->nama }}</strong> mengajukan permohonan untuk mengaktifkan kembali akunnya yang sedang dinonaktifkan.</p>
-                                    <div class="notif-time">{{ $request->created_at->diffForHumans() }}</div>
-                                </div>
-                            </div>
-                            <div class="notif-action">
-                                Tinjau <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
-                        </a>
-                    @endforeach
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--dark-oak); margin-bottom: 24px;">Riwayat Transaksi</h3>
+                
+                @if(isset($transactions) && $transactions->count() > 0)
+                    <div class="table-responsive">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>ID Transaksi</th>
+                                    <th>Tanggal</th>
+                                    <th>Pengguna</th>
+                                    <th>Paket</th>
+                                    <th>Metode Pembayaran</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($transactions as $trans)
+                                    <tr>
+                                        <td><strong>#{{ $trans->id_transaksi }}</strong></td>
+                                        <td style="color: rgba(61,43,31,0.7);">{{ $trans->created_at ? $trans->created_at->format('d M Y, H:i') : '-' }}</td>
+                                        <td>{{ $trans->user ? $trans->user->nama : 'Unknown' }}</td>
+                                        <td>{{ $trans->paket ? $trans->paket->nama : 'Unknown' }}</td>
+                                        <td>{{ $trans->metode_pembayaran ?: '-' }}</td>
+                                        <td><strong>Rp {{ number_format($trans->subtotal, 0, ',', '.') }}</strong></td>
+                                        <td>
+                                            @php
+                                                $statusClass = 'badge-pending';
+                                                if (strtolower($trans->status) === 'sukses' || strtolower($trans->status) === 'berhasil') {
+                                                    $statusClass = 'badge-sukses';
+                                                } elseif (strtolower($trans->status) === 'batal' || strtolower($trans->status) === 'gagal') {
+                                                    $statusClass = 'badge-batal';
+                                                }
+                                            @endphp
+                                            <span class="badge {{ $statusClass }}">{{ $trans->status ?: 'Pending' }}</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 @else
                     <div class="empty-state">
-                        <div class="empty-icon">🔔</div>
-                        <div class="empty-text">Belum ada notifikasi baru saat ini.</div>
+                        <div class="empty-icon">💸</div>
+                        <div class="empty-text">Belum ada data transaksi saat ini.</div>
                     </div>
                 @endif
             </div>

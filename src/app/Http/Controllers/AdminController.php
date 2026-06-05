@@ -74,4 +74,25 @@ class AdminController extends Controller
 
         return view('admin.notifications', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'reactivationRequests'));
     }
+
+    public function transactions()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+        
+        // Calculate total income (assuming 'sukses' status)
+        $totalIncome = \App\Models\Transaksi::where('status', 'sukses')->sum('subtotal');
+        
+        // Get all transactions
+        $transactions = \App\Models\Transaksi::with(['user', 'paket', 'voucher'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        $totalTransactions = $transactions->count();
+
+        return view('admin.transactions', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'totalIncome', 'totalTransactions', 'transactions'));
+    }
 }
