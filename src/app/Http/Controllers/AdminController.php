@@ -15,7 +15,11 @@ class AdminController extends Controller
 
         $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
 
-        return view('admin.dashboard', compact('userName', 'photoProfile', 'reactivationRequestsCount'));
+        $totalSiswa = \App\Models\User::where('role', 'siswa')->count();
+        $totalGuru  = \App\Models\User::where('role', 'guru')->count();
+        $totalKelas = \App\Models\Materi::whereNotNull('kelas')->where('kelas', '!=', '')->distinct('kelas')->count('kelas');
+
+        return view('admin.dashboard', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'totalSiswa', 'totalGuru', 'totalKelas'));
     }
 
     public function users()
@@ -94,5 +98,43 @@ class AdminController extends Controller
         $totalTransactions = $transactions->count();
 
         return view('admin.transactions', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'totalIncome', 'totalTransactions', 'transactions'));
+    }
+
+    public function promoIndex()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+        
+        $vouchers = \App\Models\Voucher::orderBy('id_voucher', 'desc')->get();
+
+        return view('admin.promo', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'vouchers'));
+    }
+
+    public function promoStore(Request $request)
+    {
+        $request->validate([
+            'kode_voucher' => 'required|string|unique:voucher,kode_voucher|max:50',
+            'potongan' => 'required|numeric|min:0',
+            'tanggal_berakhir' => 'required|date',
+        ]);
+
+        \App\Models\Voucher::create([
+            'kode_voucher' => strtoupper($request->kode_voucher),
+            'potongan' => $request->potongan,
+            'tanggal_berakhir' => $request->tanggal_berakhir,
+        ]);
+
+        return redirect()->back()->with('success', 'Promo baru berhasil ditambahkan!');
+    }
+
+    public function promoDestroy($id)
+    {
+        $voucher = \App\Models\Voucher::findOrFail($id);
+        $voucher->delete();
+
+        return redirect()->back()->with('success', 'Promo berhasil dihapus!');
     }
 }

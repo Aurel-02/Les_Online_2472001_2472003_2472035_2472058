@@ -83,7 +83,6 @@ Route::middleware(['auth'])->group(function () {
     // Chat
     Route::get('/guru/chat', [GuruController::class, 'chat'])->name('guru.chat');
 
-
     // Materi CRUD
     Route::get('/guru/materi', [GuruController::class, 'materiIndex'])->name('guru.materi.index');
     Route::get('/guru/materi/create', [GuruController::class, 'materiCreate'])->name('guru.materi.create');
@@ -91,16 +90,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
-    // Tugas CRUD
-    Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
-    Route::get('/guru/tugas/create', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
-    Route::post('/guru/tugas', [GuruController::class, 'tugasStore'])->name('guru.tugas.store');
-    Route::get('/guru/tugas/{id}/edit', [GuruController::class, 'tugasEdit'])->name('guru.tugas.edit');
-    Route::put('/guru/tugas/{id}', [GuruController::class, 'tugasUpdate'])->name('guru.tugas.update');
-    Route::delete('/guru/tugas/{id}', [GuruController::class, 'tugasDestroy'])->name('guru.tugas.destroy');
-
 
 });
+
 
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
@@ -120,6 +112,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/pengguna/{id}/restore', [AdminController::class, 'restoreUser'])->name('admin.users.restore');
     Route::get('/admin/notifikasi', [AdminController::class, 'notifications'])->name('admin.notifications');
     Route::get('/admin/transaksi', [AdminController::class, 'transactions'])->name('admin.transactions');
+    
+    // Promo / Voucher Management
+    Route::get('/admin/promo', [AdminController::class, 'promoIndex'])->name('admin.promo.index');
+    Route::post('/admin/promo', [AdminController::class, 'promoStore'])->name('admin.promo.store');
+    Route::delete('/admin/promo/{id}', [AdminController::class, 'promoDestroy'])->name('admin.promo.destroy');
     
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
     Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');

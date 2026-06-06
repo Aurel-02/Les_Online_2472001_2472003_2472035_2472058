@@ -314,7 +314,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </span> Transaksi & Income
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="{{ route('admin.promo.index') }}" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </span> Kelola Promo
@@ -369,7 +369,7 @@
                 <div class="package-left">
                     <h2>Selamat Datang<br>di Control Panel</h2>
                     <p>Kelola seluruh operasional sistem, pantau perkembangan pengguna, dan atur konfigurasi dari satu tempat.</p>
-                    <a href="#" class="btn-upgrade">Lihat Laporan ✨</a>
+                    <a href="{{ route('admin.transactions') }}" class="btn-upgrade">Lihat Laporan ✨</a>
                 </div>
                 <div class="package-illustration">⚙️</div>
             </div>
@@ -381,7 +381,7 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                     </div>
                     <div class="stat-info">
-                        <h3>1,240</h3>
+                        <h3>{{ number_format($totalSiswa ?? 0) }}</h3>
                         <p>Total Siswa</p>
                     </div>
                 </div>
@@ -390,7 +390,7 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
                     <div class="stat-info">
-                        <h3>85</h3>
+                        <h3>{{ number_format($totalGuru ?? 0) }}</h3>
                         <p>Total Guru</p>
                     </div>
                 </div>
@@ -399,7 +399,7 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                     </div>
                     <div class="stat-info">
-                        <h3>142</h3>
+                        <h3>{{ number_format($totalKelas ?? 0) }}</h3>
                         <p>Total Kelas</p>
                     </div>
                 </div>
@@ -416,17 +416,17 @@
                             <p>Tambah, edit, atau hapus data siswa dan guru di dalam sistem.</p>
                         </div>
                     </div>
-                    <a href="#" class="btn-action btn-primary">Kelola</a>
+                    <a href="{{ route('admin.users') }}" class="btn-action btn-primary">Kelola</a>
                 </div>
                 <div class="schedule-item">
                     <div class="schedule-info">
                         <div class="schedule-icon">💳</div>
                         <div class="schedule-details">
                             <h4>Verifikasi Transaksi</h4>
-                            <p>Ada 5 transaksi baru yang menunggu untuk diverifikasi.</p>
+                            <p>Ada transaksi baru yang menunggu untuk diverifikasi.</p>
                         </div>
                     </div>
-                    <a href="#" class="btn-action btn-primary">Lihat Transaksi</a>
+                    <a href="{{ route('admin.transactions') }}" class="btn-action btn-primary">Lihat Transaksi</a>
                 </div>
                 <div class="schedule-item">
                     <div class="schedule-info">

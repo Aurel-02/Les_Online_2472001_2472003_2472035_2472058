@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
-use App\Models\Tugas;
 use App\Models\User;
 use App\Services\UserSession;
 use Illuminate\Http\Request;
@@ -28,25 +27,18 @@ class GuruController extends Controller
         $s = $this->sessionData();
 
         $totalMateri = Materi::where('id_guru', $s['userId'])->count();
-        $totalTugas  = Tugas::where('id_guru', $s['userId'])->count();
 
-        // Tugas yang deadline-nya ≤ 3 hari lagi
-        $tugasDeadlineDekat = Tugas::where('id_guru', $s['userId'])
-            ->whereDate('deadline', '>=', now())
-            ->whereDate('deadline', '<=', now()->addDays(3))
-            ->orderBy('deadline')
-            ->get();
-
-        return view('guru.dashboard', compact(
-            'totalMateri', 'totalTugas', 'tugasDeadlineDekat'
-        ) + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
+        return view('guru.dashboard', compact('totalMateri') + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
     }
 
     // ─── SISWA ───────────────────────────────────────────────────────────────
     public function daftarSiswa()
     {
         $s        = $this->sessionData();
-        $siswaList = User::where('role', 'siswa')->get();
+        $siswaList = User::where('role', 'siswa')
+            ->leftJoin('jenjang', 'user.id_jenjang', '=', 'jenjang.id_jenjang')
+            ->select('user.*', 'jenjang.nama_jenjang')
+            ->get();
         return view('guru.siswa.index', [
             'userName'     => $s['userName'],
             'photoProfile' => $s['photoProfile'],
@@ -162,109 +154,6 @@ class GuruController extends Controller
         return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil dihapus!');
     }
 
-    // ─── TUGAS CRUD ──────────────────────────────────────────────────────────
-    public function tugasIndex()
-    {
-        $s         = $this->sessionData();
-        $tugasList = Tugas::where('id_guru', $s['userId'])->latest()->get();
-        return view('guru.tugas.index', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-            'tugasList'    => $tugasList,
-        ]);
-    }
-
-    public function tugasCreate()
-    {
-        $s = $this->sessionData();
-        return view('guru.tugas.form', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-        ]);
-    }
-
-    public function tugasStore(Request $request)
-    {
-        $request->validate([
-            'judul'      => 'required|string|max:255',
-            'deskripsi'  => 'nullable|string',
-            'deadline'   => 'required|date|after:now',
-            'kelas'      => 'required|string|max:100',
-            'mapel'      => 'required|string|max:100',
-            'file_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,zip|max:20480',
-        ]);
-
-        $userId   = UserSession::getInstance()->getUser()->id_user;
-        $filePath = null;
-
-        if ($request->hasFile('file_tugas')) {
-            $filePath = $request->file('file_tugas')->store('tugas', 'public');
-        }
-
-        Tugas::create([
-            'judul'      => $request->judul,
-            'deskripsi'  => $request->deskripsi,
-            'deadline'   => $request->deadline,
-            'kelas'      => $request->kelas,
-            'mapel'      => $request->mapel,
-            'file_tugas' => $filePath,
-            'id_guru'    => $userId,
-        ]);
-
-        return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil ditambahkan!');
-    }
-
-    public function tugasEdit($id)
-    {
-        $s     = $this->sessionData();
-        $tugas = Tugas::where('id_tugas', $id)->where('id_guru', $s['userId'])->firstOrFail();
-        return view('guru.tugas.form', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-            'tugas'        => $tugas,
-        ]);
-    }
-
-    public function tugasUpdate(Request $request, $id)
-    {
-        $request->validate([
-            'judul'      => 'required|string|max:255',
-            'deskripsi'  => 'nullable|string',
-            'deadline'   => 'required|date',
-            'kelas'      => 'required|string|max:100',
-            'mapel'      => 'required|string|max:100',
-            'file_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,zip|max:20480',
-        ]);
-
-        $userId   = UserSession::getInstance()->getUser()->id_user;
-        $tugas    = Tugas::where('id_tugas', $id)->where('id_guru', $userId)->firstOrFail();
-        $filePath = $tugas->file_tugas;
-
-        if ($request->hasFile('file_tugas')) {
-            if ($filePath) Storage::disk('public')->delete($filePath);
-            $filePath = $request->file('file_tugas')->store('tugas', 'public');
-        }
-
-        $tugas->update([
-            'judul'      => $request->judul,
-            'deskripsi'  => $request->deskripsi,
-            'deadline'   => $request->deadline,
-            'kelas'      => $request->kelas,
-            'mapel'      => $request->mapel,
-            'file_tugas' => $filePath,
-        ]);
-
-        return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil diperbarui!');
-    }
-
-    public function tugasDestroy($id)
-    {
-        $userId = UserSession::getInstance()->getUser()->id_user;
-        $tugas  = Tugas::where('id_tugas', $id)->where('id_guru', $userId)->firstOrFail();
-        if ($tugas->file_tugas) Storage::disk('public')->delete($tugas->file_tugas);
-        $tugas->delete();
-        return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil dihapus!');
-    }
 
 
 
