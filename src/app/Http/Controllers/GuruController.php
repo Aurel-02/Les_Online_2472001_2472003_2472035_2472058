@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JadwalMengajar;
 use App\Models\Materi;
 use App\Models\Tugas;
 use App\Models\User;
@@ -31,18 +30,6 @@ class GuruController extends Controller
         $totalMateri = Materi::where('id_guru', $s['userId'])->count();
         $totalTugas  = Tugas::where('id_guru', $s['userId'])->count();
 
-        $hariIni = now()->locale('id')->dayName; // e.g. "Jumat"
-        // Mapping nama hari Indonesia ke enum DB
-        $hariMap = [
-            'Senin'  => 'Senin',  'Selasa' => 'Selasa', 'Rabu'   => 'Rabu',
-            'Kamis'  => 'Kamis',  'Jumat'  => 'Jumat',  'Sabtu'  => 'Sabtu',
-            'Minggu' => 'Minggu',
-        ];
-        $hariDb = $hariMap[$hariIni] ?? null;
-        $jadwalHariIni = $hariDb
-            ? JadwalMengajar::where('id_guru', $s['userId'])->where('hari', $hariDb)->orderBy('jam_mulai')->get()
-            : collect();
-
         // Tugas yang deadline-nya ≤ 3 hari lagi
         $tugasDeadlineDekat = Tugas::where('id_guru', $s['userId'])
             ->whereDate('deadline', '>=', now())
@@ -51,7 +38,7 @@ class GuruController extends Controller
             ->get();
 
         return view('guru.dashboard', compact(
-            'totalMateri', 'totalTugas', 'jadwalHariIni', 'tugasDeadlineDekat'
+            'totalMateri', 'totalTugas', 'tugasDeadlineDekat'
         ) + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
     }
 
@@ -279,99 +266,7 @@ class GuruController extends Controller
         return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil dihapus!');
     }
 
-    // ─── JADWAL MENGAJAR CRUD ─────────────────────────────────────────────────
-    public function jadwalIndex()
-    {
-        $s           = $this->sessionData();
-        $hariOrder   = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-        $jadwalList  = JadwalMengajar::where('id_guru', $s['userId'])
-            ->orderByRaw("FIELD(hari, 'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu')")
-            ->orderBy('jam_mulai')
-            ->get();
 
-        return view('guru.jadwal.index', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-            'jadwalList'   => $jadwalList,
-            'hariOrder'    => $hariOrder,
-        ]);
-    }
-
-    public function jadwalCreate()
-    {
-        $s = $this->sessionData();
-        return view('guru.jadwal.form', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-        ]);
-    }
-
-    public function jadwalStore(Request $request)
-    {
-        $request->validate([
-            'hari'        => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-            'jam_mulai'   => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'mapel'       => 'required|string|max:100',
-            'kelas'       => 'required|string|max:100',
-        ]);
-
-        $userId = UserSession::getInstance()->getUser()->id_user;
-
-        JadwalMengajar::create([
-            'hari'        => $request->hari,
-            'jam_mulai'   => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'mapel'       => $request->mapel,
-            'kelas'       => $request->kelas,
-            'id_guru'     => $userId,
-        ]);
-
-        return redirect()->route('guru.jadwal.index')->with('success', 'Jadwal berhasil ditambahkan!');
-    }
-
-    public function jadwalEdit($id)
-    {
-        $s      = $this->sessionData();
-        $jadwal = JadwalMengajar::where('id_jadwal', $id)->where('id_guru', $s['userId'])->firstOrFail();
-        return view('guru.jadwal.form', [
-            'userName'     => $s['userName'],
-            'photoProfile' => $s['photoProfile'],
-            'jadwal'       => $jadwal,
-        ]);
-    }
-
-    public function jadwalUpdate(Request $request, $id)
-    {
-        $request->validate([
-            'hari'        => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-            'jam_mulai'   => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'mapel'       => 'required|string|max:100',
-            'kelas'       => 'required|string|max:100',
-        ]);
-
-        $userId = UserSession::getInstance()->getUser()->id_user;
-        $jadwal = JadwalMengajar::where('id_jadwal', $id)->where('id_guru', $userId)->firstOrFail();
-
-        $jadwal->update([
-            'hari'        => $request->hari,
-            'jam_mulai'   => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'mapel'       => $request->mapel,
-            'kelas'       => $request->kelas,
-        ]);
-
-        return redirect()->route('guru.jadwal.index')->with('success', 'Jadwal berhasil diperbarui!');
-    }
-
-    public function jadwalDestroy($id)
-    {
-        $userId = UserSession::getInstance()->getUser()->id_user;
-        $jadwal = JadwalMengajar::where('id_jadwal', $id)->where('id_guru', $userId)->firstOrFail();
-        $jadwal->delete();
-        return redirect()->route('guru.jadwal.index')->with('success', 'Jadwal berhasil dihapus!');
-    }
 
     public function chat()
     {

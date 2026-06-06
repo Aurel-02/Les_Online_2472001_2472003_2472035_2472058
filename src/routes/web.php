@@ -99,13 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/guru/tugas/{id}', [GuruController::class, 'tugasUpdate'])->name('guru.tugas.update');
     Route::delete('/guru/tugas/{id}', [GuruController::class, 'tugasDestroy'])->name('guru.tugas.destroy');
 
-    // Jadwal Mengajar CRUD
-    Route::get('/guru/jadwal', [GuruController::class, 'jadwalIndex'])->name('guru.jadwal.index');
-    Route::get('/guru/jadwal/create', [GuruController::class, 'jadwalCreate'])->name('guru.jadwal.create');
-    Route::post('/guru/jadwal', [GuruController::class, 'jadwalStore'])->name('guru.jadwal.store');
-    Route::get('/guru/jadwal/{id}/edit', [GuruController::class, 'jadwalEdit'])->name('guru.jadwal.edit');
-    Route::put('/guru/jadwal/{id}', [GuruController::class, 'jadwalUpdate'])->name('guru.jadwal.update');
-    Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
+
 });
 
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
