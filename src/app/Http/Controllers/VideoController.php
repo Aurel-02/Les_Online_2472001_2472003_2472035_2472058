@@ -15,7 +15,12 @@ class VideoController extends Controller
         $user    = $session->getUser();
 
         if ($user) {
+<<<<<<< HEAD
             Activity::create([
+=======
+            // Menggunakan Observer Pattern untuk Notifikasi
+            \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                 'user_id'     => $user->getKey(),
                 'type'        => 'materi',
                 'description' => 'Menonton video materi pembelajaran',

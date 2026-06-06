@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< HEAD
 use App\Models\JadwalMengajar;
 use App\Models\Materi;
 use App\Models\Tugas;
+=======
+use App\Models\Materi;
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 use App\Models\User;
 use App\Services\UserSession;
 use Illuminate\Http\Request;
@@ -29,6 +33,7 @@ class GuruController extends Controller
         $s = $this->sessionData();
 
         $totalMateri = Materi::where('id_guru', $s['userId'])->count();
+<<<<<<< HEAD
         $totalTugas  = Tugas::where('id_guru', $s['userId'])->count();
 
         $hariIni = now()->locale('id')->dayName; // e.g. "Jumat"
@@ -53,13 +58,24 @@ class GuruController extends Controller
         return view('guru.dashboard', compact(
             'totalMateri', 'totalTugas', 'jadwalHariIni', 'tugasDeadlineDekat'
         ) + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
+=======
+
+        return view('guru.dashboard', compact('totalMateri') + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
     }
 
     // ─── SISWA ───────────────────────────────────────────────────────────────
     public function daftarSiswa()
     {
         $s        = $this->sessionData();
+<<<<<<< HEAD
         $siswaList = User::where('role', 'siswa')->get();
+=======
+        $siswaList = User::where('role', 'siswa')
+            ->leftJoin('jenjang', 'user.id_jenjang', '=', 'jenjang.id_jenjang')
+            ->select('user.*', 'jenjang.nama_jenjang')
+            ->get();
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         return view('guru.siswa.index', [
             'userName'     => $s['userName'],
             'photoProfile' => $s['photoProfile'],
@@ -175,6 +191,7 @@ class GuruController extends Controller
         return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil dihapus!');
     }
 
+<<<<<<< HEAD
     // ─── TUGAS CRUD ──────────────────────────────────────────────────────────
     public function tugasIndex()
     {
@@ -372,4 +389,17 @@ class GuruController extends Controller
         $jadwal->delete();
         return redirect()->route('guru.jadwal.index')->with('success', 'Jadwal berhasil dihapus!');
     }
+=======
+
+
+
+    public function chat()
+    {
+        $s = $this->sessionData();
+        return view('guru.chat', [
+            'userName' => $s['userName'],
+            'photoProfile' => $s['photoProfile'],
+        ]);
+    }
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 }

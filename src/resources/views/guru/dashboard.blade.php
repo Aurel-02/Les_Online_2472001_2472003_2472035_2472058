@@ -311,11 +311,16 @@
         </a>
 
         <div class="sidebar-menu">
+<<<<<<< HEAD
             <a href="#" class="sidebar-item active">
+=======
+            <a href="{{ route('guru.dashboard') }}" class="sidebar-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
             </a>
+<<<<<<< HEAD
             <a href="#" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -345,6 +350,22 @@
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 </span> Notifikasi
+=======
+            <a href="{{ route('guru.siswa.index') }}" class="sidebar-item {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </span> Siswa
+            </a>
+            <a href="{{ route('guru.materi.index') }}" class="sidebar-item {{ request()->routeIs('guru.materi.*') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span> Materi Belajar
+            </a>
+            <a href="{{ route('guru.chat') }}" class="sidebar-item {{ request()->routeIs('guru.chat') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </span> Chat
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
             </a>
         </div>
 
@@ -382,8 +403,12 @@
             <div class="package-banner">
                 <div class="package-left">
                     <h2>Siap Menginspirasi<br>Hari Ini?</h2>
+<<<<<<< HEAD
                     <p>Pantau jadwal kelas, kelola materi pembelajaran, dan evaluasi perkembangan siswa dengan mudah.</p>
                     <a href="#" class="btn-upgrade">Lihat Jadwal Mengajar ✨</a>
+=======
+                    <p>Kelola materi pembelajaran dan evaluasi perkembangan siswa dengan mudah.</p>
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                 </div>
                 <div class="package-illustration">👨‍🏫</div>
             </div>
@@ -408,6 +433,7 @@
                         <p>Kelas Aktif</p>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div class="stat-card">
                     <div class="stat-icon bg-mauve">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -453,6 +479,11 @@
                     <a href="#" class="btn-action btn-outline">Persiapkan Materi</a>
                 </div>
             </div>
+=======
+            </div>
+
+
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
             <!-- AKTIVITAS TERBARU -->
             <h2 class="section-title">Aktivitas & Notifikasi</h2>
@@ -460,7 +491,11 @@
                 <div class="activity-item">
                     <div class="activity-icon bg-sage">📥</div>
                     <div class="activity-text">
+<<<<<<< HEAD
                         <div class="activity-desc"><strong>Budi Santoso</strong> (X IPA 1) telah mengumpulkan tugas <strong>"Latihan Fungsi Kuadrat"</strong></div>
+=======
+                        <div class="activity-desc"><strong>Budi Santoso</strong> (X IPA 1) telah bergabung di kelas belajar.</div>
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                         <div class="activity-time">30 menit yang lalu</div>
                     </div>
                 </div>

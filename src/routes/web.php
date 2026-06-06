@@ -8,6 +8,11 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PTNController;
+<<<<<<< HEAD
+=======
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
 Route::get('/', function () {
     return view('landing');
@@ -21,7 +26,24 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+<<<<<<< HEAD
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+=======
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Account deactivated routes
+Route::get('/account-deactivated/{id}', [AuthController::class, 'showDeactivated'])->name('account.deactivated');
+Route::post('/request-reactivation/{id}', [AuthController::class, 'requestReactivation'])->name('account.reactivate.request');
+
+// ─── Chat API (shared siswa & guru) ──────────────────────────────────────────
+Route::middleware(['auth'])->prefix('chat')->group(function () {
+    Route::get('/contacts', [ChatController::class, 'contacts'])->name('chat.contacts');
+    Route::get('/messages/{contactId}', [ChatController::class, 'messages'])->name('chat.messages');
+    Route::post('/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/poll/{contactId}', [ChatController::class, 'poll'])->name('chat.poll');
+});
+
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
 // ─── Route untuk Siswa (dilindungi middleware auth & role) ───────────────────────────
 Route::middleware(['auth', 'role:siswa'])->group(function () {
@@ -65,6 +87,12 @@ Route::middleware(['auth'])->group(function () {
     // Siswa
     Route::get('/guru/siswa', [GuruController::class, 'daftarSiswa'])->name('guru.siswa.index');
 
+<<<<<<< HEAD
+=======
+    // Chat
+    Route::get('/guru/chat', [GuruController::class, 'chat'])->name('guru.chat');
+
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
     // Materi CRUD
     Route::get('/guru/materi', [GuruController::class, 'materiIndex'])->name('guru.materi.index');
     Route::get('/guru/materi/create', [GuruController::class, 'materiCreate'])->name('guru.materi.create');
@@ -72,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
+<<<<<<< HEAD
     // Tugas CRUD
     Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
     Route::get('/guru/tugas/create', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
@@ -89,6 +118,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
 });
 
+=======
+
+});
+
+
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
     Route::get('/orangtua/profile', [\App\Http\Controllers\ProfileController::class, 'indexOrangTua'])->name('orangtua.profile');
@@ -98,4 +133,32 @@ Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::post('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordOrangTua'])->name('orangtua.profile.password.update');
     Route::get('/orangtua/paket-belajar', [\App\Http\Controllers\OrangTuaController::class, 'paketBelajar'])->name('orangtua.paket-belajar');
     Route::post('/orangtua/transaksi', [\App\Http\Controllers\OrangTuaController::class, 'storeTransaksi'])->name('orangtua.transaksi.store');
+<<<<<<< HEAD
+=======
+});
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/pengguna', [AdminController::class, 'users'])->name('admin.users');
+    Route::delete('/admin/pengguna/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+    Route::put('/admin/pengguna/{id}/restore', [AdminController::class, 'restoreUser'])->name('admin.users.restore');
+    Route::get('/admin/notifikasi', [AdminController::class, 'notifications'])->name('admin.notifications');
+    Route::get('/admin/transaksi', [AdminController::class, 'transactions'])->name('admin.transactions');
+    
+    // Promo / Voucher Management
+    Route::get('/admin/promo', [AdminController::class, 'promoIndex'])->name('admin.promo.index');
+    Route::post('/admin/promo', [AdminController::class, 'promoStore'])->name('admin.promo.store');
+    Route::delete('/admin/promo/{id}', [AdminController::class, 'promoDestroy'])->name('admin.promo.destroy');
+    
+    // Paket Belajar Management
+    Route::get('/admin/paket', [AdminController::class, 'paketIndex'])->name('admin.paket.index');
+    Route::post('/admin/paket', [AdminController::class, 'paketStore'])->name('admin.paket.store');
+    Route::delete('/admin/paket/{id}', [AdminController::class, 'paketDestroy'])->name('admin.paket.destroy');
+
+    Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
+    Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::post('/admin/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('admin.profile.photo');
+    Route::get('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordFormAdmin'])->name('admin.profile.password');
+    Route::post('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordAdmin'])->name('admin.profile.password.update');
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 });

@@ -60,7 +60,10 @@
         .user-name { font-weight: 700; color: var(--dark-oak); }
 
         .badge { padding: 6px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; display: inline-block; }
+<<<<<<< HEAD
         .badge-role { background: rgba(217, 179, 130, 0.2); color: #B38F60; }
+=======
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
         .empty-state { text-align: center; padding: 40px 0; color: rgba(61,43,31,0.5); font-weight: 500; }
     </style>
@@ -80,11 +83,16 @@
         </a>
 
         <div class="sidebar-menu">
+<<<<<<< HEAD
             <a href="{{ route('guru.dashboard') }}" class="sidebar-item">
+=======
+            <a href="{{ route('guru.dashboard') }}" class="sidebar-item {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
             </a>
+<<<<<<< HEAD
             <a href="{{ route('guru.siswa.index') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -94,6 +102,22 @@
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 </span> Materi & Tugas
+=======
+            <a href="{{ route('guru.siswa.index') }}" class="sidebar-item {{ request()->routeIs('guru.siswa.*') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </span> Siswa
+            </a>
+            <a href="{{ route('guru.materi.index') }}" class="sidebar-item {{ request()->routeIs('guru.materi.*') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span> Materi Belajar
+            </a>
+            <a href="{{ route('guru.chat') }}" class="sidebar-item {{ request()->routeIs('guru.chat') ? 'active' : '' }}">
+                <span class="sidebar-item-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </span> Chat
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
             </a>
         </div>
 
@@ -133,7 +157,11 @@
                             <tr>
                                 <th>Nama Siswa</th>
                                 <th>Email</th>
+<<<<<<< HEAD
                                 <th>Peran</th>
+=======
+                                <th>Jenjang</th>
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                                 <th>Bergabung Pada</th>
                             </tr>
                         </thead>
@@ -153,7 +181,11 @@
                                     </div>
                                 </td>
                                 <td>{{ $siswa->email }}</td>
+<<<<<<< HEAD
                                 <td><span class="badge badge-role">{{ ucfirst($siswa->role) }}</span></td>
+=======
+                                <td><span class="badge" style="background: rgba(142, 150, 128, 0.2); color: #6A725D;">{{ $siswa->nama_jenjang ?? '-' }}</span></td>
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
                                 <td>{{ $siswa->created_at->format('d M Y') }}</td>
                             </tr>
                             @empty

@@ -289,12 +289,20 @@
     </div>
  
     <div class="nav-right">
+<<<<<<< HEAD
         <div class="nav-bell">
+=======
+        <a href="{{ route('siswa.notifikasi') }}" class="nav-bell" style="text-decoration:none;">
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--dark-oak)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
             <span class="dot"></span>
+<<<<<<< HEAD
         </div>
+=======
+        </a>
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         <a href="{{ route('siswa.profile') }}" class="nav-user" style="text-decoration:none; color:inherit;">
             <div class="nav-avatar" style="overflow:hidden;">
                 @if(isset($photoProfile) && $photoProfile)

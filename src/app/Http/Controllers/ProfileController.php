@@ -184,4 +184,51 @@ class ProfileController extends Controller
 
         return redirect()->route('orangtua.profile')->with('success_password', 'Password berhasil diubah!');
     }
+<<<<<<< HEAD
+=======
+
+    public function indexAdmin()
+    {
+        $session = UserSession::getInstance();
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $userName = $user->nama;
+        $userEmail = $user->email;
+        $userRole = $user->role;
+        $photoProfile = $user->photo_profile;
+        
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+
+        return view('admin.profile', compact('userName', 'userEmail', 'userRole', 'photoProfile', 'user', 'reactivationRequestsCount'));
+    }
+
+    public function changePasswordAdmin()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+        
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+
+        return view('admin.change_password', compact('userName', 'photoProfile', 'reactivationRequestsCount'));
+    }
+
+    public function updatePasswordAdmin(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->old_password, $user->password)) {
+            return back()->withErrors(['old_password' => 'Password lama tidak cocok']);
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('admin.profile')->with('success_password', 'Password berhasil diubah!');
+    }
+>>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 }

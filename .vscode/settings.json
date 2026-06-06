@@ -1,0 +1,8 @@
+{
+    "php.workspace.root": "src",
+    "intelephense.environment.documentRoot": "src",
+    "intelephense.environment.includePaths": [
+        "src"
+    ],
+    "php.suggest.basic": false
+}
