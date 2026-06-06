@@ -101,7 +101,10 @@ class SiswaController extends Controller
         }
 
         if ($jenjangName) {
-            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')->where('jenjang', $jenjangName)->get();
+            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')
+                ->where('jenjang', $jenjangName)
+                ->orWhere('jenjang', 'Umum')
+                ->get();
         } else {
             $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')->get();
         }

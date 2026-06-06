@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Promo - Pintar.id</title>
+    <title>Kelola Paket Belajar - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -159,12 +159,27 @@
             letter-spacing: -0.5px;
         }
 
-        /* ── Responsive Layout Grid ── */
-        .promo-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 2fr;
+        /* ── Stacked Layout ── */
+        .paket-grid {
+            display: flex;
+            flex-direction: column;
             gap: 32px;
-            align-items: start;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .btn-submit {
+            max-width: 240px;
         }
 
         @media (max-width: 992px) {
@@ -172,7 +187,15 @@
             .main-wrapper { margin-left: 0; }
             .content-body { padding: 0 24px 60px; }
             .topbar { padding: 24px; justify-content: space-between; }
-            .promo-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .btn-submit {
+                max-width: 100%;
+            }
         }
 
         /* ── Card Styles ── */
@@ -223,6 +246,15 @@
             box-shadow: 0 4px 12px rgba(142, 150, 128, 0.1);
         }
 
+        select.info-value {
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%233D2B1F' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+            cursor: pointer;
+        }
+
         .btn-submit {
             width: 100%;
             background: var(--muted-sage);
@@ -244,7 +276,7 @@
             box-shadow: 0 8px 24px rgba(142,150,128,0.3);
         }
 
-        /* ── Table Styles ── */
+        /* ── Table/Grid Styles ── */
         .table-responsive {
             overflow-x: auto;
             width: 100%;
@@ -276,16 +308,18 @@
             background-color: rgba(255, 255, 255, 0.6);
         }
 
-        .promo-code {
-            font-family: monospace;
-            background: rgba(217, 179, 130, 0.25);
-            color: #b07c43;
-            padding: 4px 8px;
-            border-radius: 6px;
+        .jenjang-badge {
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 13px;
             font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 0.5px;
+            display: inline-block;
         }
+
+        .badge-sd { background-color: rgba(217, 179, 130, 0.2); color: #B38F60; }
+        .badge-smp { background-color: rgba(112, 161, 255, 0.2); color: #5B8BEB; }
+        .badge-sma { background-color: rgba(142, 150, 128, 0.2); color: #6A725D; }
+        .badge-umum { background-color: rgba(163, 124, 118, 0.2); color: #8a655f; }
 
         .btn-delete {
             padding: 8px 16px;
@@ -434,12 +468,12 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </span> Transaksi & Income
             </a>
-            <a href="{{ route('admin.promo.index') }}" class="sidebar-item active">
+            <a href="{{ route('admin.promo.index') }}" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </span> Kelola Promo
             </a>
-            <a href="{{ route('admin.paket.index') }}" class="sidebar-item">
+            <a href="{{ route('admin.paket.index') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                 </span> Paket Belajar
@@ -484,7 +518,7 @@
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
             
-            <h1 class="page-title">Kelola Promo</h1>
+            <h1 class="page-title">Kelola Paket Belajar</h1>
 
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
@@ -493,73 +527,103 @@
                 <div class="alert alert-error">{{ session('error') }}</div>
             @endif
 
-            <div class="promo-grid">
+            <div class="paket-grid">
                 
-                <!-- KARTU TAMBAH PROMO -->
+                <!-- KARTU TAMBAH PAKET -->
                 <div class="glass-card">
-                    <h3 class="card-subtitle">Tambah Promo</h3>
+                    <h3 class="card-subtitle">Tambah Paket</h3>
                     
-                    <form action="{{ route('admin.promo.store') }}" method="POST">
+                    <form action="{{ route('admin.paket.store') }}" method="POST">
                         @csrf
-                        <div class="form-group">
-                            <label class="info-label" for="kode_voucher">Kode Promo</label>
-                            <input class="info-value" type="text" name="kode_voucher" id="kode_voucher" placeholder="CONTOH: DISKON50" value="{{ old('kode_voucher') }}" required>
-                            @error('kode_voucher')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="info-label" for="nama">Nama Paket</label>
+                                <input class="info-value" type="text" name="nama" id="nama" placeholder="CONTOH: Paket Intensif UTBK" value="{{ old('nama') }}" required>
+                                @error('nama')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="info-label" for="jenjang">Jenjang Pendidikan</label>
+                                <select class="info-value" name="jenjang" id="jenjang" required>
+                                    <option value="" disabled selected>Pilih Jenjang</option>
+                                    <option value="SD" {{ old('jenjang') == 'SD' ? 'selected' : '' }}>SD</option>
+                                    <option value="SMP" {{ old('jenjang') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                    <option value="SMA" {{ old('jenjang') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                    <option value="Umum" {{ old('jenjang') == 'Umum' ? 'selected' : '' }}>Umum</option>
+                                </select>
+                                @error('jenjang')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="info-label" for="potongan">Potongan Harga (Rp)</label>
-                            <input class="info-value" type="number" name="potongan" id="potongan" placeholder="CONTOH: 50000" min="0" value="{{ old('potongan') }}" required>
-                            @error('potongan')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="info-label" for="harga">Harga Paket (Rp)</label>
+                                <input class="info-value" type="number" name="harga" id="harga" placeholder="CONTOH: 450000" min="0" value="{{ old('harga') }}" required>
+                                @error('harga')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label class="info-label" for="masa_aktif">Masa Aktif (Hari)</label>
+                                <input class="info-value" type="number" name="masa_aktif" id="masa_aktif" placeholder="CONTOH: 90" min="1" value="{{ old('masa_aktif') }}" required>
+                                @error('masa_aktif')
+                                    <span class="error-message">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="info-label" for="tanggal_berakhir">Tanggal Berakhir</label>
-                            <input class="info-value" type="date" name="tanggal_berakhir" id="tanggal_berakhir" value="{{ old('tanggal_berakhir') }}" required>
-                            @error('tanggal_berakhir')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">Simpan Paket</button>
                         </div>
-
-                        <button type="submit" class="btn-submit">Simpan Promo</button>
                     </form>
                 </div>
 
-                <!-- KARTU DAFTAR PROMO -->
+                <!-- KARTU DAFTAR PAKET -->
                 <div class="glass-card">
-                    <h3 class="card-subtitle">Daftar Promo Aktif</h3>
+                    <h3 class="card-subtitle">Daftar Paket Belajar</h3>
                     
                     <div class="table-responsive">
                         <table class="styled-table">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Kode Promo</th>
-                                    <th>Potongan</th>
-                                    <th>Berakhir Pada</th>
+                                    <th>Nama Paket</th>
+                                    <th>Jenjang</th>
+                                    <th>Harga</th>
+                                    <th>Masa Aktif</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($vouchers as $index => $voucher)
+                                @forelse($pakets as $index => $paket)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td><span class="promo-code">{{ $voucher->kode_voucher }}</span></td>
-                                    <td>Rp {{ number_format($voucher->potongan, 0, ',', '.') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($voucher->tanggal_berakhir)->format('d M Y') }}</td>
+                                    <td><strong>{{ $paket->nama }}</strong></td>
                                     <td>
-                                        <button type="button" class="btn-delete" onclick="confirmDelete({{ $voucher->id_voucher }}, '{{ addslashes($voucher->kode_voucher) }}')">
+                                        @php
+                                            $badgeClass = 'badge-umum';
+                                            if ($paket->jenjang == 'SD') $badgeClass = 'badge-sd';
+                                            elseif ($paket->jenjang == 'SMP') $badgeClass = 'badge-smp';
+                                            elseif ($paket->jenjang == 'SMA') $badgeClass = 'badge-sma';
+                                        @endphp
+                                        <span class="jenjang-badge {{ $badgeClass }}">{{ $paket->jenjang }}</span>
+                                    </td>
+                                    <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
+                                    <td>{{ $paket->masa_aktif }} Hari</td>
+                                    <td>
+                                        <button type="button" class="btn-delete" onclick="confirmDelete({{ $paket->id_paket }}, '{{ addslashes($paket->nama) }}')">
                                             Hapus
                                         </button>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" style="text-align: center; color: rgba(61,43,31,0.5);">Belum ada promo yang terdaftar.</td>
+                                    <td colspan="6" style="text-align: center; color: rgba(61,43,31,0.5);">Belum ada paket pembelajaran yang terdaftar.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -572,12 +636,12 @@
         </div>
     </main>
 
-    <!-- Modal Konfirmasi Hapus Promo -->
+    <!-- Modal Konfirmasi Hapus Paket -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal-card">
             <div class="modal-icon">⚠️</div>
-            <h3 class="modal-title">Hapus Promo?</h3>
-            <p class="modal-desc">Anda yakin ingin menghapus promo <strong id="deletePromoCode"></strong>? Promo ini tidak akan bisa digunakan lagi oleh pengguna.</p>
+            <h3 class="modal-title">Hapus Paket Belajar?</h3>
+            <p class="modal-desc">Anda yakin ingin menghapus paket belajar <strong id="deletePaketName"></strong>? Siswa tidak akan bisa membeli paket ini lagi.</p>
             
             <form id="deleteForm" method="POST" action="">
                 @csrf
@@ -591,9 +655,9 @@
     </div>
 
     <script>
-        function confirmDelete(voucherId, voucherCode) {
-            document.getElementById('deletePromoCode').innerText = voucherCode;
-            document.getElementById('deleteForm').action = '/admin/promo/' + voucherId;
+        function confirmDelete(paketId, paketName) {
+            document.getElementById('deletePaketName').innerText = paketName;
+            document.getElementById('deleteForm').action = '/admin/paket/' + paketId;
             document.getElementById('deleteModal').classList.add('active');
         }
 

@@ -137,4 +137,44 @@ class AdminController extends Controller
 
         return redirect()->back()->with('success', 'Promo berhasil dihapus!');
     }
+
+    public function paketIndex()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+        
+        $pakets = \App\Models\PaketPembelajaran::orderBy('id_paket', 'desc')->get();
+
+        return view('admin.paket', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'pakets'));
+    }
+
+    public function paketStore(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'jenjang' => 'required|in:SD,SMP,SMA,Umum',
+            'harga' => 'required|numeric|min:0',
+            'masa_aktif' => 'required|integer|min:1',
+        ]);
+
+        \App\Models\PaketPembelajaran::create([
+            'nama' => $request->nama,
+            'jenjang' => $request->jenjang,
+            'harga' => $request->harga,
+            'masa_aktif' => $request->masa_aktif,
+        ]);
+
+        return redirect()->back()->with('success', 'Paket pembelajaran baru berhasil ditambahkan!');
+    }
+
+    public function paketDestroy($id)
+    {
+        $paket = \App\Models\PaketPembelajaran::findOrFail($id);
+        $paket->delete();
+
+        return redirect()->back()->with('success', 'Paket pembelajaran berhasil dihapus!');
+    }
 }

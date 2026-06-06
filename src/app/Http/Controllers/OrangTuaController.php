@@ -84,6 +84,7 @@ class OrangTuaController extends Controller
 
         $promotedPackages = DB::table('paket_pembelajaran')
             ->where('jenjang', $jenjangName)
+            ->orWhere('jenjang', 'Umum')
             ->take(3)
             ->get();
 
@@ -143,7 +144,10 @@ class OrangTuaController extends Controller
         }
 
         if ($jenjangName) {
-            $paketList = DB::table('paket_pembelajaran')->where('jenjang', $jenjangName)->get();
+            $paketList = DB::table('paket_pembelajaran')
+                ->where('jenjang', $jenjangName)
+                ->orWhere('jenjang', 'Umum')
+                ->get();
         } else {
             $paketList = DB::table('paket_pembelajaran')->get();
         }

@@ -118,6 +118,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/promo', [AdminController::class, 'promoStore'])->name('admin.promo.store');
     Route::delete('/admin/promo/{id}', [AdminController::class, 'promoDestroy'])->name('admin.promo.destroy');
     
+    // Paket Belajar Management
+    Route::get('/admin/paket', [AdminController::class, 'paketIndex'])->name('admin.paket.index');
+    Route::post('/admin/paket', [AdminController::class, 'paketStore'])->name('admin.paket.store');
+    Route::delete('/admin/paket/{id}', [AdminController::class, 'paketDestroy'])->name('admin.paket.destroy');
+
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
     Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');
     Route::post('/admin/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('admin.profile.photo');
