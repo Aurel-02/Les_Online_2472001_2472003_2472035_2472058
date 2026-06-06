@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Pengguna - Pintar.id</title>
+    <title>Kelola Promo - Pintar.id</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -159,15 +159,97 @@
             letter-spacing: -0.5px;
         }
 
+        /* ── Responsive Layout Grid ── */
+        .promo-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 32px;
+            align-items: start;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); transition: 0.3s; }
+            .main-wrapper { margin-left: 0; }
+            .content-body { padding: 0 24px 60px; }
+            .topbar { padding: 24px; justify-content: space-between; }
+            .promo-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── Card Styles ── */
         .glass-card {
             background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 32px;
-            padding: 36px; box-shadow: 0 10px 30px rgba(61, 43, 31, 0.04);
-            margin-bottom: 48px;
-            overflow-x: auto;
+            padding: 32px; box-shadow: 0 10px 30px rgba(61, 43, 31, 0.04);
+            margin-bottom: 32px;
+        }
+
+        .card-subtitle {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--dark-oak);
+            margin-bottom: 20px;
+        }
+
+        /* ── Form Controls ── */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .info-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(61,43,31,0.5);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .info-value {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(61,43,31,0.1);
+            background: rgba(255,255,255,0.6);
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            color: var(--dark-oak);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .info-value:focus {
+            border-color: var(--muted-sage);
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 4px 12px rgba(142, 150, 128, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--muted-sage);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 4px 12px rgba(142, 150, 128, 0.2);
+        }
+
+        .btn-submit:hover {
+            background: #7b846e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(142,150,128,0.3);
         }
 
         /* ── Table Styles ── */
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+
         .styled-table {
             width: 100%;
             border-collapse: collapse;
@@ -194,18 +276,16 @@
             background-color: rgba(255, 255, 255, 0.6);
         }
 
-        .role-badge {
-            padding: 6px 12px;
-            border-radius: 99px;
-            font-size: 13px;
+        .promo-code {
+            font-family: monospace;
+            background: rgba(217, 179, 130, 0.25);
+            color: #b07c43;
+            padding: 4px 8px;
+            border-radius: 6px;
             font-weight: 700;
-            display: inline-block;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
-
-        .role-siswa { background-color: rgba(142, 150, 128, 0.2); color: #6A725D; }
-        .role-guru { background-color: rgba(112, 161, 255, 0.2); color: #5B8BEB; }
-        .role-orangtua { background-color: rgba(217, 179, 130, 0.2); color: #B38F60; }
-        .role-admin { background-color: rgba(163, 124, 118, 0.2); color: #8a655f; }
 
         .btn-delete {
             padding: 8px 16px;
@@ -221,33 +301,6 @@
 
         .btn-delete:hover {
             background-color: #ff5252;
-        }
-
-        .btn-disabled {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background-color: #ccc;
-            color: #666;
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: not-allowed;
-        }
-
-        .btn-restore {
-            padding: 8px 16px;
-            border-radius: 8px;
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-restore:hover {
-            background-color: #27ae60;
         }
 
         /* ── Modal Styles ── */
@@ -343,10 +396,11 @@
             border-radius: 16px;
             margin-bottom: 24px;
             font-weight: 600;
+            display: block;
         }
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
+        .error-message { color: #ff6b6b; font-size: 12px; font-weight: 600; margin-top: 4px; display: block; }
     </style>
 </head>
 <body>
@@ -370,7 +424,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </span> Dashboard
             </a>
-            <a href="{{ route('admin.users') }}" class="sidebar-item active">
+            <a href="{{ route('admin.users') }}" class="sidebar-item">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </span> Kelola Pengguna
@@ -380,7 +434,7 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 </span> Transaksi & Income
             </a>
-            <a href="{{ route('admin.promo.index') }}" class="sidebar-item">
+            <a href="{{ route('admin.promo.index') }}" class="sidebar-item active">
                 <span class="sidebar-item-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </span> Kelola Promo
@@ -430,7 +484,7 @@
         <!-- ── DASHBOARD BODY ── -->
         <div class="content-body">
             
-            <h1 class="page-title">Kelola Pengguna</h1>
+            <h1 class="page-title">Kelola Promo</h1>
 
             @if(session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
@@ -439,112 +493,108 @@
                 <div class="alert alert-error">{{ session('error') }}</div>
             @endif
 
-            <div class="glass-card">
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Terdaftar Pada</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($users as $index => $user)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <strong>{{ $user->nama }}</strong>
-                                @if($user->reactivation_requested)
-                                    <span style="display:inline-block; margin-left:8px; padding:4px 8px; background:#fff3cd; color:#856404; font-size:11px; font-weight:700; border-radius:99px; border:1px solid #ffeeba;">Minta Reaktivasi</span>
-                                @endif
-                            </td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                @php
-                                    $roleClass = 'role-siswa';
-                                    if ($user->role == 'guru') $roleClass = 'role-guru';
-                                    elseif ($user->role == 'orang tua') $roleClass = 'role-orangtua';
-                                    elseif ($user->role == 'admin') $roleClass = 'role-admin';
-                                @endphp
-                                @if($user->trashed())
-                                    <span class="role-badge" style="background-color: #e0e0e0; color: #555;">Nonaktif</span>
-                                @else
-                                    <span class="role-badge {{ $roleClass }}">{{ ucfirst($user->role) }}</span>
-                                @endif
-                            </td>
-                            <td>{{ $user->created_at->format('d M Y') }}</td>
-                            <td>
-                                @if($user->id_user === auth()->id())
-                                    <button type="button" class="btn-disabled" disabled>Anda</button>
-                                @elseif($user->trashed())
-                                    <button type="button" class="btn-restore" onclick="confirmRestore({{ $user->id_user }}, '{{ addslashes($user->nama) }}')">
-                                        Aktifkan Kembali
-                                    </button>
-                                @else
-                                    <button type="button" class="btn-delete" onclick="confirmDelete({{ $user->id_user }}, '{{ addslashes($user->nama) }}')">
-                                        Nonaktifkan
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="promo-grid">
+                
+                <!-- KARTU TAMBAH PROMO -->
+                <div class="glass-card">
+                    <h3 class="card-subtitle">Tambah Promo</h3>
+                    
+                    <form action="{{ route('admin.promo.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label class="info-label" for="kode_voucher">Kode Promo</label>
+                            <input class="info-value" type="text" name="kode_voucher" id="kode_voucher" placeholder="CONTOH: DISKON50" value="{{ old('kode_voucher') }}" required>
+                            @error('kode_voucher')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="info-label" for="potongan">Potongan Harga (Rp)</label>
+                            <input class="info-value" type="number" name="potongan" id="potongan" placeholder="CONTOH: 50000" min="0" value="{{ old('potongan') }}" required>
+                            @error('potongan')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="info-label" for="tanggal_berakhir">Tanggal Berakhir</label>
+                            <input class="info-value" type="date" name="tanggal_berakhir" id="tanggal_berakhir" value="{{ old('tanggal_berakhir') }}" required>
+                            @error('tanggal_berakhir')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <button type="submit" class="btn-submit">Simpan Promo</button>
+                    </form>
+                </div>
+
+                <!-- KARTU DAFTAR PROMO -->
+                <div class="glass-card">
+                    <h3 class="card-subtitle">Daftar Promo Aktif</h3>
+                    
+                    <div class="table-responsive">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode Promo</th>
+                                    <th>Potongan</th>
+                                    <th>Berakhir Pada</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($vouchers as $index => $voucher)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><span class="promo-code">{{ $voucher->kode_voucher }}</span></td>
+                                    <td>Rp {{ number_format($voucher->potongan, 0, ',', '.') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($voucher->tanggal_berakhir)->format('d M Y') }}</td>
+                                    <td>
+                                        <button type="button" class="btn-delete" onclick="confirmDelete({{ $voucher->id_voucher }}, '{{ addslashes($voucher->kode_voucher) }}')">
+                                            Hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: rgba(61,43,31,0.5);">Belum ada promo yang terdaftar.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
         </div>
     </main>
 
-    <!-- Modal Konfirmasi Delete -->
+    <!-- Modal Konfirmasi Hapus Promo -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal-card">
             <div class="modal-icon">⚠️</div>
-            <h3 class="modal-title">Nonaktifkan Pengguna?</h3>
-            <p class="modal-desc">Anda yakin ingin menonaktifkan akun <strong id="deleteUserName"></strong>? Pengguna ini tidak akan bisa login lagi.</p>
+            <h3 class="modal-title">Hapus Promo?</h3>
+            <p class="modal-desc">Anda yakin ingin menghapus promo <strong id="deletePromoCode"></strong>? Promo ini tidak akan bisa digunakan lagi oleh pengguna.</p>
             
             <form id="deleteForm" method="POST" action="">
                 @csrf
                 @method('DELETE')
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('deleteModal')">Batal</button>
-                    <button type="submit" class="btn-confirm">Ya, Nonaktifkan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Konfirmasi Restore -->
-    <div class="modal-overlay" id="restoreModal">
-        <div class="modal-card">
-            <div class="modal-icon">✅</div>
-            <h3 class="modal-title">Aktifkan Kembali Pengguna?</h3>
-            <p class="modal-desc">Anda yakin ingin mengaktifkan kembali akun <strong id="restoreUserName"></strong>? Pengguna ini akan dapat login dan menggunakan sistem seperti biasa.</p>
-            
-            <form id="restoreForm" method="POST" action="">
-                @csrf
-                @method('PUT')
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal('restoreModal')">Batal</button>
-                    <button type="submit" class="btn-restore" style="flex:1;">Ya, Aktifkan</button>
+                    <button type="submit" class="btn-confirm">Ya, Hapus</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        function confirmDelete(userId, userName) {
-            document.getElementById('deleteUserName').innerText = userName;
-            document.getElementById('deleteForm').action = '/admin/pengguna/' + userId;
+        function confirmDelete(voucherId, voucherCode) {
+            document.getElementById('deletePromoCode').innerText = voucherCode;
+            document.getElementById('deleteForm').action = '/admin/promo/' + voucherId;
             document.getElementById('deleteModal').classList.add('active');
-        }
-
-        function confirmRestore(userId, userName) {
-            document.getElementById('restoreUserName').innerText = userName;
-            document.getElementById('restoreForm').action = '/admin/pengguna/' + userId + '/restore';
-            document.getElementById('restoreModal').classList.add('active');
         }
 
         function closeModal(modalId) {
