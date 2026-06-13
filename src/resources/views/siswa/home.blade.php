@@ -515,7 +515,7 @@
         <div class="content-body">
 
             @if(!$activePackageName)
-            <!-- BANNER PAKET BELAJAR -->
+            <!-- BANNER PAKET BELAJAR (BELUM AKTIF) -->
             <div class="package-banner">
                 <div class="package-left">
                     <h2>Upgrade Belajarmu<br>Sekarang!</h2>
@@ -523,6 +523,16 @@
                     <a href="{{ route('siswa.paket-belajar') }}" class="btn-upgrade">Lihat Paket Belajar ✨</a>
                 </div>
                 <div class="package-illustration">🚀</div>
+            </div>
+            @else
+            <!-- BANNER PAKET BELAJAR (SUDAH AKTIF) -->
+            <div class="package-banner" style="background: linear-gradient(135deg, var(--muted-sage) 0%, #A2AA95 100%); box-shadow: 0 16px 40px rgba(142, 150, 128, 0.3);">
+                <div class="package-left">
+                    <h2>Selamat Belajar,<br>Calon Orang Sukses!</h2>
+                    <p>Fokuslah pada tujuanmu. Akses semua materi dan latihan soal tanpa batas dengan paket <strong>{{ $activePackageName }}</strong>.</p>
+                    <a href="{{ route('siswa.materi') }}" class="btn-upgrade" style="color: var(--muted-sage);">Mulai Belajar Sekarang ✨</a>
+                </div>
+                <div class="package-illustration">🎓</div>
             </div>
             @endif
 
