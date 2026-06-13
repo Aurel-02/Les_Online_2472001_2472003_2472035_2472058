@@ -25,18 +25,11 @@ class TransactionStorageHandler extends CheckoutHandler
             ]);
 
             // Insert log into activities table
-<<<<<<< HEAD
-            Activity::create([
-                'user_id' => $context->userId,
-                'type' => 'transaksi',
-                'description' => 'Membeli paket ' . $context->paket->nama . ' menggunakan ' . $context->metodePembayaran . ($context->voucher ? ' dengan voucher ' . $context->voucher->kode_voucher : '')
-=======
             // Menggunakan Observer Pattern untuk Notifikasi
             \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
                 'user_id' => $context->userId,
                 'type' => 'pembelian',
                 'description' => "Membeli paket " . $context->paket->nama . " seharga " . number_format($context->subtotal, 0, ',', '.') . ($context->voucher ? ' dengan voucher ' . $context->voucher->kode_voucher : '')
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
             ]);
 
             DB::commit();

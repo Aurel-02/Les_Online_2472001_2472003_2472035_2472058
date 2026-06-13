@@ -28,20 +28,6 @@ class SoalSD implements SoalUjianInterface
             $decoys  = $this->generateDecoys($correct, 3);
             $options = [$decoys[0], $decoys[1], $correct, $decoys[2]];
 
-<<<<<<< HEAD
-            $questions[] = [
-                'id'          => $i,
-                'text'        => "Soal No. {$i}: " . $text,
-                'options'     => [
-                    'A' => (string)$options[0],
-                    'B' => (string)$options[1],
-                    'C' => (string)$options[2],
-                    'D' => (string)$options[3],
-                ],
-                'correct'     => 'C',
-                'explanation' => $explanation,
-            ];
-=======
             $optionsMap = [
                 'A' => (string)$options[0],
                 'B' => (string)$options[1],
@@ -50,7 +36,6 @@ class SoalSD implements SoalUjianInterface
             ];
             $flyweight = SoalFlyweightFactory::getFlyweight('', $text, $optionsMap, 'C', $explanation);
             $questions[] = $flyweight->render($i);
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         }
         return $questions;
     }

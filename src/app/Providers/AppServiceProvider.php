@@ -31,13 +31,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-<<<<<<< HEAD
-        //
-=======
         // Observer Pattern Registration
         \App\Pattern\Observer\ActivityNotifier::getInstance()->attach(
             new \App\Pattern\Observer\DatabaseActivityLogger()
         );
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
     }
 }

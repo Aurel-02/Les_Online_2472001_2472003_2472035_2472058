@@ -8,11 +8,8 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CatatanController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PTNController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
 Route::get('/', function () {
     return view('landing');
@@ -26,10 +23,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-<<<<<<< HEAD
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
-=======
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Account deactivated routes
 Route::get('/account-deactivated/{id}', [AuthController::class, 'showDeactivated'])->name('account.deactivated');
@@ -42,8 +36,6 @@ Route::middleware(['auth'])->prefix('chat')->group(function () {
     Route::post('/send', [ChatController::class, 'send'])->name('chat.send');
     Route::get('/poll/{contactId}', [ChatController::class, 'poll'])->name('chat.poll');
 });
-
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 
 // ─── Route untuk Siswa (dilindungi middleware auth & role) ───────────────────────────
 Route::middleware(['auth', 'role:siswa'])->group(function () {
@@ -87,12 +79,8 @@ Route::middleware(['auth'])->group(function () {
     // Siswa
     Route::get('/guru/siswa', [GuruController::class, 'daftarSiswa'])->name('guru.siswa.index');
 
-<<<<<<< HEAD
-=======
     // Chat
     Route::get('/guru/chat', [GuruController::class, 'chat'])->name('guru.chat');
-
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
     // Materi CRUD
     Route::get('/guru/materi', [GuruController::class, 'materiIndex'])->name('guru.materi.index');
     Route::get('/guru/materi/create', [GuruController::class, 'materiCreate'])->name('guru.materi.create');
@@ -100,7 +88,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/guru/materi/{id}/edit', [GuruController::class, 'materiEdit'])->name('guru.materi.edit');
     Route::put('/guru/materi/{id}', [GuruController::class, 'materiUpdate'])->name('guru.materi.update');
     Route::delete('/guru/materi/{id}', [GuruController::class, 'materiDestroy'])->name('guru.materi.destroy');
-<<<<<<< HEAD
     // Tugas CRUD
     Route::get('/guru/tugas', [GuruController::class, 'tugasIndex'])->name('guru.tugas.index');
     Route::get('/guru/tugas/create', [GuruController::class, 'tugasCreate'])->name('guru.tugas.create');
@@ -117,13 +104,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/guru/jadwal/{id}', [GuruController::class, 'jadwalUpdate'])->name('guru.jadwal.update');
     Route::delete('/guru/jadwal/{id}', [GuruController::class, 'jadwalDestroy'])->name('guru.jadwal.destroy');
 });
-
-=======
-
-});
-
-
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::get('/orangtua/home', [\App\Http\Controllers\OrangTuaController::class, 'index'])->name('orangtua.home');
     Route::get('/orangtua/profile', [\App\Http\Controllers\ProfileController::class, 'indexOrangTua'])->name('orangtua.profile');
@@ -133,8 +113,6 @@ Route::middleware(['auth', 'role:orang tua'])->group(function () {
     Route::post('/orangtua/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordOrangTua'])->name('orangtua.profile.password.update');
     Route::get('/orangtua/paket-belajar', [\App\Http\Controllers\OrangTuaController::class, 'paketBelajar'])->name('orangtua.paket-belajar');
     Route::post('/orangtua/transaksi', [\App\Http\Controllers\OrangTuaController::class, 'storeTransaksi'])->name('orangtua.transaksi.store');
-<<<<<<< HEAD
-=======
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -160,5 +138,4 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('admin.profile.photo');
     Route::get('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'showChangePasswordFormAdmin'])->name('admin.profile.password');
     Route::post('/admin/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePasswordAdmin'])->name('admin.profile.password.update');
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 });

@@ -34,18 +34,8 @@ class SoalSMA implements SoalUjianInterface
                 'D' => "{$a}x² + {$b}",
             ];
 
-<<<<<<< HEAD
-            $questions[] = [
-                'id'          => $i,
-                'text'        => "Soal No. {$i}: " . $text,
-                'options'     => $opts,
-                'correct'     => 'C',
-                'explanation' => $explanation,
-            ];
-=======
             $flyweight = SoalFlyweightFactory::getFlyweight('', $text, $opts, 'C', $explanation);
             $questions[] = $flyweight->render($i);
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         }
         return $questions;
     }
@@ -60,17 +50,9 @@ class SoalSMA implements SoalUjianInterface
         if (!is_array($indices)) $indices = [$indices];
 
         foreach ($indices as $rank => $idx) {
-<<<<<<< HEAD
-            $q               = $pool[$idx];
-            $q['id']         = $rank + 1;
-            $q['text']       = "Soal No. " . ($rank + 1) . " [{$q['tag']}]: " . $q['text'];
-            unset($q['tag']);
-            $questions[]     = $q;
-=======
             $q = $pool[$idx];
             $flyweight = SoalFlyweightFactory::getFlyweight($q['tag'], $q['text'], $q['options'], $q['correct'], $q['explanation']);
             $questions[] = $flyweight->render($rank + 1);
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         }
 
         return $questions;

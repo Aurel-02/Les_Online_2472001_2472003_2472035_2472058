@@ -32,20 +32,6 @@ class SoalSMP implements SoalUjianInterface
             $decoys  = $this->generateDecoys($correct, 3);
             $options = [$decoys[0], $correct, $decoys[1], $decoys[2]];
 
-<<<<<<< HEAD
-            $questions[] = [
-                'id'          => $i,
-                'text'        => "Soal No. {$i}: " . $text,
-                'options'     => [
-                    'A' => (string)$options[0],
-                    'B' => (string)$options[1],
-                    'C' => (string)$options[2],
-                    'D' => (string)$options[3],
-                ],
-                'correct'     => 'B',
-                'explanation' => $explanation,
-            ];
-=======
             $optionsMap = [
                 'A' => (string)$options[0],
                 'B' => (string)$options[1],
@@ -54,7 +40,6 @@ class SoalSMP implements SoalUjianInterface
             ];
             $flyweight = SoalFlyweightFactory::getFlyweight('', $text, $optionsMap, 'B', $explanation);
             $questions[] = $flyweight->render($i);
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
         }
         return $questions;
     }

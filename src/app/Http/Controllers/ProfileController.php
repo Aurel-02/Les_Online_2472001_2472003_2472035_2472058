@@ -12,7 +12,7 @@ class ProfileController extends Controller
     {
         $session = UserSession::getInstance();
         $user = $session->getUser();
-        
+
         return view('siswa.profile', [
             'userName' => $user->nama,
             'userEmail' => $user->email,
@@ -33,7 +33,7 @@ class ProfileController extends Controller
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             $filename = time() . '_' . $file->getClientOriginalName();
-            
+
             // Simpan ke direktori public/uploads/profiles
             $file->move(public_path('uploads/profiles'), $filename);
 
@@ -102,7 +102,7 @@ class ProfileController extends Controller
     {
         $session = UserSession::getInstance();
         $user = $session->getUser();
-        
+
         return view('guru.profile', [
             'userName' => $user->nama,
             'userEmail' => $user->email,
@@ -145,7 +145,7 @@ class ProfileController extends Controller
     {
         $session = UserSession::getInstance();
         $user = $session->getUser();
-        
+
         return view('orangtua.profile', [
             'userName' => $user->nama,
             'userEmail' => $user->email,
@@ -184,9 +184,6 @@ class ProfileController extends Controller
 
         return redirect()->route('orangtua.profile')->with('success_password', 'Password berhasil diubah!');
     }
-<<<<<<< HEAD
-=======
-
     public function indexAdmin()
     {
         $session = UserSession::getInstance();
@@ -195,7 +192,7 @@ class ProfileController extends Controller
         $userEmail = $user->email;
         $userRole = $user->role;
         $photoProfile = $user->photo_profile;
-        
+
         $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
 
         return view('admin.profile', compact('userName', 'userEmail', 'userRole', 'photoProfile', 'user', 'reactivationRequestsCount'));
@@ -206,7 +203,7 @@ class ProfileController extends Controller
         $session = UserSession::getInstance();
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
-        
+
         $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
 
         return view('admin.change_password', compact('userName', 'photoProfile', 'reactivationRequestsCount'));
@@ -230,5 +227,4 @@ class ProfileController extends Controller
 
         return redirect()->route('admin.profile')->with('success_password', 'Password berhasil diubah!');
     }
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
 }

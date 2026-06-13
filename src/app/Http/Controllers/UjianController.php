@@ -195,12 +195,8 @@ class UjianController extends Controller
             ? "Menyelesaikan Try Out UTBK/SNBT dengan skor raw {$utbkRawScore} (nilai {$score})"
             : "Menyelesaikan ujian " . strtoupper($jenis) . " " . $mapel . " dengan nilai " . $score;
 
-<<<<<<< HEAD
-        \App\Models\Activity::create([
-=======
         // Menggunakan Observer Pattern untuk Notifikasi
         \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
->>>>>>> f1477981be828601e79080bb40992bd330fffc3a
             'user_id'     => $user->getKey(),
             'type'        => 'ujian',
             'description' => $scoreDesc,
