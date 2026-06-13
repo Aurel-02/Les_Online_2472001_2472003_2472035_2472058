@@ -87,17 +87,35 @@ class AdminController extends Controller
 
         $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
         
-        // Calculate total income (assuming 'sukses' status)
-        $totalIncome = \App\Models\Transaksi::where('status', 'sukses')->sum('subtotal');
+        // Calculate total income
+        $totalIncome = \App\Models\Transaksi::whereIn('status', ['sukses', 'berhasil'])->sum('subtotal');
         
-        // Get all transactions
-        $transactions = \App\Models\Transaksi::with(['user', 'paket', 'voucher'])
-            ->orderBy('created_at', 'desc')
+        // Data untuk Grafik (7 hari terakhir)
+        $chartDataRaw = \App\Models\Transaksi::where('created_at', '>=', now()->subDays(6)->startOfDay())
+            ->whereIn('status', ['sukses', 'berhasil'])
+            ->selectRaw('DATE(created_at) as date, SUM(subtotal) as daily_income')
+            ->groupBy('date')
+            ->orderBy('date')
             ->get();
             
-        $totalTransactions = $transactions->count();
+        // Siapkan array untuk 7 hari terakhir agar data yang kosong tetap bernilai 0
+        $chartLabels = [];
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $chartLabels[] = now()->subDays($i)->translatedFormat('d M');
+            $match = $chartDataRaw->firstWhere('date', $date);
+            $chartData[] = $match ? $match->daily_income : 0;
+        }
 
-        return view('admin.transactions', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'totalIncome', 'totalTransactions', 'transactions'));
+        // Get total transactions
+        $totalTransactions = \App\Models\Transaksi::count();
+
+        return view('admin.transactions', compact(
+            'userName', 'photoProfile', 'reactivationRequestsCount', 
+            'totalIncome', 'totalTransactions', 
+            'chartLabels', 'chartData'
+        ));
     }
 
     public function promoIndex()
@@ -168,6 +186,26 @@ class AdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Paket pembelajaran baru berhasil ditambahkan!');
+    }
+
+    public function paketUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'jenjang' => 'required|in:SD,SMP,SMA,Umum',
+            'harga' => 'required|numeric|min:0',
+            'masa_aktif' => 'required|integer|min:1',
+        ]);
+
+        $paket = \App\Models\PaketPembelajaran::findOrFail($id);
+        $paket->update([
+            'nama' => $request->nama,
+            'jenjang' => $request->jenjang,
+            'harga' => $request->harga,
+            'masa_aktif' => $request->masa_aktif,
+        ]);
+
+        return redirect()->back()->with('success', 'Paket pembelajaran berhasil diperbarui!');
     }
 
     public function paketDestroy($id)

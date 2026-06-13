@@ -321,6 +321,23 @@
         .badge-sma { background-color: rgba(142, 150, 128, 0.2); color: #6A725D; }
         .badge-umum { background-color: rgba(163, 124, 118, 0.2); color: #8a655f; }
 
+        .btn-edit {
+            padding: 8px 16px;
+            border-radius: 8px;
+            background-color: var(--warm-amber);
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-right: 8px;
+        }
+
+        .btn-edit:hover {
+            background-color: #c9a473;
+        }
+
         .btn-delete {
             padding: 8px 16px;
             border-radius: 8px;
@@ -616,6 +633,9 @@
                                     <td>Rp {{ number_format($paket->harga, 0, ',', '.') }}</td>
                                     <td>{{ $paket->masa_aktif }} Hari</td>
                                     <td>
+                                        <button type="button" class="btn-edit" onclick="openEditModal({{ $paket->id_paket }}, '{{ addslashes($paket->nama) }}', '{{ $paket->jenjang }}', {{ $paket->harga }}, {{ $paket->masa_aktif }})">
+                                            Edit
+                                        </button>
                                         <button type="button" class="btn-delete" onclick="confirmDelete({{ $paket->id_paket }}, '{{ addslashes($paket->nama) }}')">
                                             Hapus
                                         </button>
@@ -654,7 +674,58 @@
         </div>
     </div>
 
+    <!-- Modal Edit Paket -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-card" style="max-width: 500px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h3 class="modal-title" style="margin-bottom: 0;">Edit Paket Belajar</h3>
+                <button type="button" style="background:none; border:none; font-size:20px; cursor:pointer;" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            
+            <form id="editForm" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label class="info-label" for="edit_nama">Nama Paket</label>
+                    <input class="info-value" type="text" name="nama" id="edit_nama" required>
+                </div>
+                <div class="form-group">
+                    <label class="info-label" for="edit_jenjang">Jenjang Pendidikan</label>
+                    <select class="info-value" name="jenjang" id="edit_jenjang" required>
+                        <option value="SD">SD</option>
+                        <option value="SMP">SMP</option>
+                        <option value="SMA">SMA</option>
+                        <option value="Umum">Umum</option>
+                    </select>
+                </div>
+                <div class="form-row" style="margin-bottom: 24px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="info-label" for="edit_harga">Harga Paket (Rp)</label>
+                        <input class="info-value" type="number" name="harga" id="edit_harga" min="0" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="info-label" for="edit_masa_aktif">Masa Aktif (Hari)</label>
+                        <input class="info-value" type="number" name="masa_aktif" id="edit_masa_aktif" min="1" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('editModal')">Batal</button>
+                    <button type="submit" class="btn-confirm" style="background: var(--muted-sage);">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
+        function openEditModal(id, nama, jenjang, harga, masa_aktif) {
+            document.getElementById('edit_nama').value = nama;
+            document.getElementById('edit_jenjang').value = jenjang;
+            document.getElementById('edit_harga').value = harga;
+            document.getElementById('edit_masa_aktif').value = masa_aktif;
+            document.getElementById('editForm').action = '/admin/paket/' + id;
+            document.getElementById('editModal').classList.add('active');
+        }
+
         function confirmDelete(paketId, paketName) {
             document.getElementById('deletePaketName').innerText = paketName;
             document.getElementById('deleteForm').action = '/admin/paket/' + paketId;

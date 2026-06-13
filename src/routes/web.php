@@ -123,6 +123,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Paket Belajar Management
     Route::get('/admin/paket', [AdminController::class, 'paketIndex'])->name('admin.paket.index');
     Route::post('/admin/paket', [AdminController::class, 'paketStore'])->name('admin.paket.store');
+    Route::put('/admin/paket/{id}', [AdminController::class, 'paketUpdate'])->name('admin.paket.update');
     Route::delete('/admin/paket/{id}', [AdminController::class, 'paketDestroy'])->name('admin.paket.destroy');
 
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');

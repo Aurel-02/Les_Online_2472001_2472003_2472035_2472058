@@ -1233,8 +1233,8 @@
                 checkoutBtn.innerHTML = originalContent;
                 
                 if (data.success) {
-                    // Redirect immediately to notifications page
-                    window.location.href = '{{ route("siswa.notifikasi") }}';
+                    // Redirect immediately to home page
+                    window.location.href = '{{ route("orangtua.home") }}';
                 } else {
                     alert(data.message || 'Gagal memproses transaksi. Coba lagi.');
                 }
@@ -1249,7 +1249,7 @@
 
         function finishPurchase() {
             closeDetailModal();
-            window.location.href = '{{ route("siswa.notifikasi") }}';
+            window.location.href = '{{ route("orangtua.home") }}';
         }
     </script>
 

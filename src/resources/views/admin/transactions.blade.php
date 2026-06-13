@@ -197,6 +197,7 @@
         .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
         .empty-text { font-size: 18px; color: rgba(61,43,31,0.5); font-weight: 600; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="blob-1"></div>
@@ -298,54 +299,97 @@
             </div>
 
             <div class="glass-card">
-                <h3 style="font-size: 20px; font-weight: 800; color: var(--dark-oak); margin-bottom: 24px;">Riwayat Transaksi</h3>
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--dark-oak); margin-bottom: 24px;">Riwayat Transaksi (7 Hari Terakhir)</h3>
                 
-                @if(isset($transactions) && $transactions->count() > 0)
-                    <div class="table-responsive">
-                        <table class="styled-table">
-                            <thead>
-                                <tr>
-                                    <th>ID Transaksi</th>
-                                    <th>Tanggal</th>
-                                    <th>Pengguna</th>
-                                    <th>Paket</th>
-                                    <th>Metode Pembayaran</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($transactions as $trans)
-                                    <tr>
-                                        <td><strong>#{{ $trans->id_transaksi }}</strong></td>
-                                        <td style="color: rgba(61,43,31,0.7);">{{ $trans->created_at ? $trans->created_at->format('d M Y, H:i') : '-' }}</td>
-                                        <td>{{ $trans->user ? $trans->user->nama : 'Unknown' }}</td>
-                                        <td>{{ $trans->paket ? $trans->paket->nama : 'Unknown' }}</td>
-                                        <td>{{ $trans->metode_pembayaran ?: '-' }}</td>
-                                        <td><strong>Rp {{ number_format($trans->subtotal, 0, ',', '.') }}</strong></td>
-                                        <td>
-                                            @php
-                                                $statusClass = 'badge-pending';
-                                                if (strtolower($trans->status) === 'sukses' || strtolower($trans->status) === 'berhasil') {
-                                                    $statusClass = 'badge-sukses';
-                                                } elseif (strtolower($trans->status) === 'batal' || strtolower($trans->status) === 'gagal') {
-                                                    $statusClass = 'badge-batal';
-                                                }
-                                            @endphp
-                                            <span class="badge {{ $statusClass }}">{{ $trans->status ?: 'Pending' }}</span>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @else
-                    <div class="empty-state">
-                        <div class="empty-icon">💸</div>
-                        <div class="empty-text">Belum ada data transaksi saat ini.</div>
-                    </div>
-                @endif
+                <div style="position: relative; height:400px; width:100%;">
+                    <canvas id="transactionsChart"></canvas>
+                </div>
             </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const ctx = document.getElementById('transactionsChart').getContext('2d');
+                    
+                    const labels = @json($chartLabels);
+                    const data = @json($chartData);
+                    
+                    const chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Pendapatan Harian (Rp)',
+                                data: data,
+                                borderColor: '#A37C76', // var(--dusty-mauve)
+                                backgroundColor: 'rgba(163, 124, 118, 0.2)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#8E9680', // var(--muted-sage)
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(61,43,31,0.9)',
+                                    titleFont: { size: 14, family: "'Outfit', sans-serif" },
+                                    bodyFont: { size: 14, family: "'Outfit', sans-serif" },
+                                    padding: 12,
+                                    callbacks: {
+                                        label: function(context) {
+                                            let label = context.dataset.label || '';
+                                            if (label) {
+                                                label += ': ';
+                                            }
+                                            if (context.parsed.y !== null) {
+                                                label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(context.parsed.y);
+                                            }
+                                            return label;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(61,43,31,0.05)',
+                                        drawBorder: false,
+                                    },
+                                    ticks: {
+                                        font: { family: "'Outfit', sans-serif" },
+                                        color: 'rgba(61,43,31,0.6)',
+                                        callback: function(value, index, values) {
+                                            if (value >= 1000000) return (value / 1000000) + ' Juta';
+                                            if (value >= 1000) return (value / 1000) + ' Ribu';
+                                            return value;
+                                        }
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false,
+                                        drawBorder: false,
+                                    },
+                                    ticks: {
+                                        font: { family: "'Outfit', sans-serif" },
+                                        color: 'rgba(61,43,31,0.6)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+            </script>
 
         </div>
     </main>
