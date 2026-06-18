@@ -137,15 +137,32 @@
                         </div>
                         <div>
                             <label class="form-label" for="mapel">Mata Pelajaran</label>
-                            <input type="text" id="mapel" name="mapel" class="form-control" value="{{ old('mapel', $materi->mapel ?? '') }}" placeholder="Contoh: Matematika">
+                            <select id="mapel" name="mapel" class="form-control" required>
+                                <option value="" disabled selected>Pilih Mapel...</option>
+                            </select>
                             @error('mapel') <div class="error-message">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="kelas">Kelas</label>
-                        <input type="text" id="kelas" name="kelas" class="form-control" value="{{ old('kelas', $materi->kelas ?? '') }}" placeholder="Contoh: X IPA 1, VII A">
-                        @error('kelas') <div class="error-message">{{ $message }}</div> @enderror
+                    <div class="form-row">
+                        <div>
+                            <label class="form-label" for="kelas">Kelas <span>*</span></label>
+                            <select id="kelas" name="kelas" class="form-control" required>
+                                <option value="" disabled selected>Pilih Kelas...</option>
+                            </select>
+                            @error('kelas') <div class="error-message">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div id="jurusan-container" style="display: none;">
+                            <label class="form-label" for="jurusan">Jurusan <span>*</span></label>
+                            <select id="jurusan" name="jurusan" class="form-control">
+                                <option value="" disabled selected>Pilih Jurusan...</option>
+                                <option value="semua" {{ old('jurusan', $materi->jurusan ?? '') == 'semua' ? 'selected' : '' }}>Semua Jurusan</option>
+                                <option value="ipa" {{ old('jurusan', $materi->jurusan ?? '') == 'ipa' ? 'selected' : '' }}>IPA</option>
+                                <option value="ips" {{ old('jurusan', $materi->jurusan ?? '') == 'ips' ? 'selected' : '' }}>IPS</option>
+                            </select>
+                            @error('jurusan') <div class="error-message">{{ $message }}</div> @enderror
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -175,5 +192,77 @@
             </div>
         </div>
     </main>
+
+    <script>
+        const jenjangSelect = document.getElementById('jenjang');
+        const mapelSelect = document.getElementById('mapel');
+        const kelasSelect = document.getElementById('kelas');
+        const jurusanContainer = document.getElementById('jurusan-container');
+        const jurusanSelect = document.getElementById('jurusan');
+
+        const mapelData = {
+            SD: ['Matematika', 'Bahasa Indonesia', 'IPA Dasar'],
+            SMP: ['Matematika', 'Bahasa Inggris', 'IPA Terpadu', 'IPS Terpadu'],
+            SMA: ['Matematika Wajib', 'Matematika Peminatan', 'Fisika', 'Kimia', 'Biologi', 'Ekonomi', 'Geografi', 'Sosiologi']
+        };
+
+        const oldMapel = "{!! addslashes(old('mapel', $materi->mapel ?? '')) !!}";
+        const oldKelas = "{!! addslashes(old('kelas', $materi->kelas ?? '')) !!}";
+
+        function updateFormFields() {
+            const jenjang = jenjangSelect.value;
+            
+            // Populate Mapel
+            mapelSelect.innerHTML = '<option value="" disabled>Pilih Mapel...</option>';
+            if (jenjang && mapelData[jenjang]) {
+                mapelData[jenjang].forEach(mapel => {
+                    const opt = document.createElement('option');
+                    opt.value = mapel;
+                    opt.textContent = mapel;
+                    if (mapel === oldMapel) opt.selected = true;
+                    mapelSelect.appendChild(opt);
+                });
+            } else {
+                const opt = document.createElement('option');
+                opt.value = oldMapel;
+                opt.textContent = oldMapel || 'Pilih Mapel...';
+                opt.selected = true;
+                mapelSelect.appendChild(opt);
+            }
+
+            // Populate Kelas
+            kelasSelect.innerHTML = '<option value="" disabled>Pilih Kelas...</option>';
+            let minKelas = 0, maxKelas = 0;
+            if (jenjang === 'SD') { minKelas = 1; maxKelas = 6; }
+            else if (jenjang === 'SMP') { minKelas = 7; maxKelas = 9; }
+            else if (jenjang === 'SMA') { minKelas = 10; maxKelas = 12; }
+
+            for (let i = minKelas; i <= maxKelas; i++) {
+                if (i === 0) break;
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = `Kelas ${i}`;
+                if (String(i) === String(oldKelas)) opt.selected = true;
+                kelasSelect.appendChild(opt);
+            }
+
+            // Handle Jurusan visibility
+            if (jenjang === 'SMA') {
+                jurusanContainer.style.display = 'block';
+                jurusanSelect.required = true;
+            } else {
+                jurusanContainer.style.display = 'none';
+                jurusanSelect.required = false;
+                jurusanSelect.value = ''; // Reset jurusan
+            }
+        }
+
+        jenjangSelect.addEventListener('change', updateFormFields);
+        
+        // Run on load to handle old values / edit mode
+        if (jenjangSelect.value) {
+            updateFormFields();
+        }
+    </script>
 </body>
 </html>

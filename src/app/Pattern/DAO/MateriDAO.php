@@ -11,12 +11,29 @@ class MateriDAO
         return Materi::whereNotNull('kelas')->where('kelas', '!=', '')->distinct('kelas')->count('kelas');
     }
 
-    public function searchMateriWithGuruByJudul($judul)
+    public function searchMateriWithGuruByJudul($keyword, $kelas = null, $jurusan = null)
     {
-        return \Illuminate\Support\Facades\DB::table('materi')
+        $query = \Illuminate\Support\Facades\DB::table('materi')
             ->join('user', 'materi.id_guru', '=', 'user.id_user')
-            ->where('materi.judul', 'LIKE', '%' . $judul . '%')
-            ->select('materi.*', 'user.nama as nama_guru')
-            ->get();
+            ->where(function($q) use ($keyword) {
+                $q->where('materi.judul', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('materi.mapel', 'LIKE', '%' . $keyword . '%');
+            });
+
+        if ($kelas) {
+            $query->where('materi.kelas', (string)$kelas);
+        }
+
+        if ($jurusan) {
+            $query->where(function($q) use ($jurusan) {
+                $q->where('materi.jurusan', $jurusan)
+                  ->orWhereNull('materi.jurusan')
+                  ->orWhere('materi.jurusan', '')
+                  ->orWhere('materi.jurusan', 'Semua Jurusan')
+                  ->orWhere('materi.jurusan', 'semua');
+            });
+        }
+
+        return $query->select('materi.*', 'user.nama as nama_guru')->get();
     }
 }

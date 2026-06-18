@@ -14,11 +14,11 @@ class SiswaController extends Controller
     protected $paketDAO;
     protected $materiDAO;
 
-    public function __construct(VoucherDAO $voucherDAO, PaketPembelajaranDAO $paketDAO, MateriDAO $materiDAO)
+    public function __construct()
     {
-        $this->voucherDAO = $voucherDAO;
-        $this->paketDAO = $paketDAO;
-        $this->materiDAO = $materiDAO;
+        $this->voucherDAO = new VoucherDAO();
+        $this->paketDAO = new PaketPembelajaranDAO();
+        $this->materiDAO = new MateriDAO();
     }
 
     public function index()
@@ -65,7 +65,11 @@ class SiswaController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
         $mapel = $request->query('mapel', 'Matematika');
-        $materis = $this->materiDAO->searchMateriWithGuruByJudul($mapel);
+        
+        $kelas = session('selected_kelas');
+        $jurusan = session('selected_jurusan');
+        
+        $materis = $this->materiDAO->searchMateriWithGuruByJudul($mapel, $kelas, $jurusan);
             
         return view('siswa.materi', compact('userName', 'mapel', 'photoProfile', 'materis'));
     }

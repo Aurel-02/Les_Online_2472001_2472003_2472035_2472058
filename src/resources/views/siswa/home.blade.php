@@ -694,6 +694,7 @@
                 { title: 'IPS Terpadu', subtitle: 'Sejarah & Geografi', icon: '🌍', color: 'bg-mauve' }
             ],
             sma_ipa: [
+                { title: 'Matematika Wajib', subtitle: 'Aljabar Dasar & Lanjut', icon: '📏', color: 'bg-amber' },
                 { title: 'Matematika Peminatan', subtitle: 'Kalkulus & Trigonometri', icon: '📐', color: 'bg-amber' },
                 { title: 'Fisika', subtitle: 'Mekanika & Termodinamika', icon: '⚡', color: 'bg-blue' },
                 { title: 'Kimia', subtitle: 'Reaksi & Unsur', icon: '🧪', color: 'bg-sage' },

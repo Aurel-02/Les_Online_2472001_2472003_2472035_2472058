@@ -19,6 +19,7 @@ class Materi extends Model
         'jenjang',
         'mapel',
         'kelas',
+        'jurusan',
         'file_materi',
         'id_guru',
     ];

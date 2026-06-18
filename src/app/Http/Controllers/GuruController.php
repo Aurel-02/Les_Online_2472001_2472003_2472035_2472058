@@ -74,13 +74,14 @@ class GuruController extends Controller
             'link_video'  => 'nullable|url',
             'jenjang'     => 'required|in:SD,SMP,SMA',
             'mapel'       => 'nullable|string|max:100',
-            'kelas'       => 'nullable|string|max:100',
+            'kelas'       => 'required|integer',
+            'jurusan'     => 'nullable|string|in:ipa,ips,semua',
             'file_materi' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
         ]);
 
         $userId = UserSession::getInstance()->getUser()->id_user;
         $file = $request->file('file_materi');
-        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas']);
+        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas', 'jurusan']);
         $data['id_guru'] = $userId;
 
         $command = new \App\Pattern\Command\Materi\CreateMateriCommand($data, $file);
@@ -108,13 +109,14 @@ class GuruController extends Controller
             'link_video'  => 'nullable|url',
             'jenjang'     => 'required|in:SD,SMP,SMA',
             'mapel'       => 'nullable|string|max:100',
-            'kelas'       => 'nullable|string|max:100',
+            'kelas'       => 'required|integer',
+            'jurusan'     => 'nullable|string|in:ipa,ips,semua',
             'file_materi' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
         ]);
 
         $userId = UserSession::getInstance()->getUser()->id_user;
         $file = $request->file('file_materi');
-        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas']);
+        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas', 'jurusan']);
 
         $command = new \App\Pattern\Command\Materi\UpdateMateriCommand($id, $userId, $data, $file);
         $command->execute();
