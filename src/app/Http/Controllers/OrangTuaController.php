@@ -24,29 +24,20 @@ class OrangTuaController extends Controller
             ->get();
 
         $selectedStudentId = $request->query('siswa_id');
-        $selectedStudent = null;
-
-        if ($selectedStudentId) {
-            $selectedStudent = User::where('role', 'siswa')
-                ->where('id_user', $selectedStudentId)
-                ->first();
+        if (!$selectedStudentId && $students->count() > 0) {
+            $selectedStudentId = $students->first()->id_user;
         }
 
-        if (!$selectedStudent && $students->count() > 0) {
-            $selectedStudent = $students->first();
-        }
+        $proxy = new \App\Pattern\Proxy\OrangTuaSiswaProxy($parentUser->id_user, $selectedStudentId);
+        $selectedStudent = $proxy->getSiswa();
 
-        $histories = collect();
-        $activePackageName = null;
-        $sisaHari = 0;
+        $histories = $proxy->getExamHistories();
+        $packageInfo = $proxy->getActivePackageInfo();
+        $sisaHari = $packageInfo['sisaHari'];
+        $activePackageName = $packageInfo['activePackageName'];
+
         $jenjangName = 'SMA';
-
         if ($selectedStudent) {
-            $histories = ExamScore::where('user_id', $selectedStudent->getKey())
-                ->orderBy('created_at', 'desc')
-                ->take(15)
-                ->get();
-
             $jenjangId = $selectedStudent->id_jenjang ?? 3;
             $jenjangName = match ((int)$jenjangId) {
                 1 => 'SD',
@@ -54,28 +45,6 @@ class OrangTuaController extends Controller
                 3 => 'SMA',
                 default => 'SMA',
             };
-
-            $latestTransaction = DB::table('transaksi')
-                ->join('paket_pembelajaran', 'transaksi.id_paket', '=', 'paket_pembelajaran.id_paket')
-                ->where('transaksi.id_user', $selectedStudent->id_user)
-                ->where('transaksi.status', 'berhasil')
-                ->orderBy('transaksi.id_transaksi', 'desc')
-                ->first();
-
-            if ($latestTransaction) {
-                $createdAt = new \DateTime($latestTransaction->created_at);
-                $now = new \DateTime();
-                
-                $createdTimestamp = $createdAt->getTimestamp();
-                $nowTimestamp = $now->getTimestamp();
-                $secondsActive = (int)$latestTransaction->masa_aktif * 24 * 3600;
-
-                if ($nowTimestamp < ($createdTimestamp + $secondsActive)) {
-                    $remainingSeconds = ($createdTimestamp + $secondsActive) - $nowTimestamp;
-                    $sisaHari = (int)ceil($remainingSeconds / (24 * 3600));
-                    $activePackageName = $latestTransaction->nama;
-                }
-            }
         }
 
         $vouchers = DB::table('voucher')
@@ -120,17 +89,12 @@ class OrangTuaController extends Controller
             ->get();
 
         $selectedStudentId = $request->query('siswa_id');
-        $selectedStudent = null;
-
-        if ($selectedStudentId) {
-            $selectedStudent = User::where('role', 'siswa')
-                ->where('id_user', $selectedStudentId)
-                ->first();
+        if (!$selectedStudentId && $students->count() > 0) {
+            $selectedStudentId = $students->first()->id_user;
         }
 
-        if (!$selectedStudent && $students->count() > 0) {
-            $selectedStudent = $students->first();
-        }
+        $proxy = new \App\Pattern\Proxy\OrangTuaSiswaProxy($parentUser->id_user, $selectedStudentId);
+        $selectedStudent = $proxy->getSiswa();
 
         $jenjangName = null;
         if ($selectedStudent) {
@@ -176,10 +140,12 @@ class OrangTuaController extends Controller
 
         $siswaId = (int)$request->siswa_id;
 
-        // Verify that the requested siswa exists
-        $siswaExists = User::where('id_user', $siswaId)->where('role', 'siswa')->exists();
-        if (!$siswaExists) {
-            return response()->json(['success' => false, 'message' => 'Siswa tidak ditemukan.'], 400);
+        // Verify that the requested siswa exists and belongs to this orang tua via Proxy
+        $proxy = new \App\Pattern\Proxy\OrangTuaSiswaProxy($user->id_user, $siswaId);
+        $siswa = $proxy->getSiswa();
+        
+        if (!$siswa) {
+            return response()->json(['success' => false, 'message' => 'Siswa tidak ditemukan atau Anda tidak memiliki akses.'], 403);
         }
 
         // Instantiate Chain of Responsibility Context with the chosen student's ID
