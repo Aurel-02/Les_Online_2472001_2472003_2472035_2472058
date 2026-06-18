@@ -16,13 +16,8 @@ class TransaksiDAO
         return Transaksi::count();
     }
 
-    public function getWeeklyIncomeChartDataRaw()
+    public function getIncomeChartData(\App\Pattern\Strategy\IncomeReportStrategy $strategy): array
     {
-        return Transaksi::where('created_at', '>=', now()->subDays(6)->startOfDay())
-            ->whereIn('status', ['sukses', 'berhasil'])
-            ->selectRaw('DATE(created_at) as date, SUM(subtotal) as daily_income')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        return $strategy->getChartData();
     }
 }

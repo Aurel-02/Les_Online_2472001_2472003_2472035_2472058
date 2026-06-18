@@ -26,6 +26,15 @@ class CreateMateriCommand implements CommandInterface
 
         $this->data['file_materi'] = $filePath;
 
-        return Materi::create($this->data);
+        $materi = Materi::create($this->data);
+
+        // Menggunakan Observer Pattern untuk Notifikasi
+        \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
+            'user_id'     => $this->data['id_guru'],
+            'type'        => 'materi',
+            'description' => 'Menambahkan materi baru: ' . $this->data['judul'],
+        ]);
+
+        return $materi;
     }
 }

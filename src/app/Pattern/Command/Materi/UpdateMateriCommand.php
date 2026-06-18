@@ -37,6 +37,13 @@ class UpdateMateriCommand implements CommandInterface
 
         $materi->update($this->data);
 
+        // Menggunakan Observer Pattern untuk Notifikasi
+        \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
+            'user_id'     => $this->userId,
+            'type'        => 'materi',
+            'description' => 'Memperbarui materi: ' . ($this->data['judul'] ?? $materi->judul),
+        ]);
+
         return $materi;
     }
 }

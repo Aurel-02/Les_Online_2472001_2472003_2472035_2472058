@@ -98,16 +98,9 @@ class AdminController extends Controller
         $totalIncome = $this->transaksiDAO->getTotalIncome();
         $totalTransactions = $this->transaksiDAO->getTotalTransactions();
         
-        $chartDataRaw = $this->transaksiDAO->getWeeklyIncomeChartDataRaw();
-            
-        $chartLabels = [];
-        $chartData = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $chartLabels[] = now()->subDays($i)->translatedFormat('d M');
-            $match = $chartDataRaw->firstWhere('date', $date);
-            $chartData[] = $match ? $match->daily_income : 0;
-        }
+        $reportData = $this->transaksiDAO->getIncomeChartData(new \App\Pattern\Strategy\WeeklyIncomeStrategy());
+        $chartLabels = $reportData['labels'];
+        $chartData = $reportData['data'];
 
         return view('admin.transactions', compact(
             'userName', 'photoProfile', 'reactivationRequestsCount', 

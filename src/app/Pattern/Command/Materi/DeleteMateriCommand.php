@@ -24,7 +24,16 @@ class DeleteMateriCommand implements CommandInterface
         if ($materi->file_materi) {
             Storage::disk('public')->delete($materi->file_materi);
         }
-        
-        return $materi->delete();
+        $judul = $materi->judul;
+        $deleted = $materi->delete();
+
+        // Menggunakan Observer Pattern untuk Notifikasi
+        \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
+            'user_id'     => $this->userId,
+            'type'        => 'materi',
+            'description' => 'Menghapus materi: ' . $judul,
+        ]);
+
+        return $deleted;
     }
 }

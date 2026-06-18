@@ -49,17 +49,17 @@ class UserDAO
 
     public function softDeleteUser($id)
     {
-        $user = $this->findUserById($id);
-        $user->delete();
+        $user = clone $this->findUserById($id);
+        $context = new \App\Pattern\State\UserContext($user);
+        $context->suspend();
         return $user;
     }
 
     public function restoreUser($id)
     {
-        $user = $this->findWithTrashedById($id);
-        $user->restore();
-        $user->reactivation_requested = false;
-        $user->save();
+        $user = clone $this->findWithTrashedById($id);
+        $context = new \App\Pattern\State\UserContext($user);
+        $context->activate();
         return $user;
     }
 }
