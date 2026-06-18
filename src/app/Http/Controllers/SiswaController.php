@@ -4,9 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Services\UserSession; 
 use Illuminate\Http\Request;
+use App\Pattern\DAO\VoucherDAO;
+use App\Pattern\DAO\PaketPembelajaranDAO;
+use App\Pattern\DAO\MateriDAO;
 
 class SiswaController extends Controller
 {
+    protected $voucherDAO;
+    protected $paketDAO;
+    protected $materiDAO;
+
+    public function __construct(VoucherDAO $voucherDAO, PaketPembelajaranDAO $paketDAO, MateriDAO $materiDAO)
+    {
+        $this->voucherDAO = $voucherDAO;
+        $this->paketDAO = $paketDAO;
+        $this->materiDAO = $materiDAO;
+    }
+
     public function index()
     {
         $session = UserSession::getInstance();
@@ -28,36 +42,18 @@ class SiswaController extends Controller
                             ->get();
         }
 
-        // Fetch active vouchers
-        $vouchers = \Illuminate\Support\Facades\DB::table('voucher')
-            ->where('tanggal_berakhir', '>=', now()->toDateString())
-            ->get();
+        // Fetch active vouchers using DAO
+        $vouchers = $this->voucherDAO->getActiveVouchers();
 
-        // Fetch active package remaining days
+        // Fetch active package remaining days using Proxy's RealAccess
         $activePackageName = null;
         $sisaHari = 0;
+        
         if ($user) {
-            $latestTransaction = \Illuminate\Support\Facades\DB::table('transaksi')
-                ->join('paket_pembelajaran', 'transaksi.id_paket', '=', 'paket_pembelajaran.id_paket')
-                ->where('transaksi.id_user', $user->id_user)
-                ->where('transaksi.status', 'berhasil')
-                ->orderBy('transaksi.id_transaksi', 'desc')
-                ->first();
-
-            if ($latestTransaction) {
-                $createdAt = new \DateTime($latestTransaction->created_at);
-                $now = new \DateTime();
-                
-                $createdTimestamp = $createdAt->getTimestamp();
-                $nowTimestamp = $now->getTimestamp();
-                $secondsActive = (int)$latestTransaction->masa_aktif * 24 * 3600;
-
-                if ($nowTimestamp < ($createdTimestamp + $secondsActive)) {
-                    $remainingSeconds = ($createdTimestamp + $secondsActive) - $nowTimestamp;
-                    $sisaHari = (int)ceil($remainingSeconds / (24 * 3600));
-                    $activePackageName = $latestTransaction->nama;
-                }
-            }
+            $siswaAccess = new \App\Pattern\Proxy\SiswaRealAccess($user->id_user);
+            $packageInfo = $siswaAccess->getActivePackageInfo();
+            $sisaHari = $packageInfo['sisaHari'];
+            $activePackageName = $packageInfo['activePackageName'];
         }
 
         return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile', 'activities', 'vouchers', 'activePackageName', 'sisaHari'));
@@ -69,12 +65,7 @@ class SiswaController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
         $mapel = $request->query('mapel', 'Matematika');
-        
-        $materis = \Illuminate\Support\Facades\DB::table('materi')
-            ->join('user', 'materi.id_guru', '=', 'user.id_user')
-            ->where('materi.judul', 'LIKE', '%' . $mapel . '%')
-            ->select('materi.*', 'user.nama as nama_guru')
-            ->get();
+        $materis = $this->materiDAO->searchMateriWithGuruByJudul($mapel);
             
         return view('siswa.materi', compact('userName', 'mapel', 'photoProfile', 'materis'));
     }
@@ -101,19 +92,10 @@ class SiswaController extends Controller
             $jenjangName = \Illuminate\Support\Facades\DB::table('jenjang')->where('id_jenjang', $idJenjang)->value('nama_jenjang');
         }
 
-        if ($jenjangName) {
-            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')
-                ->where('jenjang', $jenjangName)
-                ->orWhere('jenjang', 'Umum')
-                ->get();
-        } else {
-            $paketList = \Illuminate\Support\Facades\DB::table('paket_pembelajaran')->get();
-        }
+        $paketList = $this->paketDAO->getPaketsByJenjang($jenjangName);
         
         // Fetch active vouchers
-        $vouchers = \Illuminate\Support\Facades\DB::table('voucher')
-            ->where('tanggal_berakhir', '>=', now()->toDateString())
-            ->get();
+        $vouchers = $this->voucherDAO->getActiveVouchers();
 
         return view('siswa.paket_belajar', compact('userName', 'photoProfile', 'paketList', 'jenjangName', 'vouchers'));
     }

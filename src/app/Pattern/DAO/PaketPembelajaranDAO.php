@@ -11,6 +11,16 @@ class PaketPembelajaranDAO
         return PaketPembelajaran::orderBy('id_paket', 'desc')->get();
     }
 
+    public function getPaketsByJenjang($jenjangName)
+    {
+        if ($jenjangName) {
+            return PaketPembelajaran::where('jenjang', $jenjangName)
+                ->orWhere('jenjang', 'Umum')
+                ->get();
+        }
+        return $this->getAllPakets();
+    }
+
     public function createPaket(array $data)
     {
         return PaketPembelajaran::create($data);

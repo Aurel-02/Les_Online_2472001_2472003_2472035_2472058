@@ -11,6 +11,11 @@ class VoucherDAO
         return Voucher::orderBy('id_voucher', 'desc')->get();
     }
 
+    public function getActiveVouchers()
+    {
+        return Voucher::where('tanggal_berakhir', '>=', now()->toDateString())->get();
+    }
+
     public function createVoucher(array $data)
     {
         return Voucher::create($data);

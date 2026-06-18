@@ -10,4 +10,13 @@ class MateriDAO
     {
         return Materi::whereNotNull('kelas')->where('kelas', '!=', '')->distinct('kelas')->count('kelas');
     }
+
+    public function searchMateriWithGuruByJudul($judul)
+    {
+        return \Illuminate\Support\Facades\DB::table('materi')
+            ->join('user', 'materi.id_guru', '=', 'user.id_user')
+            ->where('materi.judul', 'LIKE', '%' . $judul . '%')
+            ->select('materi.*', 'user.nama as nama_guru')
+            ->get();
+    }
 }
