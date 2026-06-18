@@ -21,7 +21,8 @@ class SiswaController extends Controller
 
         $activities = collect();
         if ($user) {
-            $activities = \App\Models\Activity::where('user_id', $user->getKey())
+            $activities = \App\Models\Activity::query()
+                            ->where('user_id', $user->getKey())
                             ->orderBy('created_at', 'desc')
                             ->take(5)
                             ->get();
@@ -126,7 +127,8 @@ class SiswaController extends Controller
         $user = $session->getUser();
         $activities = collect();
         if ($user) {
-            $activities = \App\Models\Activity::where('user_id', $user->getKey())
+            $activities = \App\Models\Activity::query()
+                            ->where('user_id', $user->getKey())
                             ->orderBy('created_at', 'desc')
                             ->get();
         }
