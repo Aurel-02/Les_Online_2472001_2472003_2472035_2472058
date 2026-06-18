@@ -4,20 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserSession;
+use App\Pattern\DAO\UserDAO;
+use App\Pattern\DAO\TransaksiDAO;
+use App\Pattern\DAO\MateriDAO;
+use App\Pattern\DAO\VoucherDAO;
+use App\Pattern\DAO\PaketPembelajaranDAO;
 
 class AdminController extends Controller
 {
+    protected $userDAO;
+    protected $transaksiDAO;
+    protected $materiDAO;
+    protected $voucherDAO;
+    protected $paketDAO;
+
+    public function __construct(
+        UserDAO $userDAO,
+        TransaksiDAO $transaksiDAO,
+        MateriDAO $materiDAO,
+        VoucherDAO $voucherDAO,
+        PaketPembelajaranDAO $paketDAO
+    ) {
+        $this->userDAO = $userDAO;
+        $this->transaksiDAO = $transaksiDAO;
+        $this->materiDAO = $materiDAO;
+        $this->voucherDAO = $voucherDAO;
+        $this->paketDAO = $paketDAO;
+    }
+
     public function dashboard()
     {
         $session = UserSession::getInstance();
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
-
-        $totalSiswa = \App\Models\User::where('role', 'siswa')->count();
-        $totalGuru  = \App\Models\User::where('role', 'guru')->count();
-        $totalKelas = \App\Models\Materi::whereNotNull('kelas')->where('kelas', '!=', '')->distinct('kelas')->count('kelas');
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $totalSiswa = $this->userDAO->getTotalSiswa();
+        $totalGuru  = $this->userDAO->getTotalGuru();
+        $totalKelas = $this->materiDAO->getTotalKelas();
 
         return view('admin.dashboard', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'totalSiswa', 'totalGuru', 'totalKelas'));
     }
@@ -28,39 +52,27 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
-
-        $users = \App\Models\User::withTrashed()
-            ->where('role', '!=', 'admin')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $users = $this->userDAO->getUsersExcludingAdmin();
 
         return view('admin.users', compact('userName', 'photoProfile', 'users', 'reactivationRequestsCount'));
     }
 
     public function destroyUser($id)
     {
-        $user = \App\Models\User::findOrFail($id);
-        
         // Prevent deleting oneself
-        if ($user->id_user === \Illuminate\Support\Facades\Auth::id()) {
+        if ((int)$id === \Illuminate\Support\Facades\Auth::id()) {
             return redirect()->back()->with('error', 'Tidak dapat menonaktifkan akun sendiri.');
         }
 
-        $user->delete();
+        $this->userDAO->softDeleteUser($id);
 
         return redirect()->back()->with('success', 'Pengguna berhasil dinonaktifkan.');
     }
 
     public function restoreUser($id)
     {
-        $user = \App\Models\User::withTrashed()->findOrFail($id);
-        $user->restore();
-        
-        // Clear reactivation requested flag
-        $user->reactivation_requested = false;
-        $user->save();
-
+        $this->userDAO->restoreUser($id);
         return redirect()->back()->with('success', 'Pengguna berhasil diaktifkan kembali.');
     }
 
@@ -70,11 +82,8 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
-        $reactivationRequests = \App\Models\User::withTrashed()
-            ->where('reactivation_requested', true)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $reactivationRequests = $this->userDAO->getReactivationRequests();
 
         return view('admin.notifications', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'reactivationRequests'));
     }
@@ -85,20 +94,12 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $totalIncome = $this->transaksiDAO->getTotalIncome();
+        $totalTransactions = $this->transaksiDAO->getTotalTransactions();
         
-        // Calculate total income
-        $totalIncome = \App\Models\Transaksi::whereIn('status', ['sukses', 'berhasil'])->sum('subtotal');
-        
-        // Data untuk Grafik (7 hari terakhir)
-        $chartDataRaw = \App\Models\Transaksi::where('created_at', '>=', now()->subDays(6)->startOfDay())
-            ->whereIn('status', ['sukses', 'berhasil'])
-            ->selectRaw('DATE(created_at) as date, SUM(subtotal) as daily_income')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get();
+        $chartDataRaw = $this->transaksiDAO->getWeeklyIncomeChartDataRaw();
             
-        // Siapkan array untuk 7 hari terakhir agar data yang kosong tetap bernilai 0
         $chartLabels = [];
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
@@ -107,9 +108,6 @@ class AdminController extends Controller
             $match = $chartDataRaw->firstWhere('date', $date);
             $chartData[] = $match ? $match->daily_income : 0;
         }
-
-        // Get total transactions
-        $totalTransactions = \App\Models\Transaksi::count();
 
         return view('admin.transactions', compact(
             'userName', 'photoProfile', 'reactivationRequestsCount', 
@@ -124,9 +122,8 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
-        
-        $vouchers = \App\Models\Voucher::orderBy('id_voucher', 'desc')->get();
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $vouchers = $this->voucherDAO->getAllVouchers();
 
         return view('admin.promo', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'vouchers'));
     }
@@ -139,7 +136,7 @@ class AdminController extends Controller
             'tanggal_berakhir' => 'required|date',
         ]);
 
-        \App\Models\Voucher::create([
+        $this->voucherDAO->createVoucher([
             'kode_voucher' => strtoupper($request->kode_voucher),
             'potongan' => $request->potongan,
             'tanggal_berakhir' => $request->tanggal_berakhir,
@@ -150,9 +147,7 @@ class AdminController extends Controller
 
     public function promoDestroy($id)
     {
-        $voucher = \App\Models\Voucher::findOrFail($id);
-        $voucher->delete();
-
+        $this->voucherDAO->deleteVoucher($id);
         return redirect()->back()->with('success', 'Promo berhasil dihapus!');
     }
 
@@ -162,9 +157,8 @@ class AdminController extends Controller
         $userName = $session->getName();
         $photoProfile = $session->getPhotoProfile();
 
-        $reactivationRequestsCount = \App\Models\User::withTrashed()->where('reactivation_requested', true)->count();
-        
-        $pakets = \App\Models\PaketPembelajaran::orderBy('id_paket', 'desc')->get();
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $pakets = $this->paketDAO->getAllPakets();
 
         return view('admin.paket', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'pakets'));
     }
@@ -178,7 +172,7 @@ class AdminController extends Controller
             'masa_aktif' => 'required|integer|min:1',
         ]);
 
-        \App\Models\PaketPembelajaran::create([
+        $this->paketDAO->createPaket([
             'nama' => $request->nama,
             'jenjang' => $request->jenjang,
             'harga' => $request->harga,
@@ -197,8 +191,7 @@ class AdminController extends Controller
             'masa_aktif' => 'required|integer|min:1',
         ]);
 
-        $paket = \App\Models\PaketPembelajaran::findOrFail($id);
-        $paket->update([
+        $this->paketDAO->updatePaket($id, [
             'nama' => $request->nama,
             'jenjang' => $request->jenjang,
             'harga' => $request->harga,
@@ -210,9 +203,7 @@ class AdminController extends Controller
 
     public function paketDestroy($id)
     {
-        $paket = \App\Models\PaketPembelajaran::findOrFail($id);
-        $paket->delete();
-
+        $this->paketDAO->deletePaket($id);
         return redirect()->back()->with('success', 'Paket pembelajaran berhasil dihapus!');
     }
 }

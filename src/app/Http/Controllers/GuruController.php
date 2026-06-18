@@ -79,22 +79,12 @@ class GuruController extends Controller
         ]);
 
         $userId = UserSession::getInstance()->getUser()->id_user;
-        $filePath = null;
+        $file = $request->file('file_materi');
+        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas']);
+        $data['id_guru'] = $userId;
 
-        if ($request->hasFile('file_materi')) {
-            $filePath = $request->file('file_materi')->store('materi', 'public');
-        }
-
-        Materi::create([
-            'judul'       => $request->judul,
-            'deskripsi'   => $request->deskripsi,
-            'link_video'  => $request->link_video,
-            'jenjang'     => $request->jenjang,
-            'mapel'       => $request->mapel,
-            'kelas'       => $request->kelas,
-            'file_materi' => $filePath,
-            'id_guru'     => $userId,
-        ]);
+        $command = new \App\Pattern\Command\Materi\CreateMateriCommand($data, $file);
+        $command->execute();
 
         return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil ditambahkan!');
     }
@@ -123,23 +113,11 @@ class GuruController extends Controller
         ]);
 
         $userId = UserSession::getInstance()->getUser()->id_user;
-        $materi = Materi::where('id_materi', $id)->where('id_guru', $userId)->firstOrFail();
+        $file = $request->file('file_materi');
+        $data = $request->only(['judul', 'deskripsi', 'link_video', 'jenjang', 'mapel', 'kelas']);
 
-        $filePath = $materi->file_materi;
-        if ($request->hasFile('file_materi')) {
-            if ($filePath) Storage::disk('public')->delete($filePath);
-            $filePath = $request->file('file_materi')->store('materi', 'public');
-        }
-
-        $materi->update([
-            'judul'       => $request->judul,
-            'deskripsi'   => $request->deskripsi,
-            'link_video'  => $request->link_video,
-            'jenjang'     => $request->jenjang,
-            'mapel'       => $request->mapel,
-            'kelas'       => $request->kelas,
-            'file_materi' => $filePath,
-        ]);
+        $command = new \App\Pattern\Command\Materi\UpdateMateriCommand($id, $userId, $data, $file);
+        $command->execute();
 
         return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil diperbarui!');
     }
@@ -147,9 +125,10 @@ class GuruController extends Controller
     public function materiDestroy($id)
     {
         $userId = UserSession::getInstance()->getUser()->id_user;
-        $materi = Materi::where('id_materi', $id)->where('id_guru', $userId)->firstOrFail();
-        if ($materi->file_materi) Storage::disk('public')->delete($materi->file_materi);
-        $materi->delete();
+        
+        $command = new \App\Pattern\Command\Materi\DeleteMateriCommand($id, $userId);
+        $command->execute();
+
         return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil dihapus!');
     }
 
