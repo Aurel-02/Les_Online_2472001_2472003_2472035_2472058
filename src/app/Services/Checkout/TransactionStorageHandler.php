@@ -28,7 +28,7 @@ class TransactionStorageHandler extends CheckoutHandler
             // Menggunakan Observer Pattern untuk Notifikasi
             \App\Pattern\Observer\ActivityNotifier::getInstance()->notify([
                 'user_id' => $context->userId,
-                'type' => 'pembelian',
+                'type' => 'transaksi',
                 'description' => "Membeli paket " . $context->paket->nama . " seharga " . number_format($context->subtotal, 0, ',', '.') . ($context->voucher ? ' dengan voucher ' . $context->voucher->kode_voucher : '')
             ]);
 
