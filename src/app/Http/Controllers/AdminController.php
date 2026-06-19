@@ -102,10 +102,12 @@ class AdminController extends Controller
         $chartLabels = $reportData['labels'];
         $chartData = $reportData['data'];
 
+        $transactions = $this->transaksiDAO->getAllTransactionsWithDetails();
+
         return view('admin.transactions', compact(
             'userName', 'photoProfile', 'reactivationRequestsCount', 
             'totalIncome', 'totalTransactions', 
-            'chartLabels', 'chartData'
+            'chartLabels', 'chartData', 'transactions'
         ));
     }
 

@@ -306,6 +306,75 @@
                 </div>
             </div>
 
+            <div class="glass-card" style="margin-top: 32px;">
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--dark-oak); margin-bottom: 24px;">Rincian Riwayat Pembelian Paket</h3>
+                
+                <div class="table-responsive">
+                    @if(isset($transactions) && count($transactions) > 0)
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Paket Belajar</th>
+                                    <th>Voucher</th>
+                                    <th>Metode</th>
+                                    <th>Total Bayar</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($transactions as $t)
+                                    @php
+                                        $badgeClass = match($t->status) {
+                                            'berhasil', 'sukses' => 'badge-sukses',
+                                            'pending' => 'badge-pending',
+                                            default => 'badge-batal'
+                                        };
+                                        $statusText = match($t->status) {
+                                            'berhasil', 'sukses' => 'Sukses',
+                                            'pending' => 'Pending',
+                                            default => 'Batal'
+                                        };
+                                    @endphp
+                                    <tr>
+                                        <td>#{{ $t->id_transaksi }}</td>
+                                        <td>
+                                            <div style="font-weight: 700;">{{ $t->user->nama ?? 'N/A' }}</div>
+                                            <div style="font-size: 12px; color: rgba(61,43,31,0.5);">{{ $t->user->email ?? '' }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 700;">{{ $t->paket->nama ?? 'N/A' }}</div>
+                                            <div style="font-size: 12px; color: rgba(61,43,31,0.5);">{{ $t->paket->jenjang ?? '' }}</div>
+                                        </td>
+                                        <td>
+                                            @if($t->voucher)
+                                                <strong style="color: var(--dusty-mauve);">{{ $t->voucher->kode_voucher }}</strong>
+                                                <div style="font-size: 11px; color: var(--dusty-mauve);">-Rp {{ number_format($t->voucher->potongan, 0, ',', '.') }}</div>
+                                            @else
+                                                <span style="color: rgba(61,43,31,0.4);">-</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $t->metode_pembayaran ?? 'N/A' }}</td>
+                                        <td><strong>Rp {{ number_format($t->subtotal, 0, ',', '.') }}</strong></td>
+                                        <td>
+                                            <span class="badge {{ $badgeClass }}">{{ $statusText }}</span>
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($t->created_at)->locale('id')->isoFormat('D MMMM YYYY, HH:mm') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="empty-state">
+                            <div class="empty-icon">💸</div>
+                            <div class="empty-text">Belum ada riwayat transaksi paket pembelajaran.</div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     const ctx = document.getElementById('transactionsChart').getContext('2d');
