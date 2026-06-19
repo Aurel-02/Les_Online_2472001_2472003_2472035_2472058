@@ -20,4 +20,9 @@ class TransaksiDAO
     {
         return $strategy->getChartData();
     }
+
+    public function getAllTransactionsWithDetails(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Transaksi::with(['user', 'paket', 'voucher'])->orderBy('id_transaksi', 'desc')->get();
+    }
 }

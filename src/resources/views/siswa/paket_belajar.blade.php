@@ -794,12 +794,17 @@
                             $color = $colors[$index % count($colors)];
                             $harga = $paket->harga == 0 ? 'Gratis!' : 'Rp ' . number_format($paket->harga, 0, ',', '.');
                             $emoji = getPaketEmoji($paket->nama);
+                            $isActive = isset($activePackageIds) && in_array((int)$paket->id_paket, $activePackageIds);
                         @endphp
                         <div class="paket-card" 
                              style="--accent-color: {{ $color['text'] }}; --bg-hover-light: {{ $color['bg_hover'] }}; background-color: {{ $color['bg'] }}; border-color: {{ $color['border'] }};"
-                             onclick="openDetailModal({{ json_encode($paket) }}, '{{ $emoji }}', '{{ $harga }}', '{{ $color['text'] }}')">
+                             onclick="openDetailModal({{ json_encode($paket) }}, '{{ $emoji }}', '{{ $harga }}', '{{ $color['text'] }}', {{ $isActive ? 'true' : 'false' }})">
                             
-                            <div class="paket-badge" style="background-color: {{ $color['text'] }};">{{ $paket->masa_aktif }} Hari</div>
+                            @if($isActive)
+                                <div class="paket-badge" style="background-color: #27ae60;">Aktif</div>
+                            @else
+                                <div class="paket-badge" style="background-color: {{ $color['text'] }};">{{ $paket->masa_aktif }} Hari</div>
+                            @endif
                             <div class="paket-icon">{{ $emoji }}</div>
                             <div class="paket-name">{{ $paket->nama }}</div>
                             <div class="paket-jenjang">Khusus Anak {{ $paket->jenjang }}</div>
@@ -1012,7 +1017,7 @@
             document.getElementById('detailModalOverlay').scrollTop = 0;
         }
 
-        function openDetailModal(paket, emoji, harga, accentColor) {
+        function openDetailModal(paket, emoji, harga, accentColor, isActive = false) {
             selectedPaket = paket;
             originalPriceVal = parseFloat(paket.harga);
             finalPriceVal = originalPriceVal;
@@ -1042,8 +1047,8 @@
             document.getElementById('modalIcon').textContent = emoji;
             document.getElementById('modalJenjang').textContent = `Khusus ${paket.jenjang}`;
             document.getElementById('modalJenjangText').textContent = `Jenjang: ${paket.jenjang}`;
-            document.getElementById('modalMasaAktif').textContent = `${paket.masa_aktif} Hari`;
-            document.getElementById('modalMasaAktifText').textContent = `Masa Aktif: ${paket.masa_aktif} Hari`;
+            document.getElementById('modalMasaAktif').textContent = isActive ? 'Aktif' : `${paket.masa_aktif} Hari`;
+            document.getElementById('modalMasaAktifText').textContent = isActive ? 'Status: Aktif' : `Masa Aktif: ${paket.masa_aktif} Hari`;
             
             // Apply accents
             const checkoutBtn = document.getElementById('btnCheckout');
@@ -1051,9 +1056,28 @@
             
             const nextBtn = document.getElementById('btnNextToPayment');
             nextBtn.style.backgroundColor = accentColor;
+
+            // Disable next step payment button if already active
+            if (isActive) {
+                nextBtn.disabled = true;
+                nextBtn.querySelector('span').textContent = 'Paket Sudah Aktif';
+                nextBtn.style.opacity = '0.6';
+                nextBtn.style.cursor = 'not-allowed';
+                nextBtn.removeAttribute('onclick');
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.querySelector('span').textContent = 'Beli Paket';
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+                nextBtn.setAttribute('onclick', 'showStepPayment()');
+            }
             
             const activeBadge = document.getElementById('modalMasaAktif');
-            activeBadge.style.backgroundColor = accentColor;
+            if (isActive) {
+                activeBadge.style.backgroundColor = '#27ae60';
+            } else {
+                activeBadge.style.backgroundColor = accentColor;
+            }
             
             const jenjangBadge = document.getElementById('modalJenjang');
             jenjangBadge.style.backgroundColor = 'var(--dark-oak)';

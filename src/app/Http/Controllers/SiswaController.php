@@ -101,7 +101,31 @@ class SiswaController extends Controller
         // Fetch active vouchers
         $vouchers = $this->voucherDAO->getActiveVouchers();
 
-        return view('siswa.paket_belajar', compact('userName', 'photoProfile', 'paketList', 'jenjangName', 'vouchers'));
+        // Fetch active package IDs for the current student
+        $activePackageIds = [];
+        if ($user) {
+            $transactions = \Illuminate\Support\Facades\DB::table('transaksi')
+                ->join('paket_pembelajaran', 'transaksi.id_paket', '=', 'paket_pembelajaran.id_paket')
+                ->where('transaksi.id_user', $user->id_user)
+                ->where('transaksi.status', 'berhasil')
+                ->select('transaksi.id_paket', 'transaksi.created_at', 'paket_pembelajaran.masa_aktif')
+                ->get();
+
+            foreach ($transactions as $t) {
+                $createdAt = new \DateTime($t->created_at);
+                $now = new \DateTime();
+                
+                $createdTimestamp = $createdAt->getTimestamp();
+                $nowTimestamp = $now->getTimestamp();
+                $secondsActive = (int)$t->masa_aktif * 24 * 3600;
+
+                if ($nowTimestamp < ($createdTimestamp + $secondsActive)) {
+                    $activePackageIds[] = (int)$t->id_paket;
+                }
+            }
+        }
+
+        return view('siswa.paket_belajar', compact('userName', 'photoProfile', 'paketList', 'jenjangName', 'vouchers', 'activePackageIds'));
     }
 
     public function notifikasi(Request $request)
