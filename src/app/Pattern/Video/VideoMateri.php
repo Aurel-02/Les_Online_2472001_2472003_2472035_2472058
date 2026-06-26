@@ -34,7 +34,10 @@ class VideoMateri implements MateriInterface
             $nextVideos = \Illuminate\Support\Facades\DB::table('materi')
                 ->join('user', 'materi.id_guru', '=', 'user.id_user')
                 ->where('materi.id_materi', '!=', $idMateri)
-                ->where('materi.judul', 'LIKE', '%' . $mapel . '%')
+                ->where(function($q) use ($mapel) {
+                    $q->where('materi.judul', 'LIKE', '%' . $mapel . '%')
+                      ->orWhere('materi.mapel', 'LIKE', '%' . $mapel . '%');
+                })
                 ->select('materi.*', 'user.nama as nama_guru')
                 ->limit(5)
                 ->get();

@@ -21,7 +21,11 @@ class MateriDAO
             });
 
         if ($kelas) {
-            $query->where('materi.kelas', (string)$kelas);
+            $query->where(function($q) use ($kelas) {
+                $q->where('materi.kelas', (string)$kelas)
+                  ->orWhereNull('materi.kelas')
+                  ->orWhere('materi.kelas', '');
+            });
         }
 
         if ($jurusan) {
