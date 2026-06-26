@@ -407,7 +407,7 @@
                 @forelse($materis as $materi)
                 @php
                     $youtubeId = '';
-                    if($materi->link_video && preg_match('/embed\/([a-zA-Z0-9_-]+)/', $materi->link_video, $matches)) {
+                    if($materi->link_video && preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $materi->link_video, $matches)) {
                         $youtubeId = $matches[1];
                     }
                 @endphp

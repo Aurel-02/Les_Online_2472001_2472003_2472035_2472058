@@ -385,8 +385,14 @@
 
         <div class="glass-card video-card">
             <div class="video-wrapper" style="height: auto; min-height: 380px;">
+                @php
+                    $embedUrl = $materiData->link_video ?? '';
+                    if(isset($materiData) && $materiData->link_video && preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $materiData->link_video, $matches)) {
+                        $embedUrl = 'https://www.youtube.com/embed/' . $matches[1];
+                    }
+                @endphp
                 @if(isset($materiData) && $materiData->link_video)
-                    <iframe width="100%" height="450" src="{{ $materiData->link_video }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:18px 18px 0 0; display:block;"></iframe>
+                    <iframe width="100%" height="450" src="{{ $embedUrl }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:18px 18px 0 0; display:block;"></iframe>
                 @else
                     <div class="video-placeholder" style="padding-top:150px; padding-bottom:150px;">
                         <div class="video-placeholder-icon">▶</div>
@@ -419,7 +425,7 @@
                     @foreach($nextVideos as $nv)
                         @php
                             $ytId = '';
-                            if($nv->link_video && preg_match('/embed\/([a-zA-Z0-9_-]+)/', $nv->link_video, $matches)) {
+                            if($nv->link_video && preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $nv->link_video, $matches)) {
                                 $ytId = $matches[1];
                             }
                         @endphp
