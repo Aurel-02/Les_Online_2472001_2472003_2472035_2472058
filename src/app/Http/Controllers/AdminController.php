@@ -9,6 +9,7 @@ use App\Pattern\DAO\TransaksiDAO;
 use App\Pattern\DAO\MateriDAO;
 use App\Pattern\DAO\VoucherDAO;
 use App\Pattern\DAO\PaketPembelajaranDAO;
+use App\Pattern\DAO\PengumumanDAO;
 
 class AdminController extends Controller
 {
@@ -17,19 +18,22 @@ class AdminController extends Controller
     protected $materiDAO;
     protected $voucherDAO;
     protected $paketDAO;
+    protected $pengumumanDAO;
 
     public function __construct(
         UserDAO $userDAO,
         TransaksiDAO $transaksiDAO,
         MateriDAO $materiDAO,
         VoucherDAO $voucherDAO,
-        PaketPembelajaranDAO $paketDAO
+        PaketPembelajaranDAO $paketDAO,
+        PengumumanDAO $pengumumanDAO
     ) {
         $this->userDAO = $userDAO;
         $this->transaksiDAO = $transaksiDAO;
         $this->materiDAO = $materiDAO;
         $this->voucherDAO = $voucherDAO;
         $this->paketDAO = $paketDAO;
+        $this->pengumumanDAO = $pengumumanDAO;
     }
 
     public function dashboard()
@@ -200,5 +204,50 @@ class AdminController extends Controller
     {
         $this->paketDAO->deletePaket($id);
         return redirect()->back()->with('success', 'Paket pembelajaran berhasil dihapus!');
+    }
+
+    // ─── PENGUMUMAN ─────────────────────────────────────────────────────────
+
+    public function pengumumanIndex()
+    {
+        $session = UserSession::getInstance();
+        $userName = $session->getName();
+        $photoProfile = $session->getPhotoProfile();
+
+        $reactivationRequestsCount = $this->userDAO->getReactivationRequestsCount();
+        $pengumumanList = $this->pengumumanDAO->getAllPengumuman();
+
+        return view('admin.pengumuman', compact('userName', 'photoProfile', 'reactivationRequestsCount', 'pengumumanList'));
+    }
+
+    public function pengumumanStore(Request $request)
+    {
+        $request->validate([
+            'judul'  => 'required|string|max:255',
+            'isi'    => 'required|string',
+            'tipe'   => 'required|in:info,maintenance,warning',
+            'target' => 'required|in:semua,guru,siswa,orang_tua',
+        ]);
+
+        $this->pengumumanDAO->createPengumuman([
+            'judul'  => $request->judul,
+            'isi'    => $request->isi,
+            'tipe'   => $request->tipe,
+            'target' => $request->target,
+        ]);
+
+        return redirect()->back()->with('success', 'Pengumuman berhasil dibuat!');
+    }
+
+    public function pengumumanToggle($id)
+    {
+        $this->pengumumanDAO->toggleAktif($id);
+        return redirect()->back()->with('success', 'Status pengumuman berhasil diubah!');
+    }
+
+    public function pengumumanDestroy($id)
+    {
+        $this->pengumumanDAO->deletePengumuman($id);
+        return redirect()->back()->with('success', 'Pengumuman berhasil dihapus!');
     }
 }

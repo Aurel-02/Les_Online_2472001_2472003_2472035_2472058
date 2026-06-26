@@ -271,6 +271,60 @@
         .btn-outline { border-color: var(--dark-oak); color: var(--dark-oak); }
         .btn-outline:hover { background: rgba(61,43,31,0.05); }
 
+        /* ── Pengumuman Alert Banners ── */
+        .pengumuman-section { margin-bottom: 32px; }
+        .pengumuman-alert {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 20px 24px; border-radius: 20px;
+            margin-bottom: 14px; position: relative;
+            border: 1px solid transparent;
+            animation: slideDown 0.4s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pengumuman-alert.tipe-info {
+            background: rgba(91, 139, 235, 0.08);
+            border-color: rgba(91, 139, 235, 0.2);
+        }
+        .pengumuman-alert.tipe-maintenance {
+            background: rgba(217, 179, 130, 0.15);
+            border-color: rgba(217, 179, 130, 0.35);
+        }
+        .pengumuman-alert.tipe-warning {
+            background: rgba(255, 107, 107, 0.08);
+            border-color: rgba(255, 107, 107, 0.2);
+        }
+        .pengumuman-alert-icon {
+            width: 44px; height: 44px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+        .pengumuman-alert.tipe-info .pengumuman-alert-icon { background: rgba(91, 139, 235, 0.15); }
+        .pengumuman-alert.tipe-maintenance .pengumuman-alert-icon { background: rgba(217, 179, 130, 0.25); }
+        .pengumuman-alert.tipe-warning .pengumuman-alert-icon { background: rgba(255, 107, 107, 0.15); }
+        .pengumuman-alert-content { flex: 1; }
+        .pengumuman-alert-content h4 {
+            font-size: 15px; font-weight: 800; color: var(--dark-oak);
+            margin-bottom: 4px;
+        }
+        .pengumuman-alert-content p {
+            font-size: 14px; color: rgba(61,43,31,0.7); font-weight: 500;
+            line-height: 1.5; margin: 0;
+        }
+        .pengumuman-alert-date {
+            font-size: 11px; color: rgba(61,43,31,0.4); font-weight: 600;
+            margin-top: 6px;
+        }
+        .pengumuman-dismiss {
+            position: absolute; top: 12px; right: 14px;
+            background: none; border: none; cursor: pointer;
+            color: rgba(61,43,31,0.3); font-size: 18px; line-height: 1;
+            transition: color 0.2s;
+        }
+        .pengumuman-dismiss:hover { color: rgba(61,43,31,0.6); }
+
         /* ── Aktivitas Terbaru ── */
         .activity-item {
             display: flex; align-items: flex-start; gap: 18px; padding: 20px 0; border-bottom: 1px solid rgba(61,43,31,0.06);
@@ -371,6 +425,28 @@
                 </div>
                 <div class="package-illustration">👨‍🏫</div>
             </div>
+
+            <!-- PENGUMUMAN DARI ADMIN -->
+            @if(isset($pengumumanList) && $pengumumanList->count() > 0)
+            <div class="pengumuman-section">
+                @foreach($pengumumanList as $p)
+                <div class="pengumuman-alert tipe-{{ $p->tipe }}" id="pengumuman-{{ $p->id_pengumuman }}">
+                    <div class="pengumuman-alert-icon">
+                        @if($p->tipe === 'info') ℹ️
+                        @elseif($p->tipe === 'maintenance') 🔧
+                        @else ⚠️
+                        @endif
+                    </div>
+                    <div class="pengumuman-alert-content">
+                        <h4>{{ $p->judul }}</h4>
+                        <p>{{ $p->isi }}</p>
+                        <div class="pengumuman-alert-date">{{ $p->created_at->format('d M Y, H:i') }}</div>
+                    </div>
+                    <button class="pengumuman-dismiss" onclick="this.parentElement.style.display='none'" title="Tutup">&times;</button>
+                </div>
+                @endforeach
+            </div>
+            @endif
 
             <!-- STATUS STATS -->
             <div class="status-container">

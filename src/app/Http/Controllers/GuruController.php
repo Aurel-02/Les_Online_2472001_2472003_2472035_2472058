@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Materi;
 use App\Models\User;
 use App\Services\UserSession;
+use App\Pattern\DAO\PengumumanDAO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,7 +28,11 @@ class GuruController extends Controller
         $s = $this->sessionData();
 
         $totalMateri = Materi::where('id_guru', $s['userId'])->count();
-        return view('guru.dashboard', compact('totalMateri') + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
+
+        $pengumumanDAO = new PengumumanDAO();
+        $pengumumanList = $pengumumanDAO->getActivePengumumanForRole('guru');
+
+        return view('guru.dashboard', compact('totalMateri', 'pengumumanList') + ['userName' => $s['userName'], 'photoProfile' => $s['photoProfile']]);
     }
 
     // ─── SISWA ───────────────────────────────────────────────────────────────

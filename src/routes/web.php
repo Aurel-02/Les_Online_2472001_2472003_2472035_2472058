@@ -126,6 +126,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/paket/{id}', [AdminController::class, 'paketUpdate'])->name('admin.paket.update');
     Route::delete('/admin/paket/{id}', [AdminController::class, 'paketDestroy'])->name('admin.paket.destroy');
 
+    // Pengumuman Management
+    Route::get('/admin/pengumuman', [AdminController::class, 'pengumumanIndex'])->name('admin.pengumuman.index');
+    Route::post('/admin/pengumuman', [AdminController::class, 'pengumumanStore'])->name('admin.pengumuman.store');
+    Route::put('/admin/pengumuman/{id}/toggle', [AdminController::class, 'pengumumanToggle'])->name('admin.pengumuman.toggle');
+    Route::delete('/admin/pengumuman/{id}', [AdminController::class, 'pengumumanDestroy'])->name('admin.pengumuman.destroy');
+
     Route::get('/admin/profile', [\App\Http\Controllers\ProfileController::class, 'indexAdmin'])->name('admin.profile');
     Route::post('/admin/profile/update', [\App\Http\Controllers\ProfileController::class, 'updateProfile'])->name('admin.profile.update');
     Route::post('/admin/profile/photo', [\App\Http\Controllers\ProfileController::class, 'updatePhoto'])->name('admin.profile.photo');

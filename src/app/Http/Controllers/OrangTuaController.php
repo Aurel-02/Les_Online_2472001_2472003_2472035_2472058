@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\ExamScore;
 use App\Services\UserSession;
+use App\Pattern\DAO\PengumumanDAO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,9 @@ class OrangTuaController extends Controller
             $promotedPackages = DB::table('paket_pembelajaran')->take(3)->get();
         }
 
+        $pengumumanDAO = new PengumumanDAO();
+        $pengumumanList = $pengumumanDAO->getActivePengumumanForRole('orang_tua');
+
         return view('orangtua.dashboard', compact(
             'parentName',
             'parentPhoto',
@@ -71,7 +75,8 @@ class OrangTuaController extends Controller
             'sisaHari',
             'jenjangName',
             'vouchers',
-            'promotedPackages'
+            'promotedPackages',
+            'pengumumanList'
         ));
     }
     public function paketBelajar(Request $request)

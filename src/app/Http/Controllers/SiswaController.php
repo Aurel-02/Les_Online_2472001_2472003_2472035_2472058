@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Pattern\DAO\VoucherDAO;
 use App\Pattern\DAO\PaketPembelajaranDAO;
 use App\Pattern\DAO\MateriDAO;
+use App\Pattern\DAO\PengumumanDAO;
 
 class SiswaController extends Controller
 {
@@ -56,7 +57,10 @@ class SiswaController extends Controller
             $activePackageName = $packageInfo['activePackageName'];
         }
 
-        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile', 'activities', 'vouchers', 'activePackageName', 'sisaHari'));
+        $pengumumanDAO = new PengumumanDAO();
+        $pengumumanList = $pengumumanDAO->getActivePengumumanForRole('siswa');
+
+        return view('siswa.home', compact('userName', 'userEmail', 'userRole', 'userJenjang', 'photoProfile', 'activities', 'vouchers', 'activePackageName', 'sisaHari', 'pengumumanList'));
     }
 
     public function daftarMateri(Request $request)

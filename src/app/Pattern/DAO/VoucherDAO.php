@@ -3,6 +3,7 @@
 namespace App\Pattern\DAO;
 
 use App\Models\Voucher;
+use App\Models\Transaksi;
 
 class VoucherDAO
 {
@@ -24,6 +25,10 @@ class VoucherDAO
     public function deleteVoucher($id)
     {
         $voucher = Voucher::findOrFail($id);
+
+        // Nullify foreign key references in transaksi to avoid constraint violation
+        Transaksi::where('id_voucher', $id)->update(['id_voucher' => null]);
+
         return $voucher->delete();
     }
 }

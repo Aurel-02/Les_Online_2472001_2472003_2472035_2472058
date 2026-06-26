@@ -436,7 +436,7 @@
                             <p>Siarkan pengumuman baru ke semua guru atau siswa.</p>
                         </div>
                     </div>
-                    <a href="#" class="btn-action btn-primary">Buat Baru</a>
+                    <a href="{{ route('admin.pengumuman.index') }}" class="btn-action btn-primary">Buat Baru</a>
                 </div>
             </div>
 
