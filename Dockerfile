@@ -1,0 +1,29 @@
+-	FROM php:8.4-cli
+-	
+-	# Instal kebutuhan sistem dan ekstensi dasar
+-	RUN apt-get update && apt-get install -y \
+-	    git \
+-	    unzip \
+-	    libzip-dev \
+-	    sqlite3 \
+-	    libsqlite3-dev \
+-	    && docker-php-ext-install pdo pdo_sqlite zip
+-	
+-	# Ambil composer
+-	COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+-	
+-	WORKDIR /var/www
+-	
+-	# Salin ISI folder src langsung ke /var/www
+-	COPY src/ .
+-	
+-	# Instal paket composer
+-	RUN composer install --no-dev --optimize-autoloader
+-	
+-	# Beri izin akses folder storage dan cache
+-	RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
+-	    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+-	
+-	EXPOSE 8000
+-	
+-	CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
